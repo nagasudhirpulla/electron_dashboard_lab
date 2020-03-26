@@ -1,10 +1,10 @@
 import React from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { render } from 'react-dom'
-import { VarTime } from '../Time/VarTime'
+import { VarTime } from '../../Time/VarTime'
 import { VarTimeEditor } from './components/VarTimeEditor/VarTimeEditor'
 import { TimePeriodEditor } from './components/TimePeriodEditor/TimePeriodEditor'
-import { TimePeriod } from '../Time/TimePeriod'
+import { TimePeriod } from '../../Time/TimePeriod'
 
 console.log("Hello World from client!!!")
 
@@ -17,8 +17,6 @@ const App: React.FC<{}> = () => {
 
     return <>
         <form onSubmit={handleSubmit(onSubmit)}>
-            <input value={"asd"}/>
-            
             <h4>Variable Time</h4>
             <Controller as={<VarTimeEditor />} name="time" control={control} onChange={([selected]) => { return selected }} />
             

@@ -1,7 +1,7 @@
-import React, { Component, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
-import { ChannelNames } from '../ipc/ChannelNames';
-import { IPluginNamesResp, IRegisterVizPluginFromDialogResp } from '../server/vizPlugins/vizPluginEditorManager';
+import { ChannelNames } from '../../ipc/ChannelNames';
+import { IPluginNamesResp, IRegisterVizPluginFromDialogResp } from '../../server/vizPlugins/vizPluginEditorManager';
 
 export interface IVizPluginsListItem {
     name: string,
@@ -29,7 +29,7 @@ const addVizPluginFromDialog = async (): Promise<string> => {
     })
 }
 
-export const VizPluginsApp: React.FC<IVizPluginsAppProps> = (props: IVizPluginsAppProps) => {
+export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPluginsAppProps) => {
     const [plugins, setPlugins] = useState([] as IVizPluginsListItem[])
     useEffect(() => {
         (async function () {

@@ -1,4 +1,4 @@
-import { ITimePeriod } from "../../../Time/type_defs/ITimePeriod";
+import { ITimePeriod } from "../../../../Time/type_defs/ITimePeriod";
 import { ILayout } from "../gridLayout/ILayout";
 import { IDashboardConfig } from "./IDashboardConfig";
 

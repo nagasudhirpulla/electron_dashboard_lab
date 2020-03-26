@@ -3,8 +3,8 @@ const path = require("path")
 
 module.exports = {
     entry: {
-        client: ['babel-polyfill', path.resolve(__dirname, 'src/client/client.tsx')],
-        vizPluginsEditor: ['babel-polyfill', path.resolve(__dirname, 'src/vizPluginsEditor/vizPluginsEditor.tsx')]
+        client: ['babel-polyfill', path.resolve(__dirname, 'src/clients/client/client.tsx')],
+        vizPluginsEditor: ['babel-polyfill', path.resolve(__dirname, 'src/clients/vizPluginsEditor/index.tsx')]
     },
 
     output: {

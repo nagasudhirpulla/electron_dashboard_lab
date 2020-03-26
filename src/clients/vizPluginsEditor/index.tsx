@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { VizPluginsApp } from './VizPluginsApp';
+import { VizPluginsEditor } from './VizPluginsEditor';
 // import './preferences.css';
 
 render(
-    <VizPluginsApp adapters={[]}></VizPluginsApp>,
+    <VizPluginsEditor adapters={[]}></VizPluginsEditor>,
     document.getElementById('root')
 );
