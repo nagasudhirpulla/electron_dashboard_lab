@@ -1,24 +1,35 @@
 import React, { useState } from 'react'
 import DateTime from 'react-datetime'
 import moment from 'moment'
-import { VarTime } from '../Time/VarTime'
 import './react-datetime.css'
 import { useForm } from 'react-hook-form'
+import { VarTime } from '../../../Time/VarTime'
 
 /**
- * This form component is designed to work with react-hook-form
+ * This is controlled component. 
+ * It exposes value, onChange for controlling the state
  */
-export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange?: (v: VarTime) => void }) => {
+export const VarTimeEditor = ({ value, onChange }: { value?: VarTime, onChange?: (v: VarTime) => void }) => {
 
     const propTimeVal = value ? value : new VarTime()
-    const { register, setValue, getValues, watch } = useForm({ defaultValues: propTimeVal })
+    const { register, setValue, watch } = useForm({ defaultValues: propTimeVal })
 
     const onValChanged = () => {
         if (onChange) {
-            onChange(getValues() as VarTime)
+            const val = watch({ nest: true })
+            onChange(
+                {
+                    ...val,
+                    offsetYears: +val.offsetYears,
+                    offsetMonths: +val.offsetMonths,
+                    offsetDays: +val.offsetDays,
+                    offsetHrs: +val.offsetHrs,
+                    offsetMins: +val.offsetMins,
+                    offsetSecs: +val.offsetSecs,
+                    absoluteTime: +val.absoluteTime
+                } as VarTime)
         }
     }
-    // console.log(watch())
 
     const onAllVarCheckChanged = (evnt: React.ChangeEvent<HTMLInputElement>) => {
         const newBool = evnt.target.checked ? true : false
@@ -32,7 +43,7 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
     }
 
     const isAllCompsVariable = (): boolean => {
-        const val = getValues() as VarTime
+        const val = watch({ nest: true }) as VarTime
         return val['isVarYears'] && val['isVarMonths'] && val['isVarDays'] && val['isVarHrs'] && val['isVarMins'] && val['isVarSecs']
     }
 
@@ -48,15 +59,15 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
     return (
         <div>
             <div>
-                <input type="number" name={'absoluteTime'} ref={register} style={{ display: 'none' }} />
+                <input type='number' name={'absoluteTime'} ref={register({ min: '0' })} style={{ display: 'none' }} />
                 <DateTime
-                    value={new Date(+(getValues() as VarTime).absoluteTime)}
+                    value={new Date(+(watch({ nest: true }) as VarTime).absoluteTime)}
                     dateFormat={'DD-MM-YYYY'}
                     timeFormat={'HH:mm:ss'}
                     onChange={onAbsTimeChange}
                 />
-                <span>All Variable -{" "}</span>
-                <input type="checkbox"
+                <span>All Variable -{' '}</span>
+                <input type='checkbox'
                     checked={isAllCompsVariable()}
                     onChange={onAllVarCheckChanged}
                 />
@@ -70,14 +81,14 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarDays'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
                             <input
-                                type="number"
-                                className="num_input_width"
+                                type='number'
+                                className='var_time_num_input'
                                 name={'offsetDays'}
                                 ref={register}
                                 onChange={onValChanged}
@@ -89,16 +100,16 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarMonths'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
 
                             <input
-                                type="number"
+                                type='number'
                                 name={'offsetMonths'}
-                                className="num_input_width"
+                                className='var_time_num_input'
                                 ref={register}
                                 onChange={onValChanged}
                             />
@@ -109,15 +120,15 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarYears'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
 
                             <input
-                                type="number"
-                                className="num_input_width"
+                                type='number'
+                                className='var_time_num_input'
                                 name={'offsetYears'}
                                 ref={register}
                                 onChange={onValChanged}
@@ -130,15 +141,15 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarHrs'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
 
                             <input
-                                type="number"
-                                className="num_input_width"
+                                type='number'
+                                className='var_time_num_input'
                                 name={'offsetHrs'}
                                 ref={register}
                                 onChange={onValChanged}
@@ -150,15 +161,15 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarMins'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
 
                             <input
-                                type="number"
-                                className="num_input_width"
+                                type='number'
+                                className='var_time_num_input'
                                 name={'offsetMins'}
                                 ref={register}
                                 onChange={onValChanged}
@@ -170,15 +181,15 @@ export const VarTimeEditComp = ({ value, onChange }: { value?: VarTime, onChange
                         </td>
                         <td>
                             <input
-                                type="checkbox"
+                                type='checkbox'
                                 name={'isVarSecs'}
                                 ref={register}
                                 onChange={onValChanged}
                             />
 
                             <input
-                                type="number"
-                                className="num_input_width"
+                                type='number'
+                                className='var_time_num_input'
                                 name={'offsetSecs'}
                                 ref={register}
                                 onChange={onValChanged}

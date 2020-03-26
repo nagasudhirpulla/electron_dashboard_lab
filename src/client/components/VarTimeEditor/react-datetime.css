@@ -243,3 +243,7 @@ td.rdtYear:hover {
     font-size: 1.2em;
     margin-top: 37px;
 }
+
+.var_time_num_input {
+    width: 3em;
+}
