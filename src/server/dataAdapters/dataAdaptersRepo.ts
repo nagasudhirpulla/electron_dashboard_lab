@@ -3,47 +3,47 @@ import { writeFileAsync, readFileAsync } from "../utils/fileUtils"
 import { existsSync } from "fs"
 import path from 'path'
 
-let adapters_list: { [key: string]: AdapterManifest } = {};
-const adaptersListFilename: string = 'adapter_register.json';
+let $adaptersRegistry: { [key: string]: AdapterManifest } = {}
+const adaptersRegistryFilename: string = 'adapter_register.json'
 
 export const persistAdapters = async () => {
-    writeFileAsync(getAdapterRepoFilePath(), JSON.stringify(adapters_list, null, 4));
-    console.log(`Adapters Register created`);
+    writeFileAsync(getAdapterRepoFilePath(), JSON.stringify($adaptersRegistry, null, 4))
+    console.log(`Adapters Register created`)
 };
 
 export const initAdapters = async () => {
-    const filePath = getAdapterRepoFilePath();
+    const filePath = getAdapterRepoFilePath()
     if (!existsSync(filePath)) {
-        console.log(`${filePath} file not present`);
-        persistAdapters();
+        console.log(`${filePath} file not present`)
+        persistAdapters()
     } else {
-        adapters_list = JSON.parse(await readFileAsync(filePath) as string);
+        $adaptersRegistry = JSON.parse(await readFileAsync(filePath) as string)
     }
-    return adapters_list;
+    return $adaptersRegistry
 };
 
 export const registerAdapter = async (manifestObj: AdapterManifest) => {
-    adapters_list[manifestObj.app_id] = manifestObj;
-    await persistAdapters();
+    $adaptersRegistry[manifestObj.app_id] = manifestObj
+    await persistAdapters()
 };
 
 export const unRegisterAdapter = async (adapterId: string) => {
-    delete adapters_list[adapterId];
-    await persistAdapters();
+    delete $adaptersRegistry[adapterId]
+    await persistAdapters()
 };
 
 export const getAdapter = (key: string) => {
     if (!['number', 'string'].includes(typeof key)) {
-        return null;
+        return null
     }
-    return adapters_list[key];
+    return $adaptersRegistry[key]
 };
 
 export const getAdapters = () => {
-    return adapters_list;
+    return $adaptersRegistry
 };
 
 export const getAdapterRepoFilePath = (): string => {
-    const filePath: string = path.resolve(path.dirname(process.mainModule.filename), adaptersListFilename);
-    return filePath;
+    const filePath: string = path.resolve(path.dirname(process.mainModule.filename), adaptersRegistryFilename)
+    return filePath
 }
