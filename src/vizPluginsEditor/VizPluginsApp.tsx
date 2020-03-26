@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from 'react';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../ipc/ChannelNames';
-import { IPluginNamesResp, IRegisterVizPluginFromDialogResp } from '../server/vizComp/vizPluginEditorManager';
+import { IPluginNamesResp, IRegisterVizPluginFromDialogResp } from '../server/vizPlugins/vizPluginEditorManager';
 
 export interface IVizPluginsListItem {
     name: string,
@@ -15,11 +15,7 @@ const loadVizPlugins = async (): Promise<IVizPluginsListItem[]> => {
     return new Promise(function (resolve, reject) {
         ipcRenderer.send('' + ChannelNames.getVizPluginNames, 'ping')
         ipcRenderer.once('' + ChannelNames.getVizPluginNamesResp, (event, obj: IPluginNamesResp) => {
-            let vizPluginsList: IVizPluginsListItem[] = []
-            for (let pluginInd = 0; pluginInd < obj.length; pluginInd++) {
-                vizPluginsList.push({ 'name': obj[pluginInd] })
-            }
-            resolve(vizPluginsList)
+            resolve(obj.map(o => ({ name: o })))
         })
     })
 }

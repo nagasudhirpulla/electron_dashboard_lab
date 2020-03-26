@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
 import path from "path";
 import { ChannelNames } from './ipc/ChannelNames'
-import { openVizPluginsEditor, openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener } from './server/vizComp/vizPluginEditorManager';
+import { openVizPluginsEditor, openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener } from './server/vizPlugins/vizPluginEditorManager';
 
 let win: BrowserWindow;
 let vizPluginsEditorWin: BrowserWindow

@@ -12,3 +12,4 @@ export class TimePeriod implements ITimePeriod {
         return per.years * 365 * 30 * 24 * 60 * 60 + per.months * 30 * 24 * 60 * 60 + per.days * 24 * 60 * 60 + per.hrs * 60 * 60 + per.mins * 60 + per.secs + per.millis * 0.001;
     }
 }
+
