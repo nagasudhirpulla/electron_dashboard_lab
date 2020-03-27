@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { loadVizPlugins } from './commands/loadVizPlugins';
+import { loadVizPlugins } from './queries/loadVizPlugins';
 import { addVizPluginFromDialog } from './commands/addVizPluginFromDialog';
 import { deleteVizPlugin } from './commands/deleteVizPlugin';
 
@@ -21,6 +21,7 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
 
     const onAddVizPluginClick = async () => {
         const newPlugin = await addVizPluginFromDialog()
+        console.log(`new visualization plugin ${newPlugin} registered`)
         setPlugins(await loadVizPlugins())
     }
 
@@ -29,6 +30,7 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
             (async function () {
                 if (confirm(`Delete Plugin ${plugin.name}?`)) {
                     const isSuccess = await deleteVizPlugin(plugin.name)
+                    console.log(`delete visualization plugin ${plugin.name} result = ${isSuccess}`)
                     setPlugins(await loadVizPlugins())
                 }
             })()

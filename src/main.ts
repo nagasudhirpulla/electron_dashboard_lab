@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron'
 import path from "path";
 import { ChannelNames } from './ipc/ChannelNames'
-import { openVizPluginsEditor, openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener } from './server/vizPlugins/vizPluginsEditorIPCManager';
+import { openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener, getVizPluginScriptIPCListener } from './server/vizPlugins/vizPluginsEditorIPCManager';
 import { openDataAdaptersEditorIPCListener, getAdaptersListIPCListener, addDataAdapterIPCListener, deleteDataAdapterIPCListener, updateDataAdapterIPCListener, getAdapterDataIPCListener, openAdapterMeasPickerIPCListener, openAdapterConfigWindowIPCListener } from './server/dataAdapters/dataAdaptersIpcManager';
 
 let win: BrowserWindow
@@ -36,6 +36,8 @@ ipcMain.on('' + ChannelNames.openVizPluginsEditor, openVizPluginsEditorIPCListen
 ipcMain.on('' + ChannelNames.registerVizPluginFromDialog, registerVizPluginFromDialogIPCListener())
 ipcMain.on('' + ChannelNames.getVizPluginNames, getVizPluginNamesIPCListener())
 ipcMain.on('' + ChannelNames.deleteVizPlugin, deleteVizPluginIPCListener())
+ipcMain.on('' + ChannelNames.getVizPluginScript, getVizPluginScriptIPCListener())
+
 
 
 // Data Adapters IPC listeners setup

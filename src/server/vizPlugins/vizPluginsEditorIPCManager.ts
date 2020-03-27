@@ -1,29 +1,11 @@
 import { BrowserWindow, BrowserView, IpcMainEvent } from "electron"
 import path from 'path'
-import { registerVizPluginFromDialog, getVizPluginNames, deRegisterVizPlugin } from "./vizPluginsLibrary"
 import { ChannelNames } from "../../ipc/ChannelNames"
-import { getVizPluginsEditorWin, setVizPluginsEditorWin } from "../../main"
-
-export const openVizPluginsEditor = (): void => {
-    let vizPluginsEditorWin = getVizPluginsEditorWin()
-    if (vizPluginsEditorWin != null && !vizPluginsEditorWin.isDestroyed) {
-        vizPluginsEditorWin.reload()
-        vizPluginsEditorWin.focus()
-        return
-    }
-    vizPluginsEditorWin = new BrowserWindow({
-        width: 700,
-        height: 500,
-        webPreferences: {
-            nodeIntegration: true, webSecurity: false
-        }
-    })
-    vizPluginsEditorWin.loadURL(`file://${path.resolve(path.dirname(process.mainModule.filename), 'vizPluginsEditor.html')}`)
-    vizPluginsEditorWin.on("closed", () => {
-        vizPluginsEditorWin = null
-    })
-    setVizPluginsEditorWin(vizPluginsEditorWin)
-}
+import { registerVizPluginFromDialog } from "./commands/registerVizPluginFromDialog"
+import { getVizPluginNames } from "./queries/getVizPluginNames"
+import { deRegisterVizPlugin } from "./commands/deRegisterVizPlugin"
+import { openVizPluginsEditor } from "./commands/openVizPluginsEditor"
+import { getVizPluginScript } from "./queries/getVizPluginScript"
 
 export const openVizPluginsEditorIPCListener = () => {
     return (event: IpcMainEvent, arg: any[]) => {
@@ -59,6 +41,17 @@ export const deleteVizPluginIPCListener = () => {
         (async function () {
             const isSuccess = await deRegisterVizPlugin(name)
             event.reply('' + ChannelNames.deleteVizPluginResp, isSuccess as IDeleteVizPluginResp)
+        })()
+    }
+}
+
+export type IGetVizPluginScriptResp = string
+export const getVizPluginScriptIPCListener = () => {
+    return (event: IpcMainEvent, name: string) => {
+        (async function () {
+            const pluginScript = await getVizPluginScript(name)
+            // console.log(names)
+            event.reply('' + ChannelNames.getVizPluginScriptResp, pluginScript as IGetVizPluginScriptResp)
         })()
     }
 }

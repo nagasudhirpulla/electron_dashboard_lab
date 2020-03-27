@@ -3,7 +3,7 @@ import { IVizConfFormCompLibrary } from "./IVizConfFormCompLibrary";
 import { IWidgetConfig } from "../dashboard/IWidgetConfig";
 import { IVizConfFormCompProps } from "./IVizConfFormCompProps";
 
-export interface IVizCompsManager {
+export interface IVizPluginsManager {
     /**
     * id - unique id of the component
     * name - unique name of the component
