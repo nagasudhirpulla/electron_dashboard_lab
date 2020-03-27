@@ -1,13 +1,15 @@
 import { BrowserWindow, BrowserView, IpcMainEvent } from "electron"
 import path from 'path'
-import { registerVizPluginFromDialog, getVizPluginNames } from "./vizPluginsLibrary"
+import { registerVizPluginFromDialog, getVizPluginNames, deRegisterVizPlugin } from "./vizPluginsLibrary"
 import { ChannelNames } from "../../ipc/ChannelNames"
+import { getVizPluginsEditorWin, setVizPluginsEditorWin } from "../../main"
 
-export const openVizPluginsEditor = (vizPluginsEditorWin: BrowserWindow): BrowserWindow => {
-    if (vizPluginsEditorWin != null) {
+export const openVizPluginsEditor = (): void => {
+    let vizPluginsEditorWin = getVizPluginsEditorWin()
+    if (vizPluginsEditorWin != null && !vizPluginsEditorWin.isDestroyed) {
         vizPluginsEditorWin.reload()
         vizPluginsEditorWin.focus()
-        return vizPluginsEditorWin
+        return
     }
     vizPluginsEditorWin = new BrowserWindow({
         width: 700,
@@ -20,18 +22,18 @@ export const openVizPluginsEditor = (vizPluginsEditorWin: BrowserWindow): Browse
     vizPluginsEditorWin.on("closed", () => {
         vizPluginsEditorWin = null
     })
-    return vizPluginsEditorWin
+    setVizPluginsEditorWin(vizPluginsEditorWin)
 }
 
-export const openVizPluginsEditorIPCListener = (vizPluginsEditorWin: BrowserWindow) => {
-    return (event: IpcMainEvent, arg: any) => {
-        vizPluginsEditorWin = openVizPluginsEditor(vizPluginsEditorWin)
+export const openVizPluginsEditorIPCListener = () => {
+    return (event: IpcMainEvent, arg: any[]) => {
+        openVizPluginsEditor()
     }
 }
 
 export type IRegisterVizPluginFromDialogResp = string
 export const registerVizPluginFromDialogIPCListener = () => {
-    return (event: IpcMainEvent, arg: any) => {
+    return (event: IpcMainEvent, arg: any[]) => {
         (async function () {
             const plugin: IRegisterVizPluginFromDialogResp = await registerVizPluginFromDialog()
             event.reply('' + ChannelNames.registerVizPluginFromDialogResp, plugin)
@@ -42,11 +44,21 @@ export const registerVizPluginFromDialogIPCListener = () => {
 
 export type IPluginNamesResp = string[]
 export const getVizPluginNamesIPCListener = () => {
-    return (event: IpcMainEvent, arg: any) => {
+    return (event: IpcMainEvent, arg: any[]) => {
         (async function () {
             const names: IPluginNamesResp = await getVizPluginNames()
             // console.log(names)
             event.reply('' + ChannelNames.getVizPluginNamesResp, names)
+        })()
+    }
+}
+
+export type IDeleteVizPluginResp = boolean
+export const deleteVizPluginIPCListener = () => {
+    return (event: IpcMainEvent, name: string) => {
+        (async function () {
+            const isSuccess = await deRegisterVizPlugin(name)
+            event.reply('' + ChannelNames.deleteVizPluginResp, isSuccess as IDeleteVizPluginResp)
         })()
     }
 }

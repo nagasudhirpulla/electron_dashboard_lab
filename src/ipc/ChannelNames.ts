@@ -1,13 +1,27 @@
 export enum ChannelNames {
     openVizPluginsEditor,
     openVizPluginsEditorResp,
-
     getVizPluginNames,
     getVizPluginNamesResp,
-
     getVizPluginScript,
     getVizPluginScriptResp,
-
     registerVizPluginFromDialog,
-    registerVizPluginFromDialogResp
+    registerVizPluginFromDialogResp,
+    openDataAdaptersEditor,
+    getAdaptersList,
+    getAdaptersListResp,
+    addDataAdapter,
+    addDataAdapterResp,
+    deleteDataAdapter,
+    deleteDataAdapterResp,
+    updateDataAdapterResp,
+    updateDataAdapter,
+    getAdapterData,
+    getAdapterDataResp,
+    openAdapterMeasPicker,
+    selectedMeas,
+    openAdapterConfigWindow,
+    openAdapterConfigWindowResp,
+    deleteVizPlugin,
+    deleteVizPluginResp
 }

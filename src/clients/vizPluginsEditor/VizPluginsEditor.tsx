@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { ipcRenderer } from 'electron';
-import { ChannelNames } from '../../ipc/ChannelNames';
-import { IPluginNamesResp, IRegisterVizPluginFromDialogResp } from '../../server/vizPlugins/vizPluginEditorManager';
+import { loadVizPlugins } from './commands/loadVizPlugins';
+import { addVizPluginFromDialog } from './commands/addVizPluginFromDialog';
+import { deleteVizPlugin } from './commands/deleteVizPlugin';
 
 export interface IVizPluginsListItem {
     name: string,
@@ -9,24 +9,6 @@ export interface IVizPluginsListItem {
 
 export interface IVizPluginsAppProps {
     adapters: IVizPluginsListItem[]
-}
-
-const loadVizPlugins = async (): Promise<IVizPluginsListItem[]> => {
-    return new Promise(function (resolve, reject) {
-        ipcRenderer.send('' + ChannelNames.getVizPluginNames, 'ping')
-        ipcRenderer.once('' + ChannelNames.getVizPluginNamesResp, (event, obj: IPluginNamesResp) => {
-            resolve(obj.map(o => ({ name: o })))
-        })
-    })
-}
-
-const addVizPluginFromDialog = async (): Promise<string> => {
-    return new Promise(function (resolve, reject) {
-        ipcRenderer.send('' + ChannelNames.registerVizPluginFromDialog, 'ping')
-        ipcRenderer.once('' + ChannelNames.registerVizPluginFromDialogResp, (event, obj: IRegisterVizPluginFromDialogResp) => {
-            resolve(obj)
-        })
-    })
 }
 
 export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPluginsAppProps) => {
@@ -42,6 +24,17 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
         setPlugins(await loadVizPlugins())
     }
 
+    const onDeleteVizPluginClick = (plugin: IVizPluginsListItem) => {
+        return () => {
+            (async function () {
+                if (confirm(`Delete Plugin ${plugin.name}?`)) {
+                    const isSuccess = await deleteVizPlugin(plugin.name)
+                    setPlugins(await loadVizPlugins())
+                }
+            })()
+        }
+    }
+
     return <>
         <table>
             <tr>
@@ -51,7 +44,9 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
             {plugins.map(plugin =>
                 <tr>
                     <td>{plugin.name}</td>
-                    <td></td>
+                    <td>
+                        <button onClick={onDeleteVizPluginClick(plugin)}>Delete Plugin</button>
+                    </td>
                 </tr>
             )}
         </table>
