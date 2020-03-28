@@ -1,5 +1,5 @@
-import { IWidgetConfig } from "../dashboard/IWidgetConfig";
+import { IWidgetProps } from "../dashboard/IWidgetProps";
 
 export interface IVizCompLibrary {
-    [key: string]: React.FunctionComponent<IWidgetConfig>
+    [key: string]: React.FC<IWidgetProps>
 }

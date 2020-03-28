@@ -1,6 +1,6 @@
 import { ITimePeriod } from "../../../../Time/type_defs/ITimePeriod";
 import { ILayout } from "../gridLayout/ILayout";
-import { IDashboardConfig } from "./IDashboardConfig";
+import { IWidgetProps } from "./IWidgetProps";
 
 export interface IDashboardState {
     gridConfig: {
@@ -14,6 +14,6 @@ export interface IDashboardState {
     timerSettings: {
         timerOn: boolean
         timerPeriodicity: ITimePeriod
-    },
-    widgetConfigs: IDashboardConfig
+    }
+    widgetProps: IWidgetProps[]
 }
