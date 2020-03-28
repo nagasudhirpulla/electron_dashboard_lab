@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron"
 import { ChannelNames } from "../../../ipc/ChannelNames"
-import { IRegisterVizPluginFromDialogResp } from "../../../server/vizPlugins/vizPluginsEditorIPCManager"
+import { IRegisterVizPluginFromDialogResp } from "../../../server/vizPlugins/vizPluginsIPCManager"
 
 export const addVizPluginFromDialog = async (): Promise<string> => {
     return new Promise(function (resolve, reject) {

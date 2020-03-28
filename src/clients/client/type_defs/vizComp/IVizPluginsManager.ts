@@ -8,7 +8,8 @@ export interface IVizPluginsManager {
     * id - unique id of the component
     * name - unique name of the component
      */
-    registerComp: (name: string, comp: React.FunctionComponent<IWidgetConfig>, configFormComp: React.FunctionComponent<IVizConfFormCompProps>) => void
-    compLibrary: IVizCompLibrary
-    compConfFormCompLibrary: IVizConfFormCompLibrary
+    registerComp: (name: string, comp: React.FC<IWidgetConfig>, configFormComp: React.FC<IVizConfFormCompProps>) => void
+    getCompLibrary: () => IVizCompLibrary
+    getCompConfigFormCompLibrary: () => IVizConfFormCompLibrary
+    addCompFromScript: (scriptStr: string) => void
 }

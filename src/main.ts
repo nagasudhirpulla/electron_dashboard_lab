@@ -1,7 +1,7 @@
 import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron'
 import path from "path";
 import { ChannelNames } from './ipc/ChannelNames'
-import { openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener, getVizPluginScriptIPCListener } from './server/vizPlugins/vizPluginsEditorIPCManager';
+import { openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener, getVizPluginScriptIPCListener } from './server/vizPlugins/vizPluginsIPCManager';
 import { openDataAdaptersEditorIPCListener, getAdaptersListIPCListener, addDataAdapterIPCListener, deleteDataAdapterIPCListener, updateDataAdapterIPCListener, getAdapterDataIPCListener, openAdapterMeasPickerIPCListener, openAdapterConfigWindowIPCListener } from './server/dataAdapters/dataAdaptersIpcManager';
 
 let win: BrowserWindow

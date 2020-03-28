@@ -18,9 +18,6 @@ const onOpenDataAdaptersEditorClick = (e: any): void => {
     ipcRenderer.send('' + ChannelNames.openDataAdaptersEditor, 'ping')
 }
 
-const loadVizPlugins = () => {
-    
-}
 
 const App: React.FC<{}> = () => {
     const { handleSubmit, watch, control } = useForm({ defaultValues: { time: new VarTime(), period: new TimePeriod() } })
