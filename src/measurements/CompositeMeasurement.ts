@@ -5,6 +5,6 @@ export class CompositeMeasurement implements ICompositeMeasurement {
     static typename: string = 'CompositeMeasurement';
     discriminator: string = CompositeMeasurement.typename;
     meas_id: string | number = "dummy";
-    measurements: IAdapterMeasurement | ICompositeMeasurement[] = [];
+    measurements: (IAdapterMeasurement | ICompositeMeasurement)[] = [];
     equation: string = null;
 }
