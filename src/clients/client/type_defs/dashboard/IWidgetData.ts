@@ -1,3 +1,6 @@
-export type IWidgetData = ISeriesData[]
+import { ISeriesData } from "./ISeriesData";
 
-export type ISeriesData = number[]
+export interface IWidgetData {
+    // key is series index
+    [key: number]: ISeriesData
+}
