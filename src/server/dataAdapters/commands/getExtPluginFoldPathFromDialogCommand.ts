@@ -1,6 +1,6 @@
 const showOpenDialog = require('electron').dialog.showOpenDialog
 
-const getExtPluginFoldPathFromDialog = async (): Promise<string> => {
+export const getExtPluginFoldPathFromDialog = async (): Promise<string> => {
     const dialogRes = await showOpenDialog({
         properties: ['openDirectory'],
         title: 'Select New Plugin Folder'

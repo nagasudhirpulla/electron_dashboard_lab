@@ -3,6 +3,7 @@ import { getManifestFromExternPlugin } from "./getManifestFromExternPluginComman
 import { isPluginNamePresent } from "../queries/isPluginNamePresentQuery";
 import { copyPluginFolder } from "./copyPluginFolderCommand";
 import { registerAdapterManifest } from "./registerAdapterManifestCommand";
+import { getExtPluginFoldPathFromDialog } from "./getExtPluginFoldPathFromDialogCommand";
 
 export const registerPlugin = async (): Promise<AdapterManifest> => {
     // get the user selected folder path

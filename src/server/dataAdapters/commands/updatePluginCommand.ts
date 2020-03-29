@@ -18,14 +18,14 @@ export const updatePlugin = async (adapterId: string): Promise<AdapterManifest> 
 
     // abort update if adapter id does not match
     if (adapterId != manifestJson.app_id) {
-        console.log(`Looks like you are not updating the adapter with id ${adapterId}`)
+        console.log(`Looks like you are not updating the data adapter with id ${adapterId}`)
         return null
     }
 
     // abort update if plugin does not exist
     const pluginExists = isPluginNamePresent(manifestJson.name)
     if (pluginExists == false) {
-        console.log(`plugin name ${manifestJson.name} does not exist, hence we cant update plugin`)
+        console.log(`plugin name ${manifestJson.name} does not exist, hence we cant update the Data Adapter`)
         return null
     }
     const pluginFolderPath: string = await copyPluginFolder(pluginExtFoldPath, manifestJson)
@@ -34,6 +34,6 @@ export const updatePlugin = async (adapterId: string): Promise<AdapterManifest> 
     }
     // add the plugin attributes to the plugins app state and the json file for persistence
     await registerAdapterManifest(manifestJson)
-    console.log(`successfully updated plugin ${manifestJson.app_id}`)
+    console.log(`successfully updated the data adapter ${manifestJson.app_id}`)
     return manifestJson
 }
