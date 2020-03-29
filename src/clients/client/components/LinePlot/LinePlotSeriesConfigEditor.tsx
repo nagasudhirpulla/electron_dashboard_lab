@@ -10,7 +10,7 @@ import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
-export const LinePlotSeriesConfigEditor: React.FC<IVizConfEditorProps> = ({ value, onChange }: ILinePlotSeriesConfEditorProps) => {
+export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps> = ({ value, onChange }: ILinePlotSeriesConfEditorProps) => {
     const { register, watch, control } = useForm({ defaultValues: { ...value } })
     const onValChanged = () => {
         if (onChange) {

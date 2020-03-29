@@ -43,8 +43,8 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
                 <td>Viz Plugin Name</td>
                 <td>Actions</td>
             </tr>
-            {plugins.map(plugin =>
-                <tr>
+            {plugins.map((plugin, pluginInd) =>
+                <tr key={`plugin_${pluginInd}`}>
                     <td>{plugin.name}</td>
                     <td>
                         <button onClick={onDeleteVizPluginClick(plugin)}>Delete Plugin</button>

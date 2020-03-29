@@ -7,7 +7,7 @@ import { AdapterMeasurement } from '../AdapterMeasurement';
 import { IAdapterMeasurement } from '../type_defs/IAdapterMeasurement';
 import { AdapterMeasEditor } from './AdapterMeasEditor';
 
-export const MeasurementEditor: React.FC<{ value: IMeasurement, onChange: (m: IMeasurement) => void }> = ({ value, onChange }) => {
+export const MeasurementEditor: React.FC<{ value?: IMeasurement, onChange?: (m: IMeasurement) => void }> = ({ value, onChange }) => {
     if (value.discriminator == DummyMeasurement.typename) {
         return <DummyMeasEditor value={value as IDummyMeasurement} onChange={onChange} />
     }

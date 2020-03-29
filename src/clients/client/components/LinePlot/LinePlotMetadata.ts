@@ -1,5 +1,6 @@
-import { IVizCompMetadata } from "../../type_defs/vizComp/IVizCompMetadata";
+import { ILinePlotMetadata } from "./type_defs/ILinePlotMetadata";
 
-export const linePlotMetadata: IVizCompMetadata = {
+export const LinePlotMetadata: ILinePlotMetadata = {
+    discriminator: 'Plot',
     numMeasPerSeries: 1
 }

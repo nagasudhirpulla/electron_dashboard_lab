@@ -6,7 +6,7 @@ import { ILinePlotWidgetConfig } from "./type_defs/ILinePlotWidgetConfig";
 
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);
 
-export const LinePlotWidgetConfigEditor: React.FC<IVizConfEditorProps> = ({ value, onChange }: ILinePlotWidgetConfEditorProps) => {
+export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps> = ({ value, onChange }: ILinePlotWidgetConfEditorProps) => {
     const { register, watch } = useForm({ defaultValues: { ...value } })
     const onValChanged = () => {
         if (onChange) {

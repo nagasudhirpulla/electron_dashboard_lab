@@ -72,8 +72,8 @@ export const AdaptersEditor: React.FC<AdaptersEditorProps> = (props: AdaptersEdi
                 <td>Adapter Id</td>
                 <td>Actions</td>
             </tr>
-            {plugins.map(plugin =>
-                <tr>
+            {plugins.map((plugin, pluginInd) =>
+                <tr key={`plugin_${pluginInd}`}>
                     <td>{plugin.name}</td>
                     <td>{plugin.adapter_id}</td>
                     <td>

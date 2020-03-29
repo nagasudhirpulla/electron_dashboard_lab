@@ -11,7 +11,7 @@ import { VizPluginsRepo } from './VizPluginsRepo'
 import { LinePlot } from './components/LinePlot/LinePlot'
 import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidgetConfigEditor'
 import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
-import { linePlotMetadata } from './components/LinePlot/LinePlotMetadata'
+import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { VizPluginsManager } from './vizPluginsManager'
 
 // console.log("Hello World from client!!!")
@@ -35,7 +35,7 @@ const App: React.FC<{}> = () => {
 
     useEffect(() => {
         // register line plot
-        $comps.registerComp('Plot', LinePlot, LinePlotWidgetConfigEditor, LinePlotSeriesConfigEditor, linePlotMetadata)
+        $comps.registerComp('Plot', LinePlot, LinePlotWidgetConfigEditor, LinePlotSeriesConfigEditor, LinePlotMetadata)
         // eval("console.log($comps.getInstalledPluginNames())")
     }, [])
 

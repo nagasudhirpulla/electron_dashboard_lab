@@ -13,15 +13,6 @@ export const DummyMeasEditor: React.FC<{ value: IDummyMeasurement, onChange: (m:
     }
 
     return <>
-        <span>Measurement Id{" "}</span>
-        <input
-            type="text"
-            name={`meas_id`}
-            onChange={onValChanged}
-            ref={register}
-        />
-        <br /><br />
-
         <span>{"Value 1 "}</span>
         <input
             type="number"

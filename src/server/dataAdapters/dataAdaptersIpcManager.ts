@@ -1,4 +1,4 @@
-import { BrowserWindow, IpcMainEvent } from "electron"
+import { IpcMainEvent } from "electron"
 import { AdapterManifest } from "../type_defs/AdapterManifest"
 import { ChannelNames } from "../../ipc/ChannelNames"
 import { getAdaptersRegistry } from "./dataAdaptersRegistry"

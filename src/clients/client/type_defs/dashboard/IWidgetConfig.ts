@@ -3,7 +3,7 @@
  */
 import { ISeriesConfig } from "./ISeriesConfig";
 export interface IWidgetConfig {
-    discriminator: string
+    vizType: string
     title:string
     border: string
     seriesConfigs: ISeriesConfig[]

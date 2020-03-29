@@ -1,3 +1,4 @@
 export interface IVizCompMetadata {
-    numMeasPerSeries: number;
+    discriminator: string
+    numMeasPerSeries: number
 }
