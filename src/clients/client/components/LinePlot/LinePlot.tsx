@@ -11,7 +11,7 @@ import { TimePeriod } from "../../../../Time/TimePeriod"
 
 export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
     // set default values to widget custom config
-    let config = props.config
+    let config = { ...props.config }
     config.customConfig = merge({}, defLinePlotWidgetCustomConfig, config.customConfig)
 
     // set default values to each series custom config

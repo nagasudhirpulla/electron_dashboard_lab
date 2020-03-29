@@ -5,11 +5,12 @@ import { useForm, Controller } from "react-hook-form";
 import { ILinePlotSeriesConfig } from "./type_defs/ILinePlotSeriesConfig";
 import { TimePeriodEditor } from "../TimePeriodEditor/TimePeriodEditor";
 import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle";
+import { YAxisSide } from "./type_defs/YAxisSide";
+import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const LinePlotSeriesConfigFormComp: React.FC<IVizConfFormCompProps> = ({ value, onChange }: ILinePlotSeriesConfFormCompProps) => {
-    // TODO complete this
     const { register, watch, control } = useForm({ defaultValues: { ...value } })
     const onValChanged = () => {
         if (onChange) {
@@ -66,5 +67,35 @@ export const LinePlotSeriesConfigFormComp: React.FC<IVizConfFormCompProps> = ({ 
             min="0"
         />
 
+        <SeriesDivider />
+        <span><b>Y Axis Side{" "}</b></span>
+        <select
+            onChange={onValChanged}
+            name={`yAxisSide`}
+            ref={register}
+        >
+            <option value={YAxisSide.left}>Left</option>
+            <option value={YAxisSide.right}>Right</option>
+        </select>
+
+        <SeriesDivider />
+        <span><b>Y Axis Offset{" "}</b></span>
+        <input
+            type="number"
+            onChange={onValChanged}
+            name={`yAxisOffset`}
+            ref={register}
+        />
+
+        <SeriesDivider />
+        <span><b>Plotly Render Strategy{" "}</b></span>
+        <select
+            onChange={onValChanged}
+            name={`renderStrategy`}
+            ref={register}
+        >
+            <option value={PlotlyRenderStrategy.scatter}>No GPU</option>
+            <option value={PlotlyRenderStrategy.scattergl}>Use GPU</option>
+        </select>
     </>
 }
