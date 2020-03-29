@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { TimePeriod } from '../../../../Time/TimePeriod'
+import { TimePeriod } from '../../TimePeriod'
 import './time-period-editor.css'
 
 /**

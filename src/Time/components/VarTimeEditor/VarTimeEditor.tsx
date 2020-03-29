@@ -3,7 +3,7 @@ import DateTime from 'react-datetime'
 import moment from 'moment'
 import './react-datetime.css'
 import { useForm } from 'react-hook-form'
-import { VarTime } from '../../../../Time/VarTime'
+import { VarTime } from '../../VarTime'
 
 /**
  * This is controlled component. 

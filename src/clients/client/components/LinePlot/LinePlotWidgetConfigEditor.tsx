@@ -1,12 +1,12 @@
-import { IVizConfFormCompProps } from "../../type_defs/vizComp/IVizConfFormCompProps";
+import { IVizConfEditorProps } from "../../type_defs/vizComp/IVizConfEditorProps";
 import React from 'react'
 import { useForm } from "react-hook-form";
-import { ILinePlotWidgetConfFormCompProps } from "./type_defs/ILinePlotWidgetConfFormCompProps";
+import { ILinePlotWidgetConfEditorProps } from "./type_defs/ILinePlotWidgetConfEditorProps";
 import { ILinePlotWidgetConfig } from "./type_defs/ILinePlotWidgetConfig";
 
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);
 
-export const LinePlotWidgetConfigFormComp: React.FC<IVizConfFormCompProps> = ({ value, onChange }: ILinePlotWidgetConfFormCompProps) => {
+export const LinePlotWidgetConfigEditor: React.FC<IVizConfEditorProps> = ({ value, onChange }: ILinePlotWidgetConfEditorProps) => {
     const { register, watch } = useForm({ defaultValues: { ...value } })
     const onValChanged = () => {
         if (onChange) {

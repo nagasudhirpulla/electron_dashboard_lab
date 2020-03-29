@@ -1,16 +1,16 @@
-import { IVizConfFormCompProps } from "../../type_defs/vizComp/IVizConfFormCompProps";
+import { IVizConfEditorProps } from "../../type_defs/vizComp/IVizConfEditorProps";
 import React from 'react'
-import { ILinePlotSeriesConfFormCompProps } from "./type_defs/ILinePlotSeriesConfFormCompProps";
+import { ILinePlotSeriesConfEditorProps } from "./type_defs/ILinePlotSeriesConfEditorProps";
 import { useForm, Controller } from "react-hook-form";
 import { ILinePlotSeriesConfig } from "./type_defs/ILinePlotSeriesConfig";
-import { TimePeriodEditor } from "../TimePeriodEditor/TimePeriodEditor";
+import { TimePeriodEditor } from "../../../../Time/components/TimePeriodEditor/TimePeriodEditor";
 import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle";
 import { YAxisSide } from "./type_defs/YAxisSide";
 import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
-export const LinePlotSeriesConfigFormComp: React.FC<IVizConfFormCompProps> = ({ value, onChange }: ILinePlotSeriesConfFormCompProps) => {
+export const LinePlotSeriesConfigEditor: React.FC<IVizConfEditorProps> = ({ value, onChange }: ILinePlotSeriesConfEditorProps) => {
     const { register, watch, control } = useForm({ defaultValues: { ...value } })
     const onValChanged = () => {
         if (onChange) {

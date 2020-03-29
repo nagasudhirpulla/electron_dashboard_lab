@@ -2,15 +2,15 @@ import React, { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { render } from 'react-dom'
 import { VarTime } from '../../Time/VarTime'
-import { VarTimeEditor } from './components/VarTimeEditor/VarTimeEditor'
-import { TimePeriodEditor } from './components/TimePeriodEditor/TimePeriodEditor'
+import { VarTimeEditor } from '../../Time/components/VarTimeEditor/VarTimeEditor'
+import { TimePeriodEditor } from '../../Time/components/TimePeriodEditor/TimePeriodEditor'
 import { TimePeriod } from '../../Time/TimePeriod'
 import { ipcRenderer } from 'electron'
 import { ChannelNames } from '../../ipc/ChannelNames'
 import { VizPluginsRepo } from './VizPluginsRepo'
 import { LinePlot } from './components/LinePlot/LinePlot'
-import { LinePlotWidgetConfigFormComp } from './components/LinePlot/LinePlotWidgetConfigFormComp'
-import { LinePlotSeriesConfigFormComp } from './components/LinePlot/LinePlotSeriesConfigFormComp'
+import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidgetConfigEditor'
+import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
 import { linePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { VizPluginsManager } from './vizPluginsManager'
 
@@ -35,7 +35,7 @@ const App: React.FC<{}> = () => {
 
     useEffect(() => {
         // register line plot
-        $comps.registerComp('Plot', LinePlot, LinePlotWidgetConfigFormComp, LinePlotSeriesConfigFormComp, linePlotMetadata)
+        $comps.registerComp('Plot', LinePlot, LinePlotWidgetConfigEditor, LinePlotSeriesConfigEditor, linePlotMetadata)
         // eval("console.log($comps.getInstalledPluginNames())")
     }, [])
 
