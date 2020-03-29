@@ -7,8 +7,6 @@ import { unRegisterPlugin } from "./commands/unRegisterPluginCommand"
 import { updatePlugin } from "./commands/updatePluginCommand"
 import { fetchFromAdapter } from "./queries/fetchFromAdapterQuery"
 import { getAdapterManifest } from "./queries/getAdapterManifestQuery"
-import path from 'path'
-import { getDataAdaptersEditorWin, setDataAdaptersEditorWin } from "../../main"
 import { openDataAdaptersEditor } from "./commands/openDataAdaptersEditor"
 
 export const openDataAdaptersEditorIPCListener = () => {

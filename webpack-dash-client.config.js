@@ -3,8 +3,7 @@ const path = require("path")
 
 module.exports = {
     entry: {
-        adaptersEditor: ['babel-polyfill', path.resolve(__dirname, 'src/clients/adapters/index.tsx')],
-        vizPluginsEditor: ['babel-polyfill', path.resolve(__dirname, 'src/clients/vizPlugins/index.tsx')]
+        client: ['babel-polyfill', path.resolve(__dirname, 'src/clients/client/client.tsx')]
     },
 
     output: {
@@ -50,15 +49,10 @@ module.exports = {
 
     plugins: [
         new HtmlWebPackPlugin({
-            template: path.resolve(__dirname, 'src/adapters.html'),
-            chunks: ['adaptersEditor'],
-            filename: './adapters.html'
-        }),
-        new HtmlWebPackPlugin({
-            template: path.resolve(__dirname, 'src/vizPluginsEditor.html'),
-            chunks: ['vizPluginsEditor'],
-            filename: './vizPluginsEditor.html'
-        }),
+            template: path.resolve(__dirname, 'src/client.html'),
+            chunks: ['client'],
+            filename: './client.html'
+        })
     ],
 
     externals: {

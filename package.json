@@ -81,9 +81,12 @@
     },
     "scripts": {
         "start": "electron dist/bundle.main.js",
-        "build": "npm run build-client && npm run build-server",
+        "build": "npm run build-dashboard && npm run build-client && npm run build-server",
         "build-server": "webpack --mode production --config webpack-server.config.js",
         "build-client": "webpack --mode production --config webpack-client.config.js",
-        "watch-client": "webpack --mode development --config webpack-client.config.js -w"
+        "build-dashboard": "webpack --mode production --config webpack-dash-client.config.js",
+        "watch-server": "webpack --mode development --config webpack-server.config.js -w",
+        "watch-client": "webpack --mode development --config webpack-client.config.js -w",
+        "watch-dashboard": "webpack --mode development --config webpack-dash-client.config.js -w"
     }
 }

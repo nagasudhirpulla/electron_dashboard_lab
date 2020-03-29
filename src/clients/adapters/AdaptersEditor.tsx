@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { loadVizPlugins } from './queries/loadVizPlugins';
-import { addVizPluginFromDialog } from './commands/addVizPluginFromDialog';
-import { deleteVizPlugin } from './commands/deleteVizPlugin';
+import { ipcRenderer } from 'electron';
+import merge from 'lodash.merge';
 
-export interface IVizPluginsListItem {
+export interface AdaptersListItem {
     name: string,
+    adapter_id: string
 }
 
-export interface IVizPluginsAppProps {
-    adapters: IVizPluginsListItem[]
+export interface AdaptersEditorProps {
+    adapters: AdaptersListItem[]
 }
 
-export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPluginsAppProps) => {
-    const [plugins, setPlugins] = useState([] as IVizPluginsListItem[])
+export const AdaptersEditor: React.FC<AdaptersEditorProps> = (props: AdaptersEditorProps) => {
+    const [plugins, setPlugins] = useState([] as AdaptersListItem[])
     useEffect(() => {
         (async function () {
             setPlugins(await loadVizPlugins())
@@ -40,7 +40,7 @@ export const VizPluginsEditor: React.FC<IVizPluginsAppProps> = (props: IVizPlugi
     return <>
         <table>
             <tr>
-                <td>Viz Plugin Name</td>
+                <td>Adapter Name</td>
                 <td>Actions</td>
             </tr>
             {plugins.map(plugin =>
