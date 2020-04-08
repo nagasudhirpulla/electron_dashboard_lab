@@ -3,18 +3,21 @@ import { ISeriesConfigEditorProps } from "./type_defs/ISeriesConfigEditorProps";
 import { VarTimeEditor } from "../../../../Time/components/VarTimeEditor/VarTimeEditor";
 import { SeriesCustomConfigEditor } from "../SeriesCustomConfigEditor/SeriesCustomConfigEditor";
 import { MeasurementEditor } from "../../../../measurements/components/MeasurementEditor";
+import { getDefaultSeriesConfig } from './queries/getDefautSeriesConfig';
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChange }: ISeriesConfigEditorProps) => {
+    const propVal = { ...getDefaultSeriesConfig() }
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            onChange({ ...value, [`${ev.target.name}`]: ev.target.value })
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
         }
     }
     const onValChanged = (name: string, val: {}) => {
         if (onChange) {
-            onChange({ ...value, [`${name}`]: val })
+            onChange({ ...propVal, [`${name}`]: val })
         }
     }
     return <>
@@ -22,22 +25,22 @@ export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChan
         <input
             type="text"
             name="title"
-            value={value.title}
+            value={propVal.title}
             onChange={onInpValChanged}
         />
 
         <SeriesDivider />
-        {value.measurements.map((meas, measInd) =>
+        {propVal.measurements.map((meas, measInd) =>
             <div key={`meas_${measInd}`}>
                 <span><b>Measurement{` ${(measInd + 1)} `}</b></span><br />
                 <MeasurementEditor
                     value={meas}
                     onChange={(m) => {
                         onChange({
-                            ...value, measurements: [
-                                ...value.measurements.slice(0, measInd),
+                            ...propVal, measurements: [
+                                ...propVal.measurements.slice(0, measInd),
                                 m,
-                                ...value.measurements.slice(measInd + 1),
+                                ...propVal.measurements.slice(measInd + 1),
                             ]
                         })
                     }}
@@ -48,18 +51,18 @@ export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChan
         <SeriesDivider />
         <span><b>Start Time{" "}</b></span><br />
         <VarTimeEditor
-            value={value.startTime}
+            value={propVal.startTime}
             onChange={(t) => { onValChanged("startTime", t) }} />
 
         <SeriesDivider />
         <span><b>End Time{" "}</b></span><br />
         <VarTimeEditor
-            value={value.endTime}
+            value={propVal.endTime}
             onChange={(t) => { onValChanged("endTime", t) }} />
 
         <SeriesDivider />
-        <SeriesCustomConfigEditor vizType={value.vizType}
-            value={value.customConfig}
+        <SeriesCustomConfigEditor vizType={propVal.vizType}
+            value={propVal.customConfig}
             onChange={(t) => { onValChanged("customConfig", t) }} />
     </>
 }

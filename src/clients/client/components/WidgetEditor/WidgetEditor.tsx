@@ -37,8 +37,10 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     const onDeleteSeriesClick = (sInd: number) => {
         return (
             (ev: any) => {
-                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd), ...value.seriesConfigs.slice(sInd + 1)] }
-                onChange(newVal)
+                if (confirm("Are you sure to delete this series?")) {
+                    const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd), ...value.seriesConfigs.slice(sInd + 1)] }
+                    onChange(newVal)
+                }
             }
         )
     }
@@ -47,6 +49,17 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         return (
             (ev: any) => {
                 const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd + 1), value.seriesConfigs[sInd], ...value.seriesConfigs.slice(sInd + 1)] }
+                onChange(newVal)
+            }
+        )
+    }
+
+    const onAllSeriesTimeOverwriteClick = (sInd: number) => {
+        return (
+            (ev: any) => {
+                const startTime = value.seriesConfigs[sInd].startTime
+                const endTime = value.seriesConfigs[sInd].endTime
+                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.map(sc => { return { ...sc, startTime: startTime, endTime: endTime } })] }
                 onChange(newVal)
             }
         )
@@ -88,6 +101,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
                 <div key={`seriesConfigs_${sInd}`} style={{ marginLeft: '3em' }}>
                     <button type="button" onClick={onDeleteSeriesClick(sInd)}>Delete Series</button>
                     <button type="button" onClick={onDuplicateSeriesClick(sInd)}>Duplicate Series</button>
+                    <button type="button" onClick={onAllSeriesTimeOverwriteClick(sInd)}>Time Overwrite of all Series</button>
                     <hr />
                     <SeriesEditor value={sConfig} onChange={(seriesConf) => {
                         onChange(
