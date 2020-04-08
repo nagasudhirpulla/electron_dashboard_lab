@@ -1,11 +1,11 @@
 import { IMeasurement } from "../../../../measurements/type_defs/IMeasurement";
-import { VarTime } from "../../../../Time/VarTime";
+import { IVarTime } from "../../../../Time/type_defs/IVarTime";
 
 export interface ISeriesConfig {
     title: string
     measurements: IMeasurement[]
-    startTime: VarTime
-    endTime: VarTime
+    startTime: IVarTime
+    endTime: IVarTime
     vizType: string
     customConfig: any
 }

@@ -32,6 +32,7 @@ export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChan
                 <Controller as={<MeasurementEditor />}
                     name={`measurements[${measInd}]`}
                     control={control}
+                    defaultValue={meas}
                     onChange={([selected]) => { return selected }} />
             </div>
         )}

@@ -3,6 +3,7 @@ import path from "path";
 import { ChannelNames } from './ipc/ChannelNames'
 import { openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener, getVizPluginScriptIPCListener } from './server/vizPlugins/vizPluginsIPCManager';
 import { openDataAdaptersEditorIPCListener, getAdaptersListIPCListener, addDataAdapterIPCListener, deleteDataAdapterIPCListener, updateDataAdapterIPCListener, getAdapterDataIPCListener, openAdapterMeasPickerIPCListener, openAdapterConfigWindowIPCListener } from './server/dataAdapters/dataAdaptersIpcManager';
+import { initAdaptersRegistry } from './server/dataAdapters/commands/initAdaptersRegistryCommand';
 
 let win: BrowserWindow
 let vizPluginsEditorWin: BrowserWindow
@@ -12,7 +13,9 @@ let dataAdaptersEditorWin: BrowserWindow
 export const getDataAdaptersEditorWin = (): BrowserWindow => { return dataAdaptersEditorWin }
 export const setDataAdaptersEditorWin = (win: BrowserWindow) => { dataAdaptersEditorWin = win }
 
-const onAppReady = () => {
+const onAppReady = async () => {
+    //initialize existing data adapters
+    const _ = await initAdaptersRegistry()
     createWindow()
     // openVizPluginsEditor(vizPluginsEditorWin)
 }

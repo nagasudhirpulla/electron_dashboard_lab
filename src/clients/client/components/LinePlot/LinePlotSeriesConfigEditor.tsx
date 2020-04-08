@@ -1,4 +1,3 @@
-import { IVizConfEditorProps } from "../../type_defs/vizComp/IVizConfEditorProps";
 import React from 'react'
 import { ILinePlotSeriesConfEditorProps } from "./type_defs/ILinePlotSeriesConfEditorProps";
 import { useForm, Controller } from "react-hook-form";

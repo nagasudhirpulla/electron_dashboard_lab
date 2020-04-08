@@ -13,9 +13,13 @@ import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidget
 import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
 import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { VizPluginsManager } from './vizPluginsManager'
+import { IWidgetConfig } from './type_defs/dashboard/IWidgetConfig'
+import { WidgetEditor } from './components/WidgetEditor/WidgetEditor'
 
 // console.log("Hello World from client!!!")
+// create a global variable for viz plugins repository as well make it a context for other components to access it
 const $comps = VizPluginsRepo()
+export const vizPluginsRepoContext = React.createContext($comps)
 const vizPluginsManager = VizPluginsManager()
 const onOpenVizPluginsEditorClick = (e: any): void => {
     ipcRenderer.send('' + ChannelNames.openVizPluginsEditor, 'ping')
@@ -25,10 +29,20 @@ const onOpenDataAdaptersEditorClick = (e: any): void => {
     ipcRenderer.send('' + ChannelNames.openDataAdaptersEditor, 'ping')
 }
 
+const createNewWidgetConfig = (vizType: string): IWidgetConfig => {
+    const widgetConfig: IWidgetConfig = {
+        vizType: vizType,
+        title: "",
+        border: "1px solid black",
+        seriesConfigs: [],
+        customConfig: {},
+    }
+    return widgetConfig
+}
 
 const App: React.FC<{}> = () => {
-    const { handleSubmit, watch, control } = useForm({ defaultValues: { time: new VarTime(), period: new TimePeriod() } })
-    const onSubmit = (data: { time: VarTime, period: TimePeriod }) => { console.log(data) }
+    const { handleSubmit, watch, control } = useForm({ defaultValues: { time: new VarTime(), period: new TimePeriod(), plotConfig: createNewWidgetConfig(LinePlotMetadata.discriminator) } })
+    const onSubmit = (data: { time: VarTime, period: TimePeriod, plotConfig: IWidgetConfig }) => { console.log(data) }
 
     console.log(watch('time')) // watch input value by passing the name of it
     console.log(watch('period')) // watch input value by passing the name of it
@@ -46,6 +60,10 @@ const App: React.FC<{}> = () => {
 
             <h4>Time Period</h4>
             <Controller as={<TimePeriodEditor />} name="period" control={control} onChange={([selected]) => { return selected }} />
+
+            <h4>Widget Config</h4>
+            <Controller as={<WidgetEditor />} name="plotConfig" control={control} onChange={([selected]) => { return selected }} />
+            <br />
             <input type="submit" />
         </form>
         <button onClick={onOpenVizPluginsEditorClick}>Viz Plugins</button>
