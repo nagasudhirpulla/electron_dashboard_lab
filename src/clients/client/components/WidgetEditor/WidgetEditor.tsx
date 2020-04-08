@@ -10,6 +10,7 @@ import { generateMeasFromType } from '../../../../measurements/commands/generate
 import { vizPluginsRepoContext } from '../../client';
 import { ISeriesConfig } from '../../type_defs/dashboard/ISeriesConfig';
 import { VarTime } from '../../../../Time/VarTime';
+import { getNewSeriesForVizType } from '../SeriesEditor/queries/getNewSeriesForVizType';
 
 const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
@@ -18,7 +19,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
     const vizPluginsRepo = useContext(vizPluginsRepoContext);
 
-    console.log(value)
+    // console.log(value)
 
     const onValChanged = () => {
         if (onChange) {
@@ -28,20 +29,8 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     }
 
     const onAddNewSeriesClick = () => {
-        const newMeas = generateMeasFromType(newMeasType)
-        if (newMeas == null) { return; }
-        const vizMetaData = vizPluginsRepo.getCompMetadata(value.vizType)
-        let newSeriesConfig: ISeriesConfig = {
-            title: 'series',
-            measurements: [],
-            startTime: new VarTime(),
-            endTime: new VarTime(),
-            vizType: value.vizType,
-            customConfig: {}
-        }
-        for (let measIter = 0; measIter < vizMetaData.numMeasPerSeries; measIter++) {
-            newSeriesConfig.measurements.push({ ...newMeas })
-        }
+        const numMeasPerSeries = vizPluginsRepo.getCompMetadata(value.vizType).numMeasPerSeries
+        const newSeriesConfig = getNewSeriesForVizType(newMeasType, value.vizType, numMeasPerSeries)
         onChange({ ...value, seriesConfigs: [...value.seriesConfigs, newSeriesConfig] })
     }
 
@@ -49,6 +38,15 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         return (
             (ev: any) => {
                 const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd), ...value.seriesConfigs.slice(sInd + 1)] }
+                onChange(newVal)
+            }
+        )
+    }
+
+    const onDuplicateSeriesClick = (sInd: number) => {
+        return (
+            (ev: any) => {
+                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd + 1), value.seriesConfigs[sInd], ...value.seriesConfigs.slice(sInd + 1)] }
                 onChange(newVal)
             }
         )
@@ -89,6 +87,8 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
                 <WidgetDivider />
                 <div key={`seriesConfigs_${sInd}`} style={{ marginLeft: '3em' }}>
                     <button type="button" onClick={onDeleteSeriesClick(sInd)}>Delete Series</button>
+                    <button type="button" onClick={onDuplicateSeriesClick(sInd)}>Duplicate Series</button>
+                    <hr />
                     <SeriesEditor value={sConfig} onChange={(seriesConf) => {
                         onChange(
                             {
