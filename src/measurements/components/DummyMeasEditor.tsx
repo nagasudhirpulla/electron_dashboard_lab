@@ -8,7 +8,7 @@ export const DummyMeasEditor: React.FC<{ value: IDummyMeasurement, onChange: (m:
     const onValChanged = () => {
         if (onChange) {
             const val = watch({ nest: true })
-            onChange(val as IDummyMeasurement)
+            onChange({...value, ...val} as IDummyMeasurement)
         }
     }
 
@@ -34,6 +34,6 @@ export const DummyMeasEditor: React.FC<{ value: IDummyMeasurement, onChange: (m:
         <Controller as={<TimePeriodEditor />}
             name="periodicity"
             control={control}
-            onChange={([selected]) => { return selected }} />
+            onChange={([selected]) => { onChange({ ...value, periodicity: selected }) }} />
     </>
 }

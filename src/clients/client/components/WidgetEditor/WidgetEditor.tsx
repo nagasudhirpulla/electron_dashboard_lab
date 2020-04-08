@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react'
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { SeriesEditor } from '../SeriesEditor/SeriesEditor';
@@ -15,24 +15,21 @@ const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></d
 
 export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange }: IWidgetConfigEditorProps) => {
     const { register, watch, control } = useForm({ defaultValues: { ...value } })
-    // using field arrays - https://react-hook-form.com/api#useFieldArray, https://codesandbox.io/s/react-hook-form-usefieldarray-vy8fv
-    // const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    //     {control, name: "seriesConfigs"}
-    // )
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
     const vizPluginsRepo = useContext(vizPluginsRepoContext);
+
+    console.log(value)
 
     const onValChanged = () => {
         if (onChange) {
             const val = watch({ nest: true })
-            onChange(val as IWidgetConfig)
+            onChange({ ...value, ...val } as IWidgetConfig)
         }
     }
 
     const onAddNewSeriesClick = () => {
         const newMeas = generateMeasFromType(newMeasType)
         if (newMeas == null) { return; }
-        const val = watch({ nest: true }) as IWidgetConfig
         const vizMetaData = vizPluginsRepo.getCompMetadata(value.vizType)
         let newSeriesConfig: ISeriesConfig = {
             title: 'series',
@@ -45,15 +42,22 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         for (let measIter = 0; measIter < vizMetaData.numMeasPerSeries; measIter++) {
             newSeriesConfig.measurements.push({ ...newMeas })
         }
-        if (val.seriesConfigs == undefined) { val.seriesConfigs = [] }
-        val.seriesConfigs.push(newSeriesConfig)
-        onChange({ ...value, ...val })
+        onChange({ ...value, seriesConfigs: [...value.seriesConfigs, newSeriesConfig] })
+    }
+
+    const onDeleteSeriesClick = (sInd: number) => {
+        return (
+            (ev: any) => {
+                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd), ...value.seriesConfigs.slice(sInd + 1)] }
+                onChange(newVal)
+            }
+        )
     }
 
     return <>
         <div>
             <MeasurementSelector onMeasChanged={(measType: string) => { setNewMeasType(measType) }} />
-            <button onClick={(ev: any) => { onAddNewSeriesClick() }}>Add Series</button>
+            <button type="button" onClick={(ev: any) => { onAddNewSeriesClick() }}>Add Series</button>
         </div>
 
         <WidgetDivider />
@@ -78,21 +82,26 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         <Controller as={<WidgetCustomConfigEditor vizType={value.vizType} />}
             name='customConfig'
             control={control}
-            onChange={([selected]) => { return selected }} />
+            onChange={onValChanged} />
 
         {value.seriesConfigs.map((sConfig, sInd) =>
             <>
                 <WidgetDivider />
                 <div key={`seriesConfigs_${sInd}`} style={{ marginLeft: '3em' }}>
-                    <Controller as={<SeriesEditor />}
-                        name={`seriesConfigs[${sInd}]`}
-                        defaultValue={sConfig}
-                        control={control}
-                        onChange={([selected]) => { return selected }} />
+                    <button type="button" onClick={onDeleteSeriesClick(sInd)}>Delete Series</button>
+                    <SeriesEditor value={sConfig} onChange={(seriesConf) => {
+                        onChange(
+                            {
+                                ...value,
+                                seriesConfigs: [
+                                    ...value.seriesConfigs.slice(0, sInd),
+                                    seriesConf,
+                                    ...value.seriesConfigs.slice(sInd + 1)
+                                ]
+                            })
+                    }} />
                 </div>
             </>
         )}
-
-
     </>
 }

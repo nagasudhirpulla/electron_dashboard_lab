@@ -9,7 +9,7 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
     const onValChanged = () => {
         if (onChange) {
             const val = watch({ nest: true })
-            onChange(val as IAdapterMeasurement)
+            onChange({ ...value, ...val } as IAdapterMeasurement)
         }
     }
 

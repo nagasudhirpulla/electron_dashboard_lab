@@ -1,6 +1,4 @@
-import { ISeriesConfig } from "../../type_defs/dashboard/ISeriesConfig";
 import React from 'react'
-import { useForm, Controller } from "react-hook-form";
 import { ISeriesConfigEditorProps } from "./type_defs/ISeriesConfigEditorProps";
 import { VarTimeEditor } from "../../../../Time/components/VarTimeEditor/VarTimeEditor";
 import { SeriesCustomConfigEditor } from "../SeriesCustomConfigEditor/SeriesCustomConfigEditor";
@@ -9,53 +7,59 @@ import { MeasurementEditor } from "../../../../measurements/components/Measureme
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChange }: ISeriesConfigEditorProps) => {
-    const { register, watch, control } = useForm({ defaultValues: { ...value } })
-    const onValChanged = () => {
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange(val as ISeriesConfig)
+            onChange({ ...value, [`${ev.target.name}`]: ev.target.value })
+        }
+    }
+    const onValChanged = (name: string, val: {}) => {
+        if (onChange) {
+            onChange({ ...value, [`${name}`]: val })
         }
     }
     return <>
         <span><b>Series Title{" "}</b></span>
         <input
             type="text"
-            name={`title`}
-            onChange={onValChanged}
-            ref={register}
+            name="title"
+            value={value.title}
+            onChange={onInpValChanged}
         />
 
         <SeriesDivider />
         {value.measurements.map((meas, measInd) =>
             <div key={`meas_${measInd}`}>
                 <span><b>Measurement{` ${(measInd + 1)} `}</b></span><br />
-                <Controller as={<MeasurementEditor />}
-                    name={`measurements[${measInd}]`}
-                    control={control}
-                    defaultValue={meas}
-                    onChange={([selected]) => { return selected }} />
+                <MeasurementEditor
+                    value={meas}
+                    onChange={(m) => {
+                        onChange({
+                            ...value, measurements: [
+                                ...value.measurements.slice(0, measInd),
+                                m,
+                                ...value.measurements.slice(measInd + 1),
+                            ]
+                        })
+                    }}
+                />
             </div>
         )}
 
         <SeriesDivider />
         <span><b>Start Time{" "}</b></span><br />
-        <Controller as={<VarTimeEditor />}
-            name="startTime"
-            control={control}
-            onChange={([selected]) => { return selected }} />
+        <VarTimeEditor
+            value={value.startTime}
+            onChange={(t) => { onValChanged("startTime", t) }} />
 
         <SeriesDivider />
         <span><b>End Time{" "}</b></span><br />
-        <Controller as={<VarTimeEditor />}
-            name="endTime"
-            control={control}
-            onChange={([selected]) => { return selected }} />
+        <VarTimeEditor
+            value={value.endTime}
+            onChange={(t) => { onValChanged("endTime", t) }} />
 
         <SeriesDivider />
-        <Controller as={<SeriesCustomConfigEditor vizType={value.vizType} />}
-            name="customConfig"
-            control={control}
-            onChange={([selected]) => { return selected }} />
-
+        <SeriesCustomConfigEditor vizType={value.vizType}
+            value={value.customConfig}
+            onChange={(t) => { onValChanged("customConfig", t) }} />
     </>
 }

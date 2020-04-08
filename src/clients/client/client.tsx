@@ -44,8 +44,9 @@ const App: React.FC<{}> = () => {
     const { handleSubmit, watch, control } = useForm({ defaultValues: { time: new VarTime(), period: new TimePeriod(), plotConfig: createNewWidgetConfig(LinePlotMetadata.discriminator) } })
     const onSubmit = (data: { time: VarTime, period: TimePeriod, plotConfig: IWidgetConfig }) => { console.log(data) }
 
-    console.log(watch('time')) // watch input value by passing the name of it
-    console.log(watch('period')) // watch input value by passing the name of it
+    //console.log(watch('time')) // watch input value by passing the name of it
+    //console.log(watch('period')) // watch input value by passing the name of it
+    console.log(watch('plotConfig')) // watch input value by passing the name of it
 
     useEffect(() => {
         // register line plot
@@ -62,7 +63,7 @@ const App: React.FC<{}> = () => {
             <Controller as={<TimePeriodEditor />} name="period" control={control} onChange={([selected]) => { return selected }} />
 
             <h4>Widget Config</h4>
-            <Controller as={<WidgetEditor />} name="plotConfig" control={control} onChange={([selected]) => { return selected }} />
+            <Controller as={<WidgetEditor />} name="plotConfig" control={control} />
             <br />
             <input type="submit" />
         </form>
