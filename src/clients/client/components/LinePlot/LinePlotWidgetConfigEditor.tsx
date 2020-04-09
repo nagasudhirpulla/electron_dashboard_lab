@@ -7,40 +7,39 @@ import { ILinePlotWidgetConfig } from "./type_defs/ILinePlotWidgetConfig";
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);
 
 export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps> = ({ value, onChange }: ILinePlotWidgetConfEditorProps) => {
-    const { register, watch } = useForm({ defaultValues: { ...value } })
-    const onValChanged = () => {
+    //TODO merge with default props
+    const propVal = {...value}
+
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange(val as ILinePlotWidgetConfig["customConfig"])
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
         }
     }
 
     return <>
-        <span>Background Color{" "}</span>
+        <span>Background Color{' '}</span>
         <input
-            type="text"
-            name={`backgroundColor`}
-            onChange={onValChanged}
-            ref={register}
+            type='text'
+            name='backgroundColor'
+            onChange={onInpValChanged}
         />
 
         <WidgetDivider />
-        <span>Text Color{" "}</span>
+        <span>Text Color{' '}</span>
         <input
-            type="text"
-            name={`titleColor`}
-            onChange={onValChanged}
-            ref={register}
+            type='text'
+            name='titleColor'
+            onChange={onInpValChanged}
         />
 
 
         <WidgetDivider />
-        <span>Show Grid{" "}</span>
+        <span>Show Grid{' '}</span>
         <input
-            type="checkbox"
-            name={`showGrid`}
-            onChange={onValChanged}
-            ref={register}
+            type='checkbox'
+            name='showGrid'
+            onChange={onInpValChanged}
         />
     </>
 }

@@ -1,44 +1,43 @@
 import React, { useState, useContext } from 'react'
-import { useForm, Controller } from "react-hook-form";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
-import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { SeriesEditor } from '../SeriesEditor/SeriesEditor';
 import { WidgetCustomConfigEditor } from '../WidgetCustomConfigEditor/WidgetCustomConfigEditor';
 import { MeasurementSelector } from '../../../../measurements/components/MeasurementSelector';
 import { DummyMeasurement } from '../../../../measurements/DummyMeasurement';
-import { generateMeasFromType } from '../../../../measurements/commands/generateMeasFromType';
 import { vizPluginsRepoContext } from '../../client';
-import { ISeriesConfig } from '../../type_defs/dashboard/ISeriesConfig';
-import { VarTime } from '../../../../Time/VarTime';
 import { getNewSeriesForVizType } from '../SeriesEditor/queries/getNewSeriesForVizType';
 
 const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange }: IWidgetConfigEditorProps) => {
-    const { register, watch, control } = useForm({ defaultValues: { ...value } })
+    const propVal = { ...value }
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
     const vizPluginsRepo = useContext(vizPluginsRepoContext);
 
-    // console.log(value)
-
-    const onValChanged = () => {
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange({ ...value, ...val } as IWidgetConfig)
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
+        }
+    }
+
+    const onValChanged = (name: string, val: {}) => {
+        if (onChange) {
+            onChange({ ...propVal, [`${name}`]: val })
         }
     }
 
     const onAddNewSeriesClick = () => {
-        const numMeasPerSeries = vizPluginsRepo.getCompMetadata(value.vizType).numMeasPerSeries
-        const newSeriesConfig = getNewSeriesForVizType(newMeasType, value.vizType, numMeasPerSeries)
-        onChange({ ...value, seriesConfigs: [...value.seriesConfigs, newSeriesConfig] })
+        const numMeasPerSeries = vizPluginsRepo.getCompMetadata(propVal.vizType).numMeasPerSeries
+        const newSeriesConfig = getNewSeriesForVizType(newMeasType, propVal.vizType, numMeasPerSeries)
+        onChange({ ...propVal, seriesConfigs: [...propVal.seriesConfigs, newSeriesConfig] })
     }
 
     const onDeleteSeriesClick = (sInd: number) => {
         return (
             (ev: any) => {
                 if (confirm("Are you sure to delete this series?")) {
-                    const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd), ...value.seriesConfigs.slice(sInd + 1)] }
+                    const newVal = { ...propVal, seriesConfigs: [...propVal.seriesConfigs.slice(0, sInd), ...propVal.seriesConfigs.slice(sInd + 1)] }
                     onChange(newVal)
                 }
             }
@@ -48,7 +47,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     const onDuplicateSeriesClick = (sInd: number) => {
         return (
             (ev: any) => {
-                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.slice(0, sInd + 1), value.seriesConfigs[sInd], ...value.seriesConfigs.slice(sInd + 1)] }
+                const newVal = { ...propVal, seriesConfigs: [...propVal.seriesConfigs.slice(0, sInd + 1), propVal.seriesConfigs[sInd], ...propVal.seriesConfigs.slice(sInd + 1)] }
                 onChange(newVal)
             }
         )
@@ -57,10 +56,12 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     const onAllSeriesTimeOverwriteClick = (sInd: number) => {
         return (
             (ev: any) => {
-                const startTime = value.seriesConfigs[sInd].startTime
-                const endTime = value.seriesConfigs[sInd].endTime
-                const newVal = { ...value, seriesConfigs: [...value.seriesConfigs.map(sc => { return { ...sc, startTime: startTime, endTime: endTime } })] }
-                onChange(newVal)
+                if (confirm("Are you sure to overwrite start and end time of all series?")) {
+                    const startTime = propVal.seriesConfigs[sInd].startTime
+                    const endTime = propVal.seriesConfigs[sInd].endTime
+                    const newVal = { ...propVal, seriesConfigs: [...propVal.seriesConfigs.map(sc => { return { ...sc, startTime: startTime, endTime: endTime } })] }
+                    onChange(newVal)
+                }
             }
         )
     }
@@ -75,27 +76,24 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         <span><b>Widget Title{" "}</b></span>
         <input
             type='text'
-            name={'title'}
-            onChange={onValChanged}
-            ref={register}
+            name='title'
+            onChange={onInpValChanged}
         />
 
         <WidgetDivider />
         <span><b>Border{" "}</b></span><br />
         <input
             type='text'
-            name={'border'}
-            onChange={onValChanged}
-            ref={register}
+            name='border'
+            onChange={onInpValChanged}
         />
 
         <WidgetDivider />
-        <Controller as={<WidgetCustomConfigEditor vizType={value.vizType} />}
-            name='customConfig'
-            control={control}
-            onChange={onValChanged} />
+        <WidgetCustomConfigEditor
+            vizType={propVal.vizType} value={propVal.customConfig}
+            onChange={(wConfig) => { onValChanged('customConfig', wConfig) }} />
 
-        {value.seriesConfigs.map((sConfig, sInd) =>
+        {propVal.seriesConfigs.map((sConfig, sInd) =>
             <>
                 <WidgetDivider />
                 <div key={`seriesConfigs_${sInd}`} style={{ marginLeft: '3em' }}>
@@ -104,15 +102,12 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
                     <button type="button" onClick={onAllSeriesTimeOverwriteClick(sInd)}>Time Overwrite of all Series</button>
                     <hr />
                     <SeriesEditor value={sConfig} onChange={(seriesConf) => {
-                        onChange(
-                            {
-                                ...value,
-                                seriesConfigs: [
-                                    ...value.seriesConfigs.slice(0, sInd),
-                                    seriesConf,
-                                    ...value.seriesConfigs.slice(sInd + 1)
-                                ]
-                            })
+                        onValChanged('seriesConfigs',
+                            [
+                                ...propVal.seriesConfigs.slice(0, sInd),
+                                seriesConf,
+                                ...propVal.seriesConfigs.slice(sInd + 1)
+                            ])
                     }} />
                 </div>
             </>

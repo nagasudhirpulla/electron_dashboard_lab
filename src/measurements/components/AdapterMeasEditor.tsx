@@ -1,23 +1,23 @@
 import React from 'react'
-import { useForm } from "react-hook-form";
 import { IAdapterMeasurement } from '../type_defs/IAdapterMeasurement';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../../ipc/ChannelNames';
+import { ISelectedMeas } from '../../server/dataAdapters/dataAdaptersIpcManager';
 
 export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange: (m: IAdapterMeasurement) => void }> = ({ value, onChange }) => {
-    const { register, watch, setValue } = useForm({ defaultValues: { ...value } })
-    const onValChanged = () => {
+    const propVal = { ...value }
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange({ ...value, ...val } as IAdapterMeasurement)
+            const newVal = ev.target.type == 'checkbox' ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
         }
     }
 
     const onMeasPickerClick = () => {
-        ipcRenderer.send('' + ChannelNames.openAdapterMeasPicker, { measName: name, adapterId: value.adapter_id })
+        ipcRenderer.send('' + ChannelNames.openAdapterMeasPicker, { measName: name, adapterId: propVal.adapter_id })
     }
 
-    ipcRenderer.once('' + ChannelNames.selectedMeas, (event, resp: { err?: string, measInfo: string[], measName: string }) => {
+    ipcRenderer.once('' + ChannelNames.selectedMeas, (event, resp: ISelectedMeas) => {
         if (resp.measName != name) {
             return;
         }
@@ -25,21 +25,19 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
             console.log(resp.err);
             return;
         }
-        console.log(`Obtained adapter meas from picker is ${resp.measInfo}`) // prints "pong"
+        console.log(`Obtained adapter meas from picker is ${resp.measInfo}`)
         // set the measurement Id and measurement name
-        setValue('meas_id', resp.measInfo[0])
-        onValChanged()
+        onChange({ ...propVal, 'meas_id': resp.measInfo[0] })
     });
 
     return <>
-        <span>Measurement Id{" "}</span>
+        <span>Measurement Id{' '}</span>
         <input
-            type="text"
-            name={`meas_id`}
-            onChange={onValChanged}
-            ref={register}
+            type='text'
+            name='meas_id'
+            onChange={onInpValChanged}
         />
-        <button type="button" onClick={onMeasPickerClick}>...</button>
+        <button type='button' onClick={onMeasPickerClick}>...</button>
         <br />
     </>
 }

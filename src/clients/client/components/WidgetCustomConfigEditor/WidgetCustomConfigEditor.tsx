@@ -1,13 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { IVizConfEditorProps } from '../../type_defs/vizComp/IVizConfEditorProps'
-import { LinePlotMetadata } from '../LinePlot/LinePlotMetadata'
-import { LinePlotWidgetConfigEditor } from '../LinePlot/LinePlotWidgetConfigEditor'
+import { vizPluginsRepoContext } from '../../client'
 
 export const WidgetCustomConfigEditor: React.FC<IVizConfEditorProps> = ({ vizType, value, onChange }: IVizConfEditorProps) => {
-    if (vizType == LinePlotMetadata.discriminator) {
-        return <LinePlotWidgetConfigEditor vizType={vizType} value={value} onChange={onChange} />
-    }
-    else {
-        return <></>
-    }
+    const vizPluginsRepo = useContext(vizPluginsRepoContext)
+    // console.log(vizPluginsRepo.getInstalledPluginNames())
+    let WidCustConfigEditor: React.FC<IVizConfEditorProps> = vizPluginsRepo.getCompWidgetConfigEditor(vizType)
+    return <WidCustConfigEditor value={value} onChange={onChange}></WidCustConfigEditor>
 }
