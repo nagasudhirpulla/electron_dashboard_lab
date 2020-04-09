@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import React from 'react'
 import { TimePeriod } from '../../TimePeriod'
 import './time-period-editor.css'
 
@@ -9,22 +8,12 @@ import './time-period-editor.css'
  */
 export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onChange?: (v: TimePeriod) => void }) => {
 
-    const propTimeVal = value ? value : new TimePeriod()
-    const { register, watch } = useForm({ defaultValues: propTimeVal })
+    const propVal = value ? value : new TimePeriod()
 
-    const onValChanged = () => {
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange(
-                {
-                    years: +val.years,
-                    months: +val.months,
-                    days: +val.days,
-                    hrs: +val.hrs,
-                    mins: +val.mins,
-                    secs: +val.secs,
-                    millis: 0
-                })
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
         }
     }
 
@@ -39,10 +28,10 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                         <td>
                             <input
                                 type='number'
-                                name={'days'}
-                                onChange={onValChanged}
-                                ref={register}
+                                name='days'
                                 className='time_period_num_input'
+                                value={propVal.days}
+                                onChange={onInpValChanged}
                             />
                         </td>
                         <td>
@@ -51,10 +40,10 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                         <td>
                             <input
                                 type='number'
-                                name={'months'}
-                                onChange={onValChanged}
-                                ref={register}
+                                name='months'
                                 className='time_period_num_input'
+                                value={propVal.months}
+                                onChange={onInpValChanged}
                             />
                         </td>
                         <td>
@@ -64,9 +53,9 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                             <input
                                 type='number'
                                 name={'years'}
-                                onChange={onValChanged}
-                                ref={register}
                                 className='time_period_num_input'
+                                value={propVal.years}
+                                onChange={onInpValChanged}
                             />
                         </td>
                     </tr>
@@ -77,10 +66,10 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                         <td>
                             <input
                                 type='number'
-                                name={'hrs'}
-                                onChange={onValChanged}
-                                ref={register}
+                                name='hrs'
                                 className='time_period_num_input'
+                                value={propVal.hrs}
+                                onChange={onInpValChanged}
                             />
                         </td>
                         <td>
@@ -89,10 +78,10 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                         <td>
                             <input
                                 type='number'
-                                name={'mins'}
-                                onChange={onValChanged}
-                                ref={register}
+                                name='mins'
                                 className='time_period_num_input'
+                                value={propVal.mins}
+                                onChange={onInpValChanged}
                             />
                         </td>
                         <td>
@@ -102,9 +91,9 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
                             <input
                                 type='number'
                                 name={'secs'}
-                                onChange={onValChanged}
-                                ref={register}
                                 className='time_period_num_input'
+                                value={propVal.secs}
+                                onChange={onInpValChanged}
                             />
                         </td>
                     </tr>
