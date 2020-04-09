@@ -3,12 +3,12 @@ import React from 'react'
 import { useForm } from "react-hook-form";
 import { ILinePlotWidgetConfEditorProps } from "./type_defs/ILinePlotWidgetConfEditorProps";
 import { ILinePlotWidgetConfig } from "./type_defs/ILinePlotWidgetConfig";
+import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig";
 
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);
 
 export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps> = ({ value, onChange }: ILinePlotWidgetConfEditorProps) => {
-    //TODO merge with default props
-    const propVal = {...value}
+    const propVal = { ...getDefaultCustomWidgetConfig(), ...value }
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {

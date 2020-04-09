@@ -1,21 +1,21 @@
 import { IDashboardState } from "../../../type_defs/dashboard/IDashboardState";
-import { ILayout } from "../../../type_defs/gridLayout/ILayout";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
+import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
 
 export const getDefaultDashboardState = (): IDashboardState => {
     return {
         gridConfig: {
             rowHeight: 500,
-            onLayoutChange: (currLayout: ILayout, allLayouts: any) => { },
             cols: { lg: 60, md: 50, sm: 30, xs: 30, xxs: 30 },
-            initialLayout: [{ lg: [] }],
             backgroundColor: 'white',
+            breakpoints: { lg: 1200, md: 996, sm: 768 }
         },
-        className: "dashboard",
+        className: 'dashboard',
         timerSettings: {
             timerOn: false,
             timerPeriodicity: new TimePeriod()
         },
-        widgetProps: []
+        widgetProps: [getDefaultWidgetProps()],
+        currentBreakpoint: 'lg'
     }
 }

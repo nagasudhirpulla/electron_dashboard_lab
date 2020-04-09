@@ -1,10 +1,5 @@
-export interface ILayoutItem {
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    i: string,
-    static: boolean
-}
+import { ILayoutItem } from "./ILayoutItem";
 
-export type ILayout = ILayoutItem[]
+export interface ILayout {
+    [brkPnt: string]: ILayoutItem[]
+}

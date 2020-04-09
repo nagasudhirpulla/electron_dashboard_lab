@@ -1,6 +1,6 @@
 import { IWidgetData } from "./IWidgetData";
 import { IWidgetConfig } from "./IWidgetConfig";
-import { ILayoutItem } from "../gridLayout/ILayout";
+import { ILayoutItem } from "../gridLayout/ILayoutItem";
 
 export interface IWidgetProps {
     config: IWidgetConfig
