@@ -35,6 +35,7 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
         <input
             type='text'
             name='meas_id'
+            value={propVal.meas_id}
             onChange={onInpValChanged}
         />
         <button type='button' onClick={onMeasPickerClick}>...</button>

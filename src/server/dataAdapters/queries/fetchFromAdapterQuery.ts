@@ -10,7 +10,7 @@ const fetchExeData = async (exePath: string, cmdParams: string[]): Promise<strin
             let res = ""
 
             ipc.stderr.once('data', function (data) {
-                // console.log(data.toString())
+                //console.log(data.toString())
                 reject(data.toString())
             });
 
