@@ -7,4 +7,4 @@ export interface ILayoutItem {
     static: boolean
 }
 
-export interface ILayout extends Array<ILayoutItem> { }
+export type ILayout = ILayoutItem[]

@@ -4,7 +4,7 @@ import { IWidgetProps } from "./IWidgetProps";
 
 export interface IDashboardState {
     gridConfig: {
-        rowHeight: number,
+        rowHeight: number
         onLayoutChange: (currLayout: ILayout, allLayouts: any) => {}
         cols: { lg: number, md: number, sm: number, xs: number, xxs: number }
         initialLayout: ILayout
