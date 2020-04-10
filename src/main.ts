@@ -26,7 +26,7 @@ const createWindow = () => {
         width: 1340,
         height: 750,
         webPreferences: {
-            nodeIntegration: true, webSecurity: false
+            nodeIntegration: true, webSecurity: true
         }
     })
     win.loadURL(`file://${path.resolve(path.dirname(process.mainModule.filename), 'client.html')}`)

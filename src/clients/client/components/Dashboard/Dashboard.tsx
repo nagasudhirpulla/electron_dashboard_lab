@@ -24,6 +24,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     let [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
+        // TODO move this to reducer action
         // get the layouts breakpoints
         const laytBrPnts = Object.keys(allLayouts);
         const widgetProps = dashState.widgetProps;
@@ -131,6 +132,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const generateDOM = (): JSX.Element[] => {
+        // TODO move this to queries folder
         return dashState.widgetProps.map((wp: IWidgetProps, wInd) => {
             let l: Layout = wp.layouts[dashState.currentBreakpoint];
             const contentStyle: React.CSSProperties = { border: wp.config.border }
