@@ -34,7 +34,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                 widgetProps[layInd].layouts[laytBrPnt] = layout[layInd]
             }
         }
-        setDashboardStateAction({ ...dashState, widgetProps: widgetProps })
+        dashStateDispatch(setDashboardStateAction({ ...dashState, widgetProps: widgetProps }))
     }
 
     const onOpenDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -74,7 +74,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const onBreakpointChange = (newBreakpoint: string, newCols: number) => {
-        setDashboardStateAction({ ...dashState, currentBreakpoint: newBreakpoint as IDashboardState["currentBreakpoint"] })
+        dashStateDispatch(setDashboardStateAction({ ...dashState, currentBreakpoint: newBreakpoint as IDashboardState["currentBreakpoint"] }))
     }
 
     const onEditWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {

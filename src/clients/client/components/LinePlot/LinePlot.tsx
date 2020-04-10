@@ -142,7 +142,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
     })
 
     let plot_frames: Frame[] = []
-    let plot_config: Partial<Config> = { responsive: true }
+    let plot_config: Partial<Config> = {}
 
     return (
         <Plot
