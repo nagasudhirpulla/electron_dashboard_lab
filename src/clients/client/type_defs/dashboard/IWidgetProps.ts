@@ -1,13 +1,13 @@
 import { IWidgetData } from "./IWidgetData";
 import { IWidgetConfig } from "./IWidgetConfig";
-import { ILayoutItem } from "../gridLayout/ILayoutItem";
+import { Layout } from "react-grid-layout";
 
 export interface IWidgetProps {
     config: IWidgetConfig
     data: IWidgetData
     layouts: {
-        lg?: ILayoutItem
-        md?: ILayoutItem
-        sm?: ILayoutItem
+        lg?: Layout
+        md?: Layout
+        sm?: Layout
     }
 }

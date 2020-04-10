@@ -5,10 +5,11 @@ import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
 export const getDefaultDashboardState = (): IDashboardState => {
     return {
         gridConfig: {
-            rowHeight: 500,
-            cols: { lg: 60, md: 50, sm: 30, xs: 30, xxs: 30 },
+            rowHeight: 50,
+            cols: { lg: 60, md: 50, sm: 30 },
             backgroundColor: 'white',
-            breakpoints: { lg: 1200, md: 996, sm: 768 }
+            breakpoints: { lg: 1200, md: 996, sm: 768 },
+            compactType: "vertical"
         },
         className: 'dashboard',
         timerSettings: {
@@ -21,6 +22,7 @@ export const getDefaultDashboardState = (): IDashboardState => {
             isOn: false,
             start: 0,
             busy: false
-        }
+        },
+        mounted: false
     }
 }

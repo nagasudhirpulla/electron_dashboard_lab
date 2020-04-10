@@ -1,8 +1,5 @@
-import { IVizConfEditorProps } from "../../type_defs/vizComp/IVizConfEditorProps";
 import React from 'react'
-import { useForm } from "react-hook-form";
 import { ILinePlotWidgetConfEditorProps } from "./type_defs/ILinePlotWidgetConfEditorProps";
-import { ILinePlotWidgetConfig } from "./type_defs/ILinePlotWidgetConfig";
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig";
 
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);

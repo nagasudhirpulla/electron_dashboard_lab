@@ -20,7 +20,6 @@ export function openDashboardAction(): IOpenDashboardAction {
 }
 
 export const openDashboardDispatch = async (action: IOpenDashboardAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
-    // TODO complete this
     const newState: IDashboardState = await openDashboardFromDialog()
     pageStateDispatch(setDashboardStateAction({ ...pageState, ...newState }))
 }

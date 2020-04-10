@@ -6,5 +6,6 @@ export interface IDashboardState extends IDashboardProps {
         isOn: boolean,
         start: number,
         busy: boolean
-    }
+    },
+    mounted: boolean
 }

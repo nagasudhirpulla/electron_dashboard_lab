@@ -10,8 +10,8 @@ export const getDefaultWidgetProps = (): IWidgetProps => {
             lg: {
                 x: 0,
                 y: 0,
-                w: 38,
-                h: 8,
+                w: 20,
+                h: 5,
                 i: uuid(),
                 static: false
             }

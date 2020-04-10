@@ -1,7 +1,5 @@
 import React from 'react'
 import { ILinePlotSeriesConfEditorProps } from "./type_defs/ILinePlotSeriesConfEditorProps";
-import { useForm, Controller } from "react-hook-form";
-import { ILinePlotSeriesConfig } from "./type_defs/ILinePlotSeriesConfig";
 import { TimePeriodEditor } from "../../../../Time/components/TimePeriodEditor/TimePeriodEditor";
 import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle";
 import { YAxisSide } from "./type_defs/YAxisSide";
@@ -10,11 +8,25 @@ import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps> = ({ value, onChange }: ILinePlotSeriesConfEditorProps) => {
-    const { register, watch, control } = useForm({ defaultValues: { ...value } })
-    const onValChanged = () => {
+    const propVal = { ...value }
+
+    const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const val = watch({ nest: true })
-            onChange(val as ILinePlotSeriesConfig["customConfig"])
+            const newVal = ev.target.type == 'checkbox' ? ev.target.checked : ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
+        }
+    }
+
+    const onSelValChanged = (ev: React.ChangeEvent<HTMLSelectElement>) => {
+        if (onChange) {
+            const newVal = ev.target.value
+            onChange({ ...propVal, [`${ev.target.name}`]: newVal })
+        }
+    }
+
+    const onValChanged = (name: string, val: {}) => {
+        if (onChange) {
+            onChange({ ...propVal, [`${name}`]: val })
         }
     }
 
@@ -23,33 +35,31 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
         <input
             type="text"
             name={`color`}
-            onChange={onValChanged}
-            ref={register}
+            onChange={onInpValChanged}
+            value={propVal.color + ""}
         />
 
         <SeriesDivider />
         <span><b>Display Time Shift</b></span>
-        <Controller as={<TimePeriodEditor />}
-            name="displayTimeShift"
-            control={control}
-            onChange={([selected]) => { return selected }} />
-
+        <TimePeriodEditor
+            value={propVal.displayTimeShift}
+            onChange={(t) => { onValChanged('displayTimeShift', t) }} />
 
         <SeriesDivider />
         <span><b>Line Width{" "}</b></span>
         <input
             type="number"
             name={`size`}
-            onChange={onValChanged}
-            ref={register}
+            onChange={onInpValChanged}
+            value={propVal.size}
         />
 
         <SeriesDivider />
         <span><b>Visualization{" "}</b></span>
         <select
             name={`seriesStyle`}
-            onChange={onValChanged}
-            ref={register}
+            onChange={onSelValChanged}
+            value={propVal.seriesStyle}
         >
             <option value={TslpSeriesStyle.line}>Normal Timeseries</option>
             <option value={TslpSeriesStyle.duration}>Duration Curve</option>
@@ -60,18 +70,18 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
         <span><b>Y Axis Number{" "}</b></span>
         <input
             type="number"
-            onChange={onValChanged}
+            onChange={onInpValChanged}
             name={`yAxisIndex`}
-            ref={register}
+            value={propVal.yAxisIndex}
             min="0"
         />
 
         <SeriesDivider />
         <span><b>Y Axis Side{" "}</b></span>
         <select
-            onChange={onValChanged}
+            onChange={onSelValChanged}
             name={`yAxisSide`}
-            ref={register}
+            value={propVal.yAxisSide}
         >
             <option value={YAxisSide.left}>Left</option>
             <option value={YAxisSide.right}>Right</option>
@@ -81,17 +91,17 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
         <span><b>Y Axis Offset{" "}</b></span>
         <input
             type="number"
-            onChange={onValChanged}
+            onChange={onInpValChanged}
             name={`yAxisOffset`}
-            ref={register}
+            value={propVal.yAxisOffset}
         />
 
         <SeriesDivider />
         <span><b>Plotly Render Strategy{" "}</b></span>
         <select
-            onChange={onValChanged}
+            onChange={onSelValChanged}
             name={`renderStrategy`}
-            ref={register}
+            value={propVal.renderStrategy}
         >
             <option value={PlotlyRenderStrategy.scatter}>No GPU</option>
             <option value={PlotlyRenderStrategy.scattergl}>Use GPU</option>

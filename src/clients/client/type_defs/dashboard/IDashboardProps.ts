@@ -1,6 +1,6 @@
 import { ITimePeriod } from "../../../../Time/type_defs/ITimePeriod";
 import { IWidgetProps } from "./IWidgetProps";
-
+import {CoreProps} from 'react-grid-layout';
 export interface IDashboardProps {
     gridConfig: {
         rowHeight: number
@@ -8,17 +8,14 @@ export interface IDashboardProps {
             lg: number
             md: number
             sm: number
-            xs: number
-            xxs: number
         }
         breakpoints: {
             lg?: number
             md?: number
             sm?: number
-            xs?: number
-            xxs?: number
         }
         backgroundColor: string
+        compactType: CoreProps["compactType"]
     }
     className: string
     timerSettings: {
