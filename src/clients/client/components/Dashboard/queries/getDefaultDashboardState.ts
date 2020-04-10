@@ -16,6 +16,11 @@ export const getDefaultDashboardState = (): IDashboardState => {
             timerPeriodicity: new TimePeriod()
         },
         widgetProps: [getDefaultWidgetProps()],
-        currentBreakpoint: 'lg'
+        currentBreakpoint: 'lg',
+        timer: {
+            isOn: false,
+            start: 0,
+            busy: false
+        }
     }
 }

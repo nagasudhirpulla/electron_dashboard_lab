@@ -3,7 +3,9 @@ import { registerVizPlugin } from "./registerVizPlugin"
 
 export const registerVizPluginFromDialog = async (): Promise<string> => {
     // get the user selected viz plugin file path
-    const pluginExtPath = await getFilePathFromDialog()
+    const pluginExtPath = await getFilePathFromDialog('Select New Visualization Plugin', [
+        { name: 'JS Files', extensions: ['js'] },
+    ])
     if (pluginExtPath == null) {
         return null
     }

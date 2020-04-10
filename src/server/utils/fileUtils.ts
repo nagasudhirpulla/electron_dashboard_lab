@@ -49,7 +49,7 @@ export const deleteFileAsync = function (filePath: string): Promise<boolean> {
 };
 
 export const saveExcelAsync = async (wb: Workbook) => {
-    const showSaveDialog = require('electron').remote.dialog.showSaveDialog;
+    const showSaveDialog = require('electron').dialog.showSaveDialog;
     const dialogRes = await showSaveDialog({
         filters: [
             { name: 'Excel Workbook', extensions: ['xlsx'] },
@@ -112,13 +112,11 @@ export const removeFolderAsync = function (folderPath: string): Promise<boolean>
     });
 }
 
-export const getFilePathFromDialog = async (): Promise<string> => {
+export const getFilePathFromDialog = async (title: string, filters: Electron.FileFilter[]): Promise<string> => {
     const dialogRes = await showOpenDialog({
         properties: ['openFile'],
-        title: 'Select New Visualization Plugin File',
-        filters: [
-            { name: 'JS Files', extensions: ['js'] },
-        ]
+        title: title,
+        filters: filters,
     });
     let filePath: string = null;
     // console.log(dialogRes);

@@ -23,5 +23,9 @@ export enum ChannelNames {
     openAdapterConfigWindow,
     openAdapterConfigWindowResp,
     deleteVizPlugin,
-    deleteVizPluginResp
+    deleteVizPluginResp,
+    openDashboardFromDialog,
+    openDashboardFromDialogResp,
+    saveDashboardFromDialog,
+    saveDashboardFromDialogResp
 }
