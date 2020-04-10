@@ -11,7 +11,7 @@ export const getDefaultWidgetProps = (): IWidgetProps => {
                 x: 0,
                 y: 0,
                 w: 20,
-                h: 5,
+                h: 3,
                 i: uuid(),
                 static: false
             }

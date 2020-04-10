@@ -5,7 +5,7 @@ import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
 export const getDefaultDashboardState = (): IDashboardState => {
     return {
         gridConfig: {
-            rowHeight: 50,
+            rowHeight: 20,
             cols: { lg: 60, md: 50, sm: 30 },
             backgroundColor: 'white',
             breakpoints: { lg: 1200, md: 996, sm: 768 },
