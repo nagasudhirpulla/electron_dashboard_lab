@@ -13,6 +13,6 @@ export const openDashboard = async (openFilename: string) => {
     const fileContents: string = await readFileAsync(openFilename);
     // console.log(`${fileContents}`);
     const stateObj = JSON.parse(fileContents) as IDashboardState;
-    console.log(stateObj);
+    // console.log(stateObj);
     return stateObj
 }

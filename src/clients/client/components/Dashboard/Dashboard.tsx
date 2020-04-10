@@ -14,6 +14,7 @@ import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
 import { vizPluginsRepoContext } from '../../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import './dashboard.css';
 import './rgl_styles.css';
 
@@ -141,23 +142,23 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                         <span
                             className="editItemBtn"
                             onClick={onEditWidget(wInd)}
-                        ><FontAwesomeIcon icon="pen" color='white' size='xs' /></span>
+                        ><FontAwesomeIcon icon={faPen} color='coral' size='xs' /></span>
                         <span
                             className="copyWidBtn"
                             onClick={onDuplicateWidget(wInd)}
-                        ><FontAwesomeIcon icon="copy" color='white' size='xs' /></span>
+                        ><FontAwesomeIcon icon={faCopy} color='white' size='xs' /></span>
                         <span
                             className="exportBtn"
                             onClick={onExportWidget(wInd)}
-                        ><FontAwesomeIcon icon="download" color='#4CAF50' size='xs' /></span>
+                        ><FontAwesomeIcon icon={faDownload} color='#4CAF50' size='xs' /></span>
                         <span
                             className="refreshBtn"
                             onClick={onRefreshWidget(wInd)}
-                        ><FontAwesomeIcon icon="sync-alt" color='gold' size='xs' /></span>
+                        ><FontAwesomeIcon icon={faSyncAlt} color='gold' size='xs' /></span>
                         <span
                             className="removeBtn"
                             onClick={onRemoveWidget(wInd)}
-                        ><FontAwesomeIcon icon="times-circle" color='red' size='xs' /></span>
+                        ><FontAwesomeIcon icon={faTimesCircle} color='red' size='xs' /></span>
                     </div>
                     <div className="cellContent" key={l.i + '_timeseries'} style={contentStyle}>
                         <VizComp {...wp}></VizComp>
@@ -182,6 +183,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         <ResponsiveReactGridLayout
             breakpoints={dashState.gridConfig.breakpoints}
             cols={dashState.gridConfig.cols}
+            rowHeight={dashState.gridConfig.rowHeight}
             layouts={deriveLayouts()}
             onBreakpointChange={onBreakpointChange}
             onLayoutChange={onLayoutChange}

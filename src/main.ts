@@ -4,6 +4,7 @@ import { ChannelNames } from './ipc/ChannelNames'
 import { openVizPluginsEditorIPCListener, registerVizPluginFromDialogIPCListener, getVizPluginNamesIPCListener, deleteVizPluginIPCListener, getVizPluginScriptIPCListener } from './server/vizPlugins/vizPluginsIPCManager';
 import { openDataAdaptersEditorIPCListener, getAdaptersListIPCListener, addDataAdapterIPCListener, deleteDataAdapterIPCListener, updateDataAdapterIPCListener, getAdapterDataIPCListener, openAdapterMeasPickerIPCListener, openAdapterConfigWindowIPCListener } from './server/dataAdapters/dataAdaptersIpcManager';
 import { initAdaptersRegistry } from './server/dataAdapters/commands/initAdaptersRegistryCommand';
+import { saveDashboardFromDialogIPCListener, openDashboardFromDialogIPCListener } from './server/dashboard/dashboardIpcManager';
 
 let win: BrowserWindow
 let vizPluginsEditorWin: BrowserWindow
@@ -34,14 +35,16 @@ const createWindow = () => {
     })
 }
 
+// Dashboard IPC listeners setup
+ipcMain.on('' + ChannelNames.saveDashboardFromDialog, saveDashboardFromDialogIPCListener())
+ipcMain.on('' + ChannelNames.openDashboardFromDialog, openDashboardFromDialogIPCListener())
+
 // Viz Plugins IPC listeners setup
 ipcMain.on('' + ChannelNames.openVizPluginsEditor, openVizPluginsEditorIPCListener())
 ipcMain.on('' + ChannelNames.registerVizPluginFromDialog, registerVizPluginFromDialogIPCListener())
 ipcMain.on('' + ChannelNames.getVizPluginNames, getVizPluginNamesIPCListener())
 ipcMain.on('' + ChannelNames.deleteVizPlugin, deleteVizPluginIPCListener())
 ipcMain.on('' + ChannelNames.getVizPluginScript, getVizPluginScriptIPCListener())
-
-
 
 // Data Adapters IPC listeners setup
 ipcMain.on('' + ChannelNames.openDataAdaptersEditor, openDataAdaptersEditorIPCListener())

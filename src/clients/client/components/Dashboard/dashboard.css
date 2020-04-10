@@ -175,6 +175,14 @@ li b {
     color: white;
 }
 
+.editItemBtn {
+    position: absolute;
+    right: 100px;
+    top: 0;
+    cursor: pointer;
+    color: white;
+}
+
 .cellContent {
     position: absolute;
     left: 0;

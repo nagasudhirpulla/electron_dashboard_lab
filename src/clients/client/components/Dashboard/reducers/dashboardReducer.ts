@@ -38,6 +38,7 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
         switch (action.type) {
             case ActionType.OPEN_DASHBOARD: {
                 const dashboard = await openDashboardFromDialog()
+                console.log(`Opening dashboard ${JSON.stringify(dashboard)}`)
                 pageStateDispatch(setDashboardStateAction(dashboard))
                 break;
             }
