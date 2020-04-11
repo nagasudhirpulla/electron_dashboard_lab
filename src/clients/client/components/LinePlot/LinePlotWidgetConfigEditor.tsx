@@ -19,6 +19,7 @@ export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps
         <input
             type='text'
             name='backgroundColor'
+            value={propVal.backgroundColor + ""}
             onChange={onInpValChanged}
         />
 
@@ -27,6 +28,7 @@ export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps
         <input
             type='text'
             name='titleColor'
+            value={propVal.titleColor + ""}
             onChange={onInpValChanged}
         />
 

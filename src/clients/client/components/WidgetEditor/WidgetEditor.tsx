@@ -77,6 +77,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         <input
             type='text'
             name='title'
+            value={propVal.title}
             onChange={onInpValChanged}
         />
 
@@ -85,6 +86,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
         <input
             type='text'
             name='border'
+            value={propVal.border}
             onChange={onInpValChanged}
         />
 

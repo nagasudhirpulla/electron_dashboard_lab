@@ -23,6 +23,7 @@ import { duplicateWidgetAction } from './actions/DuplicateWidgetAction';
 import { deleteWidgetAction } from './actions/DeleteWidgetAction';
 import { WidgetEditorModal } from '../WidgetEditor/WidgetEditorModal';
 import { IWidgetConfig } from '../../type_defs/dashboard/IWidgetConfig';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -161,42 +162,45 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         });
     }
 
-    return <div style={getDashboardStyle(dashState)}>
-        <button onClick={onOpenDashboard}>Open Dashboard</button>
-        <button onClick={onSaveDashboard}>Save Dashboard</button>
-        <button onClick={onOpenSettingsEditor}>Settings</button>
-        <button onClick={onResetLayout}>Reset Layout</button>
-        <button onClick={onCompactTypeChange}>
-            {dashState.gridConfig.compactType || "No"}{` Compaction`}
-        </button>
-        <button onClick={onDataAdaptersEditClick}>Data Adapters</button>
-        <button onClick={onVizPluginsEditClick}>Visualization Plugins</button>
-        <button onClick={onAddWidgetClick}>Add Widget</button>
-        <button onClick={onRefreshAllWidgetsClick}>Refresh All</button>
-        <ResponsiveReactGridLayout
-            breakpoints={dashState.gridConfig.breakpoints}
-            cols={dashState.gridConfig.cols}
-            rowHeight={dashState.gridConfig.rowHeight}
-            layouts={deriveLayouts(dashState.widgetProps.map(wp => wp.layouts))}
-            onBreakpointChange={onBreakpointChange}
-            onLayoutChange={onLayoutChange}
-            // WidthProvider option
-            measureBeforeMount={false}
-            // Animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
-            // and set `measureBeforeMount={true}`.
-            useCSSTransforms={dashState.mounted}
-            compactType={dashState.gridConfig.compactType}
-            preventCollision={!dashState.gridConfig.compactType}
-            draggableHandle='.dragHandle'
-            style={divStyle}
-        >
-            {generateDOM()}
-        </ResponsiveReactGridLayout>
+    return <>
+        <div style={getDashboardStyle(dashState)}>
+            <button onClick={onOpenDashboard}>Open Dashboard</button>
+            <button onClick={onSaveDashboard}>Save Dashboard</button>
+            <button onClick={onOpenSettingsEditor}>Settings</button>
+            <button onClick={onResetLayout}>Reset Layout</button>
+            <button onClick={onCompactTypeChange}>
+                {dashState.gridConfig.compactType || "No"}{` Compaction`}
+            </button>
+            <button onClick={onDataAdaptersEditClick}>Data Adapters</button>
+            <button onClick={onVizPluginsEditClick}>Visualization Plugins</button>
+            <button onClick={onAddWidgetClick}>Add Widget</button>
+            <button onClick={onRefreshAllWidgetsClick}>Refresh All</button>
+            <ResponsiveReactGridLayout
+                breakpoints={dashState.gridConfig.breakpoints}
+                cols={dashState.gridConfig.cols}
+                rowHeight={dashState.gridConfig.rowHeight}
+                layouts={deriveLayouts(dashState.widgetProps.map(wp => wp.layouts))}
+                onBreakpointChange={onBreakpointChange}
+                onLayoutChange={onLayoutChange}
+                // WidthProvider option
+                measureBeforeMount={false}
+                // Animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
+                // and set `measureBeforeMount={true}`.
+                useCSSTransforms={dashState.mounted}
+                compactType={dashState.gridConfig.compactType}
+                preventCollision={!dashState.gridConfig.compactType}
+                draggableHandle='.dragHandle'
+                style={divStyle}
+            >
+                {generateDOM()}
+            </ResponsiveReactGridLayout>
+
+        </div>
         <WidgetEditorModal
             show={showEditWidgetModal}
             setShow={setShowEditWidgetModal}
             value={dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
         />
-    </div>
+    </>
 }

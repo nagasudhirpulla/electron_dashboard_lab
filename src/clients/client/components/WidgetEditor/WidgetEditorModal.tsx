@@ -3,9 +3,10 @@ import Modal from 'react-bootstrap/Modal'
 import { IWidgetEditorModalProps } from "./type_defs/IWidgetEditorModalProps";
 import { WidgetEditor } from "./WidgetEditor";
 import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
+import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 
 export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, show, setShow }: IWidgetEditorModalProps) => {
-    const [widgetConfig, setWidgetConfig] = useState(value)
+    const [widgetConfig, setWidgetConfig] = useState({ ...value })
 
     const handleClose = () => setShow(false)
 
@@ -14,7 +15,7 @@ export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, on
         setShow(false)
     }
 
-    const onChange = (v: IWidgetConfig) => {
+    const onChange: IWidgetConfigEditorProps["onChange"] = (v: IWidgetConfig) => {
         setWidgetConfig(v)
     }
 
