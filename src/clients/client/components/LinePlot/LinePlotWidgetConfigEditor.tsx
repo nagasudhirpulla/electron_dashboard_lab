@@ -38,6 +38,7 @@ export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps
         <input
             type='checkbox'
             name='showGrid'
+            checked={propVal.showGrid}
             onChange={onInpValChanged}
         />
     </>
