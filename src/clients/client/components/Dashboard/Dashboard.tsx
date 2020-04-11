@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { IDashboardProps } from '../../type_defs/dashboard/IDashboardProps';
 import { getDashboardStyle } from './queries/getDashboardStyle';
 import { useDashboardReducer } from './reducers/dashboardReducer';
@@ -21,11 +21,15 @@ import { layoutChangeAction } from './actions/LayoutChangeAction';
 import { deriveLayouts } from './queries/deriveLayouts';
 import { duplicateWidgetAction } from './actions/DuplicateWidgetAction';
 import { deleteWidgetAction } from './actions/DeleteWidgetAction';
+import { WidgetEditorModal } from '../WidgetEditor/WidgetEditorModal';
+import { IWidgetConfig } from '../../type_defs/dashboard/IWidgetConfig';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
     const dashInitState: IDashboardState = { ...getDefaultDashboardState(), ...props, mounted: false }
-    let [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
+    const [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
+    const [showEditWidgetModal, setShowEditWidgetModal] = useState(false)
+    const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
@@ -73,8 +77,19 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
 
     const onEditWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
         return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            // TODO complete this
+            setActiveWidgetIndex(wInd)
+            setShowEditWidgetModal(true)
         }
+    }
+
+    const onEditWidgetSubmit = (wc: IWidgetConfig): void => {
+        dashStateDispatch(setDashboardStateAction({
+            ...dashState, widgetProps: [
+                ...dashState.widgetProps.slice(0, activeWidgetIndex),
+                { ...dashState.widgetProps[activeWidgetIndex], config: wc },
+                ...dashState.widgetProps.slice(activeWidgetIndex + 1),
+            ]
+        }))
     }
 
     const onDuplicateWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
@@ -177,5 +192,11 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         >
             {generateDOM()}
         </ResponsiveReactGridLayout>
+        <WidgetEditorModal
+            show={showEditWidgetModal}
+            setShow={setShowEditWidgetModal}
+            value={dashState.widgetProps[activeWidgetIndex].config}
+            onSubmit={onEditWidgetSubmit}
+        />
     </div>
 }
