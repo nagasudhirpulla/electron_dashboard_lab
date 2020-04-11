@@ -124,7 +124,6 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const generateDOM = (): JSX.Element[] => {
-        // TODO move this to queries folder
         return dashState.widgetProps.map((wp: IWidgetProps, wInd) => {
             let l: Layout = wp.layouts[dashState.currentBreakpoint];
             const contentStyle: React.CSSProperties = { border: wp.config.border }
@@ -199,7 +198,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         <WidgetEditorModal
             show={showEditWidgetModal}
             setShow={setShowEditWidgetModal}
-            value={dashState.widgetProps[activeWidgetIndex].config}
+            value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
         />
     </>

@@ -4,11 +4,12 @@ import { TimePeriodEditor } from "../../../../Time/components/TimePeriodEditor/T
 import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle";
 import { YAxisSide } from "./type_defs/YAxisSide";
 import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
+import { getDefaultCustomSeriesConfig } from './queries/getDefaultCustomSeriesConfig';
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps> = ({ value, onChange }: ILinePlotSeriesConfEditorProps) => {
-    const propVal = { ...value }
+    const propVal = { ...getDefaultCustomSeriesConfig(), ...value }
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {

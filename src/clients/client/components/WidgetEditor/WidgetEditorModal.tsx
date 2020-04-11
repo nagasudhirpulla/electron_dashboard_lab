@@ -6,7 +6,7 @@ import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 
 export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, show, setShow }: IWidgetEditorModalProps) => {
-    const [widgetConfig, setWidgetConfig] = useState({ ...value })
+    const [widgetConfig, setWidgetConfig] = useState(JSON.parse(JSON.stringify(value)) as IWidgetConfig)
 
     const handleClose = () => setShow(false)
 
@@ -19,7 +19,7 @@ export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, on
         setWidgetConfig(v)
     }
 
-    return <Modal show={show} onHide={handleClose}>
+    return <Modal show={show} onHide={handleClose} size={'xl'}>
         <Modal.Header closeButton>
             <Modal.Title>Edit Widget Configuration</Modal.Title>
         </Modal.Header>
