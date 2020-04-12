@@ -10,7 +10,7 @@ export const openDataAdaptersEditor = (): void => {
         return
     }
     dataAdaptersEditorWin = new BrowserWindow({
-        width: 450,
+        width: 600,
         height: 500,
         webPreferences: {
             nodeIntegration: true, webSecurity: false

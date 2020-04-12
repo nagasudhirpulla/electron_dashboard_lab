@@ -5,19 +5,20 @@ import Plot from 'react-plotly.js'
 import { YAxisSide } from "./type_defs/YAxisSide"
 import { ILinePlotWidgetProps } from "./type_defs/ILinePlotWidgetProps"
 import merge from 'lodash.merge'
-import { defLinePlotWidgetCustomConfig, defLinePlotSeriesCustomConfig } from "./configDefaults"
 import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle"
 import { TimePeriod } from "../../../../Time/TimePeriod"
+import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig"
+import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
 
 export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
     // set default values to widget custom config
     let config = { ...props.config }
-    config.customConfig = merge({}, defLinePlotWidgetCustomConfig, config.customConfig)
+    config.customConfig = merge({}, getDefaultCustomWidgetConfig(), config.customConfig)
 
     // set default values to each series custom config
     for (let sInd = 0; sInd < config.seriesConfigs.length; sInd++) {
         let sConfig = config.seriesConfigs[sInd]
-        sConfig.customConfig = merge({}, defLinePlotSeriesCustomConfig, config.seriesConfigs[sInd].customConfig)
+        sConfig.customConfig = merge({}, getDefaultCustomSeriesConfig(), config.seriesConfigs[sInd].customConfig)
     }
 
     const generateSeriesData = (seriesIter: number): Data => {
@@ -44,6 +45,11 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         // implement y axis settings
         let yAxisInd = config.seriesConfigs[seriesIter].customConfig.yAxisIndex
         if (yAxisInd > 0) { seriesData['yaxis'] = `y${yAxisInd}` }
+
+        if (!(seriesIter in props.data)) {
+            // check if seriesIter is present as key in data
+            return seriesData
+        }
 
         // determine series data display time shift
         let shiftMillis: number = 0

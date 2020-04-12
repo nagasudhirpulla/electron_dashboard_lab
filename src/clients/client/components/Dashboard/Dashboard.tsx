@@ -14,7 +14,7 @@ import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
 import { vizPluginsRepoContext } from '../../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt } from '@fortawesome/free-solid-svg-icons'
 import './dashboard.css';
 import './rgl_styles.css';
 import { layoutChangeAction } from './actions/LayoutChangeAction';
@@ -24,6 +24,9 @@ import { deleteWidgetAction } from './actions/DeleteWidgetAction';
 import { WidgetEditorModal } from '../WidgetEditor/WidgetEditorModal';
 import { IWidgetConfig } from '../../type_defs/dashboard/IWidgetConfig';
 import "bootstrap/dist/css/bootstrap.min.css";
+import { DashboardSettingsEditorModal } from '../DashboardSettingsEditor/DashboardSettingsEditorModal';
+import { IDashboardSettings } from '../DashboardSettingsEditor/type_defs/IDashboardSettings';
+import { setDashboardSettingsAction } from './actions/SetDashboardSettingsAction';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -31,6 +34,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     const [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
     const [showEditWidgetModal, setShowEditWidgetModal] = useState(false)
     const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
+    const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
@@ -61,7 +65,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const onOpenSettingsEditor = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO complete this
+        setShowDashSettingsModal(true)
     }
 
     const onAddWidgetClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -91,6 +95,10 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                 ...dashState.widgetProps.slice(activeWidgetIndex + 1),
             ]
         }))
+    }
+
+    const onDashSettingsSubmit = (s: IDashboardSettings): void => {
+        dashStateDispatch(setDashboardSettingsAction(s))
     }
 
     const onDuplicateWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
@@ -163,17 +171,19 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
 
     return <>
         <div style={getDashboardStyle(dashState)}>
-            <button onClick={onOpenDashboard}>Open Dashboard</button>
-            <button onClick={onSaveDashboard}>Save Dashboard</button>
-            <button onClick={onOpenSettingsEditor}>Settings</button>
-            <button onClick={onResetLayout}>Reset Layout</button>
-            <button onClick={onCompactTypeChange}>
-                {dashState.gridConfig.compactType || "No"}{` Compaction`}
-            </button>
-            <button onClick={onDataAdaptersEditClick}>Data Adapters</button>
-            <button onClick={onVizPluginsEditClick}>Visualization Plugins</button>
-            <button onClick={onAddWidgetClick}>Add Widget</button>
-            <button onClick={onRefreshAllWidgetsClick}>Refresh All</button>
+            <div className={"btn-group btn-group-sm"}>
+                <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
+                <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
+                <button onClick={onOpenSettingsEditor} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faCog} /> Settings</button>
+                <button onClick={onResetLayout} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSyncAlt} /> Reset Layout</button>
+                <button onClick={onCompactTypeChange} className={"btn btn-outline-primary"}>
+                    {dashState.gridConfig.compactType || "No"}{` Compaction`}
+                </button>
+                <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
+                <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
+                <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
+                <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
+            </div>
             <ResponsiveReactGridLayout
                 breakpoints={dashState.gridConfig.breakpoints}
                 cols={dashState.gridConfig.cols}
@@ -200,6 +210,12 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
             setShow={setShowEditWidgetModal}
             value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
+        />
+        <DashboardSettingsEditorModal
+            show={showDashSettingsModal}
+            setShow={setShowDashSettingsModal}
+            value={{ backgroundColor: dashState.gridConfig.backgroundColor, timerSettings: dashState.timerSettings }}
+            onSubmit={onDashSettingsSubmit}
         />
     </>
 }

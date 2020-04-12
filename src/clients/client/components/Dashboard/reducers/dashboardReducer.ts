@@ -9,6 +9,7 @@ import { IToggleCompactionAction, toggleCompactionReducer } from "../actions/Tog
 import { ILayoutChangeAction, layoutChangeReducer } from "../actions/LayoutChangeAction"
 import { duplicateWidgetReducer, IDuplicateWidgetAction } from "../actions/DuplicateWidgetAction"
 import { deleteWidgetReducer, IDeleteWidgetAction } from "../actions/DeleteWidgetAction"
+import { ISetDashboardSettingsAction, setDashboardSettingsReducer } from "../actions/SetDashboardSettingsAction"
 
 export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -24,6 +25,8 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
                 return duplicateWidgetReducer(state, action as IDuplicateWidgetAction)
             case ActionType.DELETE_WIDGET:
                 return deleteWidgetReducer(state, action as IDeleteWidgetAction)
+            case ActionType.SET_DASHBOARD_SETIINGS:
+                return setDashboardSettingsReducer(state, action as ISetDashboardSettingsAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));

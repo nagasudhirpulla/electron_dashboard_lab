@@ -5,6 +5,7 @@ import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle";
 import { YAxisSide } from "./type_defs/YAxisSide";
 import { PlotlyRenderStrategy } from "./type_defs/PlotlyRenderStrategy";
 import { getDefaultCustomSeriesConfig } from './queries/getDefaultCustomSeriesConfig';
+import { ColorPicker } from '../ColorPicker/ColorPicker';
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
@@ -33,12 +34,8 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
 
     return <>
         <span><b>Series Color{" "}</b></span>
-        <input
-            type="text"
-            name={`color`}
-            onChange={onInpValChanged}
-            value={propVal.color + ""}
-        />
+        <ColorPicker colorStr={propVal.color + ""}
+            onColorChange={(c) => { onValChanged('color', c) }} />
 
         <SeriesDivider />
         <span><b>Display Time Shift</b></span>

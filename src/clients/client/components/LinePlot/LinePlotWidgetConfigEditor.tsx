@@ -1,6 +1,7 @@
 import React from 'react'
 import { ILinePlotWidgetConfEditorProps } from "./type_defs/ILinePlotWidgetConfEditorProps";
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig";
+import { ColorPicker } from '../ColorPicker/ColorPicker';
 
 const WidgetDivider: React.FC = () => (<div className="widget_divider"><hr /></div>);
 
@@ -14,27 +15,24 @@ export const LinePlotWidgetConfigEditor: React.FC<ILinePlotWidgetConfEditorProps
         }
     }
 
+    const onValChanged = (name: string, val: {}) => {
+        if (onChange) {
+            onChange({ ...propVal, [`${name}`]: val })
+        }
+    }
+
     return <>
-        <span>Background Color{' '}</span>
-        <input
-            type='text'
-            name='backgroundColor'
-            value={propVal.backgroundColor + ""}
-            onChange={onInpValChanged}
-        />
+        <span><b>Background{' '}</b></span>
+        <ColorPicker colorStr={propVal.backgroundColor + ""}
+            onColorChange={(c) => { onValChanged('backgroundColor', c) }} />
 
         <WidgetDivider />
-        <span>Text Color{' '}</span>
-        <input
-            type='text'
-            name='titleColor'
-            value={propVal.titleColor + ""}
-            onChange={onInpValChanged}
-        />
-
+        <span><b>Text Color{' '}</b></span>
+        <ColorPicker colorStr={propVal.titleColor + ""}
+            onColorChange={(c) => { onValChanged('titleColor', c) }} />
 
         <WidgetDivider />
-        <span>Show Grid{' '}</span>
+        <span><b>Show Grid{' '}</b></span>
         <input
             type='checkbox'
             name='showGrid'
