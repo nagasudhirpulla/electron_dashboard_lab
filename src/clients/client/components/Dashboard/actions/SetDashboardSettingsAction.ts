@@ -1,7 +1,7 @@
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { IDashboardSettings } from "../../DashboardSettingsEditor/type_defs/IDashboardSettings";
-import { IDashboardState } from "../../../type_defs/dashboard/IDashboardState";
+import { IDashboardState } from "../type_defs/IDashboardState";
 
 export interface ISetDashboardSettingsPayload {
     dashboardSettings: IDashboardSettings

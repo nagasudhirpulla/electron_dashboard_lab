@@ -1,5 +1,5 @@
-import { ITimePeriod } from "../../../../Time/type_defs/ITimePeriod";
-import { IWidgetProps } from "./IWidgetProps";
+import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
+import { IWidgetProps } from "../../../type_defs/dashboard/IWidgetProps";
 import {CoreProps} from 'react-grid-layout';
 export interface IDashboardProps {
     gridConfig: {

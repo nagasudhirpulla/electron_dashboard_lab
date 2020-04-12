@@ -12,7 +12,7 @@ export const ColorPicker: React.FC<{ colorStr: string, onColorChange: (c: string
         onColorChange(clr.hex)
     };
 
-    const styles = {
+    const styles: { [key: string]: React.CSSProperties } = {
         color: {
             width: '36px',
             height: '14px',
@@ -27,6 +27,10 @@ export const ColorPicker: React.FC<{ colorStr: string, onColorChange: (c: string
             display: 'inline-block',
             cursor: 'pointer',
             marginLeft: '5px'
+        },
+        input: {
+            width: "5em",
+            textAlign: "center"
         }
     }
 
@@ -42,15 +46,19 @@ export const ColorPicker: React.FC<{ colorStr: string, onColorChange: (c: string
     }
 
     return <>
-        <div>
-            <input type='text' value={colorStr} onChange={(ev) => { onColorChange(colorStringFromInp(ev.target.value)) }} />
+        <>
+            <input type='text'
+                style={styles.input}
+                value={colorStr}
+                onChange={(ev) => { onColorChange(colorStringFromInp(ev.target.value)) }} />
+
             <div style={styles.swatch} onClick={handleClick} className={'align-middle'}>
                 <div style={styles.color} />
             </div>
             {displayPicker &&
                 <SketchPicker color={colorStr} onChange={handleColorChange} />
             }
-        </div>
+        </>
     </>
 
 }

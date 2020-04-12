@@ -1,4 +1,4 @@
-import { IDashboardState } from "../../../type_defs/dashboard/IDashboardState";
+import { IDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { setDashboardStateAction } from "./SetDashboardStateAction";

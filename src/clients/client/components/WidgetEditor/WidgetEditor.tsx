@@ -8,6 +8,7 @@ import { vizPluginsRepoContext } from '../../client';
 import { getNewSeriesForVizType } from '../SeriesEditor/queries/getNewSeriesForVizType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faClone, faClock } from '@fortawesome/free-solid-svg-icons';
+import { BorderEditor } from '../BorderEditor/BorderEditor';
 
 const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
@@ -85,11 +86,9 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
 
         <WidgetDivider />
         <span><b>Border{" "}</b></span><br />
-        <input
-            type='text'
-            name='border'
+        <BorderEditor
             value={propVal.border}
-            onChange={onInpValChanged}
+            onChange={(v) => { onValChanged('border', v) }}
         />
 
         <WidgetDivider />
@@ -102,9 +101,9 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
                 <WidgetDivider />
                 <div key={`seriesConfigs_${sInd}`} style={{ marginLeft: '3em' }}>
                     <div className={"btn-group btn-group-sm"}>
-                        <button type="button" onClick={onDeleteSeriesClick(sInd)} className={"btn btn-sm btn-danger"}><FontAwesomeIcon icon={faTrashAlt}/> Delete Series</button>
-                        <button type="button" onClick={onDuplicateSeriesClick(sInd)} className={"btn btn-sm btn-warning"}><FontAwesomeIcon icon={faClone}/> Duplicate Series</button>
-                        <button type="button" onClick={onAllSeriesTimeOverwriteClick(sInd)} className={"btn btn-sm btn-info"}><FontAwesomeIcon icon={faClock}/> Time Overwrite of all Series</button>
+                        <button type="button" onClick={onDeleteSeriesClick(sInd)} className={"btn btn-sm btn-danger"}><FontAwesomeIcon icon={faTrashAlt} /> Delete Series</button>
+                        <button type="button" onClick={onDuplicateSeriesClick(sInd)} className={"btn btn-sm btn-warning"}><FontAwesomeIcon icon={faClone} /> Duplicate Series</button>
+                        <button type="button" onClick={onAllSeriesTimeOverwriteClick(sInd)} className={"btn btn-sm btn-info"}><FontAwesomeIcon icon={faClock} /> Time Overwrite of all Series</button>
                     </div>
                     <hr />
                     <SeriesEditor value={sConfig} onChange={(seriesConf) => {

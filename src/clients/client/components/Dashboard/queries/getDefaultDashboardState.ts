@@ -1,4 +1,4 @@
-import { IDashboardState } from "../../../type_defs/dashboard/IDashboardState";
+import { IDashboardState } from "../type_defs/IDashboardState";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
 

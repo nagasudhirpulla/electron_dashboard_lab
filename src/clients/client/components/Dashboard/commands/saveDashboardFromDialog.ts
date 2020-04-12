@@ -1,5 +1,5 @@
 
-import { IDashboardState } from "../../../type_defs/dashboard/IDashboardState"
+import { IDashboardState } from "../type_defs/IDashboardState"
 import { ipcRenderer } from "electron"
 import { ChannelNames } from "../../../../../ipc/ChannelNames"
 import { ISaveDashboardFromDialogResp } from "../../../../../server/dashboard/dashboardIpcManager"

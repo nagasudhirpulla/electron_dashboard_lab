@@ -6,7 +6,7 @@ export const getDefaultWidgetConfig = (): IWidgetConfig => {
     return {
         vizType: LinePlotMetadata.discriminator,
         title: 'Widget Title',
-        border: '1px solid black',
+        border: { color: 'black', size: 1, style: 'solid' },
         seriesConfigs: [],
         customConfig: getDefaultCustomWidgetConfig()
     }

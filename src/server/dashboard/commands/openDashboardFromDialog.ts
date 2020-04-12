@@ -1,4 +1,4 @@
-import { IDashboardState } from "../../../clients/client/type_defs/dashboard/IDashboardState";
+import { IDashboardState } from "../../../clients/client/components/Dashboard/type_defs/IDashboardState";
 import { getFilePathFromDialog } from "../../utils/fileUtils";
 import { openDashboard } from "./openDashboard";
 

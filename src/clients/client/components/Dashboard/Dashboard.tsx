@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react'
-import { IDashboardProps } from '../../type_defs/dashboard/IDashboardProps';
+import { IDashboardProps } from './type_defs/IDashboardProps';
 import { getDashboardStyle } from './queries/getDashboardStyle';
 import { useDashboardReducer } from './reducers/dashboardReducer';
 import { getDefaultDashboardState } from './queries/getDefaultDashboardState';
-import { IDashboardState } from '../../type_defs/dashboard/IDashboardState';
+import { IDashboardState } from './type_defs/IDashboardState';
 import { openDashboardAction } from './actions/OpenDashboardAction';
 import { saveDashboardAction } from './actions/SaveDashboardAction';
 import { setDashboardStateAction } from './actions/SetDashboardStateAction';
@@ -134,7 +134,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     const generateDOM = (): JSX.Element[] => {
         return dashState.widgetProps.map((wp: IWidgetProps, wInd) => {
             let l: Layout = wp.layouts[dashState.currentBreakpoint];
-            const contentStyle: React.CSSProperties = { border: wp.config.border }
+            const contentStyle: React.CSSProperties = { borderStyle: wp.config.border.style, borderColor: wp.config.border.color, borderWidth: wp.config.border.size }
             let VizComp: React.FC<IWidgetProps> = useContext(vizPluginsRepoContext).getComp(wp.config.vizType)
             return (
                 <div key={l.i} className={l.static ? "static" : ""}>
