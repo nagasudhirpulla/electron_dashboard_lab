@@ -7,6 +7,8 @@ import { ISeriesConfig } from "../../../type_defs/dashboard/ISeriesConfig";
 import { VarTime } from "../../../../../Time/VarTime";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 import { fetchMeasData } from "../../../fetchers/queries/fetchMeasData";
+import { ISeriesData } from "../../../type_defs/dashboard/ISeriesData";
+import { setSeriesDataAction } from "./SetSeriesDataAction";
 
 export interface IFetchSeriesDataPayload {
     widgetIndex: number
@@ -40,10 +42,18 @@ export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pa
 
     // fetch data for each window
     const measList: IMeasurement[] = sConfig.measurements
-    for (const fWin of fetchWindows) {
-        for (const meas of measList) {
-            const winData = fetchMeasData(fWin[0], fWin[1], meas, {})
-            // TODO comple this
+    for (const fWinInd in fetchWindows) {
+        const fWin = fetchWindows[fWinInd]
+        let seriesData: ISeriesData = []
+        for (const measInd in measList) {
+            let winData = await fetchMeasData(fWin[0], fWin[1], measList[measInd], {})
+            if (+fWinInd > 0 && winData != null && winData.length > 2) {
+                // remove 1st sample since we already fetched it as last sample in prev window
+                winData = [...winData.slice(2)]
+            }
+            seriesData[measInd] = winData
         }
+        // TODO comple this
+        pageStateDispatch(setSeriesDataAction(wInd, sInd, seriesData, true))
     }
 }

@@ -3,26 +3,26 @@ import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { ISeriesData } from "../../../type_defs/dashboard/ISeriesData";
 
-export interface ISetSeriesDataStatePayload {
+export interface ISetSeriesDataPayload {
     widgetIndex: number
     seriesIndex: number
     data: ISeriesData
     append: boolean
 }
 
-export interface ISetSeriesDataStateAction extends IAction {
+export interface ISetSeriesDataAction extends IAction {
     type: ActionType.SET_SERIES_DATA,
-    payload: ISetSeriesDataStatePayload
+    payload: ISetSeriesDataPayload
 }
 
-export function setSeriesDataStateAction(widgetIndex: number, seriesIndex: number, data: ISeriesData, append: boolean): ISetSeriesDataStateAction {
+export function setSeriesDataAction(widgetIndex: number, seriesIndex: number, data: ISeriesData, append: boolean): ISetSeriesDataAction {
     return {
         type: ActionType.SET_SERIES_DATA,
         payload: { widgetIndex, seriesIndex, data, append }
     }
 }
 
-export const setSeriesDataStateReducer = (state: IDashboardState, action: ISetSeriesDataStateAction): IDashboardState => {
+export const setSeriesDataReducer = (state: IDashboardState, action: ISetSeriesDataAction): IDashboardState => {
     const wInd = action.payload.widgetIndex
     const sInd = action.payload.seriesIndex
     let newData: ISeriesData

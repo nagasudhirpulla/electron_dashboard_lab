@@ -3,8 +3,9 @@ import { VarTime } from "../../../../Time/VarTime";
 import { IDummyMeasurement } from "../../../../measurements/type_defs/IDummyMeasurement";
 import { TimePeriod } from "../../../../Time/TimePeriod";
 import { DataQuality } from "../../../../server/dataAdapters/type_defs/DataQuality";
+import { IMeasData } from "../../type_defs/dashboard/IMeasData";
 
-export const fetchDummyMeasData = async (fromTime: Date, toTime: Date, meas: IDummyMeasurement, options?: IFetcherOptions): Promise<number[]> {
+export const fetchDummyMeasData = async (fromTime: Date, toTime: Date, meas: IDummyMeasurement, options?: IFetcherOptions): Promise<IMeasData> => {
     // Initialize results
     let resultData: number[] = []
     let periodicityMillis: number = TimePeriod.getSeconds(meas.periodicity) * 1000

@@ -7,8 +7,9 @@ import { fetchDummyMeasData } from "./fetchDummyMeasData";
 import { AdapterMeasurement } from "../../../../measurements/AdapterMeasurement";
 import { fetchAdapterMeasData } from "./fetchAdapterMeasData";
 import { IAdapterMeasurement } from "../../../../measurements/type_defs/IAdapterMeasurement";
+import { IMeasData } from "../../type_defs/dashboard/IMeasData";
 
-export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasurement, options?: IFetcherOptions): Promise<number[]> => {
+export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasurement, options?: IFetcherOptions): Promise<IMeasData> => {
     let resultData: number[] = []
     if (meas.discriminator == DummyMeasurement.typename) {
         resultData = await fetchDummyMeasData(fromTime, toTime, meas as IDummyMeasurement, options)

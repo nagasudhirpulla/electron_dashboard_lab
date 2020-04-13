@@ -9,6 +9,7 @@ import { fetchFromAdapter, fetchMeasDataFromAdapter } from "./queries/fetchFromA
 import { getAdapterManifest } from "./queries/getAdapterManifestQuery"
 import { openDataAdaptersEditor } from "./commands/openDataAdaptersEditor"
 import { IAdapterMeasurement } from "../../measurements/type_defs/IAdapterMeasurement"
+import { IMeasData } from "../../clients/client/type_defs/dashboard/IMeasData"
 
 export const openDataAdaptersEditorIPCListener = () => {
     return (event: IpcMainEvent, arg: any[]) => {
@@ -54,7 +55,7 @@ export const updateDataAdapterIPCListener = () => {
     }
 }
 
-export type IGetAdapterDataResp = number[]
+export type IGetAdapterDataResp = IMeasData
 export type IGetAdapterDataReq = { meas: IAdapterMeasurement, fromTime: Date, toTime: Date }
 export const getAdapterDataIPCListener = () => {
     return (event: IpcMainEvent, { meas, fromTime, toTime }: IGetAdapterDataReq) => {

@@ -4,6 +4,7 @@ import path from 'path'
 import { getExesFolder } from "./getExesFolderQuery"
 import { ChildProcess, spawn } from 'child_process'
 import { IAdapterMeasurement } from "../../../measurements/type_defs/IAdapterMeasurement"
+import { IMeasData } from "../../../clients/client/type_defs/dashboard/IMeasData"
 
 const fetchExeData = async (exePath: string, cmdParams: string[]): Promise<string> => {
     const getIpcRespAsync = (ipc: ChildProcess): Promise<string> => {
@@ -54,7 +55,7 @@ export const convertTimeToAdapterCmdStr = (time: Date): string => {
     return `${time.getTime()}`;
 };
 
-export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTime: Date, toTime: Date): Promise<number[]> => {
+export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTime: Date, toTime: Date): Promise<IMeasData> => {
     const fromTimeStr = convertTimeToAdapterCmdStr(fromTime)
     const toTimeStr = convertTimeToAdapterCmdStr(toTime)
     const cmdParams: string[] = [

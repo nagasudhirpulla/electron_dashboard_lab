@@ -44,6 +44,9 @@ export class TimePeriod implements ITimePeriod {
         if (startTime.getTime() > endTime.getTime()) {
             return []
         }
+        if (per.years == 0 && per.months == 0 && per.days == 0 && per.hrs == 0 && per.mins == 0 && per.secs == 0 && per.millis == 0) {
+            return [[startTime, endTime]]
+        }
         let abort = false
         let windows: [Date, Date][] = []
         let currStart = new Date(startTime)
