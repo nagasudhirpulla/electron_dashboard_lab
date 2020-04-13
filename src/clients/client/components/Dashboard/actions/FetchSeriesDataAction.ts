@@ -26,20 +26,21 @@ export function fetchSeriesDataAction(widgetIndex: number, seriesIndex: number):
 
 
 export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
-    // TODO comple this
     const wInd = action.payload.widgetIndex
     const sInd = action.payload.seriesIndex
     // get series config
     const sConfig: ISeriesConfig = pageState.widgetProps[wInd].config.seriesConfigs[sInd]
-    // get fetch window
-    const fetchWindow: ITimePeriod = sConfig.fetchWindow
-    const measList: IMeasurement[] = sConfig.measurements
-    // get fetch times
+    
+    // get fetch windows
+    const window: ITimePeriod = sConfig.fetchWindow
     const fetchStartTime = VarTime.getDateObj(sConfig.startTime)
     const fetchEndTime = VarTime.getDateObj(sConfig.endTime)
-
-    for (let currTime = fetchStartTime; currTime.getTime() <= fetchEndTime.getTime(); currTime = TimePeriod.addTimePeriod(currTime, fetchWindow)) {
-        const element = array[index];
+    const fetchWindows = TimePeriod.splitWindow(fetchStartTime, fetchEndTime, window)
+    
+    // fetch data for each window
+    const measList: IMeasurement[] = sConfig.measurements
+    for (const fWin of fetchWindows) {
+        // TODO comple this
 
     }
 }

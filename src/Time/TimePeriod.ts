@@ -12,7 +12,7 @@ export class TimePeriod implements ITimePeriod {
     static getSeconds(per: ITimePeriod): number {
         return per.years * 365 * 30 * 24 * 60 * 60 + per.months * 30 * 24 * 60 * 60 + per.days * 24 * 60 * 60 + per.hrs * 60 * 60 + per.mins * 60 + per.secs + per.millis * 0.001;
     }
-    
+
     static addTimePeriod(inpTime: Date, per: ITimePeriod): Date {
         //https://stackoverflow.com/questions/5645058/how-to-add-months-to-a-date-in-javascript
         let newTime = new Date(inpTime)
@@ -38,6 +38,25 @@ export class TimePeriod implements ITimePeriod {
             newTime = new Date(newTime.getTime() + per.millis)
         }
         return newTime
+    }
+
+    static splitWindow(startTime: Date, endTime: Date, per: ITimePeriod): [Date, Date][] {
+        if (startTime.getTime() > endTime.getTime()) {
+            return []
+        }
+        let abort = false
+        let windows: [Date, Date][] = []
+        let currStart = new Date(startTime)
+        do {
+            let currEnd = TimePeriod.addTimePeriod(currStart, per)
+            if (currEnd.getTime() >= endTime.getTime()) {
+                currEnd = new Date(endTime)
+                abort = true
+            }
+            windows = [...windows, [currStart, currEnd]]
+            currStart = new Date(currEnd)
+        } while (!abort)
+        return windows
     }
 }
 
