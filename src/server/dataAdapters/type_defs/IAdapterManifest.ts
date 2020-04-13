@@ -1,4 +1,4 @@
-export interface AdapterManifest {
+export interface IAdapterManifest {
     "entry": string
     "name": string
     "app_id": string

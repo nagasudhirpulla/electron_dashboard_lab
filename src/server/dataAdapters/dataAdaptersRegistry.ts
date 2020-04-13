@@ -1,12 +1,12 @@
-import { AdapterManifest } from "../type_defs/AdapterManifest"
+import { IAdapterManifest } from "./type_defs/IAdapterManifest"
 
-let $adaptersRegistry: { [key: string]: AdapterManifest } = {}
+let $adaptersRegistry: { [key: string]: IAdapterManifest } = {}
 export const adaptersRegistryFilename: string = 'adapter_register.json'
 
-export const getAdaptersRegistry = (): { [key: string]: AdapterManifest } => {
+export const getAdaptersRegistry = (): { [key: string]: IAdapterManifest } => {
     return $adaptersRegistry
 }
 
-export const setAdaptersRegistry = (inp: { [key: string]: AdapterManifest }) => {
+export const setAdaptersRegistry = (inp: { [key: string]: IAdapterManifest }) => {
     $adaptersRegistry = inp;
 }

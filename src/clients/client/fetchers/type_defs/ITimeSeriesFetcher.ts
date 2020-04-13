@@ -1,5 +1,5 @@
-import { VarTime } from "../../Time/VarTime";
-import { IMeasurement } from "../../measurements/type_defs/IMeasurement";
+import { VarTime } from "../../../../Time/VarTime";
+import { IMeasurement } from "../../../../measurements/type_defs/IMeasurement";
 import { IFetcherOptions } from "./IFetcherOptions";
 
 /**

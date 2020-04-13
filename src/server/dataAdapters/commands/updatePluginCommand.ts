@@ -1,11 +1,11 @@
-import { AdapterManifest } from "../../type_defs/AdapterManifest"
+import { IAdapterManifest } from "../type_defs/IAdapterManifest"
 import { getManifestFromExternPlugin } from "./getManifestFromExternPluginCommand"
 import { isPluginNamePresent } from "../queries/isPluginNamePresentQuery"
 import { copyPluginFolder } from "./copyPluginFolderCommand"
 import { registerAdapterManifest } from "./registerAdapterManifestCommand"
 import { getExtPluginFoldPathFromDialog } from "./getExtPluginFoldPathFromDialogCommand"
 
-export const updatePlugin = async (adapterId: string): Promise<AdapterManifest> => {
+export const updatePlugin = async (adapterId: string): Promise<IAdapterManifest> => {
     // get the user selected folder path
     const pluginExtFoldPath = await getExtPluginFoldPathFromDialog()
     if (pluginExtFoldPath == null) {

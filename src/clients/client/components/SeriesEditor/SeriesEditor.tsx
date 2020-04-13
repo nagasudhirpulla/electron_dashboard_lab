@@ -4,6 +4,7 @@ import { VarTimeEditor } from "../../../../Time/components/VarTimeEditor/VarTime
 import { SeriesCustomConfigEditor } from "../SeriesCustomConfigEditor/SeriesCustomConfigEditor";
 import { MeasurementEditor } from "../../../../measurements/components/MeasurementEditor";
 import { getDefaultSeriesConfig } from './queries/getDefautSeriesConfig';
+import { TimePeriodEditor } from '../../../../Time/components/TimePeriodEditor/TimePeriodEditor';
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
@@ -58,6 +59,12 @@ export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChan
         <VarTimeEditor
             value={propVal.endTime}
             onChange={(t) => { onValChanged('endTime', t) }} />
+
+        <SeriesDivider />
+        <span><b>Fetch Window{' '}</b></span><br />
+        <TimePeriodEditor
+            value={propVal.fetchWindow}
+            onChange={(t) => { onValChanged('fetchWindow', t) }} />
 
         <SeriesDivider />
         <SeriesCustomConfigEditor

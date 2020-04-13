@@ -8,8 +8,36 @@ export class TimePeriod implements ITimePeriod {
     mins: number = 0;
     secs: number = 0;
     millis: number = 0;
+
     static getSeconds(per: ITimePeriod): number {
         return per.years * 365 * 30 * 24 * 60 * 60 + per.months * 30 * 24 * 60 * 60 + per.days * 24 * 60 * 60 + per.hrs * 60 * 60 + per.mins * 60 + per.secs + per.millis * 0.001;
+    }
+    
+    static addTimePeriod(inpTime: Date, per: ITimePeriod): Date {
+        //https://stackoverflow.com/questions/5645058/how-to-add-months-to-a-date-in-javascript
+        let newTime = new Date(inpTime)
+        if (per.years != 0) {
+            newTime = new Date(newTime.setFullYear(newTime.getFullYear() + per.years));
+        }
+        if (per.months != 0) {
+            newTime = new Date(newTime.setMonth(newTime.getMonth() + per.months));
+        }
+        if (per.days != 0) {
+            newTime = new Date(newTime.setDate(newTime.getDate() + per.days))
+        }
+        if (per.hrs != 0) {
+            newTime = new Date(newTime.getTime() + (per.hrs * 60 * 60 * 1000))
+        }
+        if (per.mins != 0) {
+            newTime = new Date(newTime.getTime() + (per.mins * 60 * 1000))
+        }
+        if (per.secs != 0) {
+            newTime = new Date(newTime.getTime() + (per.secs * 1000))
+        }
+        if (per.millis != 0) {
+            newTime = new Date(newTime.getTime() + per.millis)
+        }
+        return newTime
     }
 }
 

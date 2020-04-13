@@ -3,9 +3,9 @@ import { getAdapterRepoFilePath } from "../queries/getAdaptersRepoFilePathQuery"
 import { persistAdaptersRegistry } from "./persistAdaptersRegistryCommand"
 import { readFileAsync } from "../../utils/fileUtils"
 import { setAdaptersRegistry, getAdaptersRegistry } from "../dataAdaptersRegistry"
-import { AdapterManifest } from "../../type_defs/AdapterManifest"
+import { IAdapterManifest } from "../type_defs/IAdapterManifest"
 
-export const initAdaptersRegistry = async (): Promise<{ [key: string]: AdapterManifest }> => {
+export const initAdaptersRegistry = async (): Promise<{ [key: string]: IAdapterManifest }> => {
     const filePath = getAdapterRepoFilePath()
     if (!existsSync(filePath)) {
         console.log(`${filePath} file not present`)

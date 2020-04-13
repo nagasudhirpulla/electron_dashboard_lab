@@ -1,9 +1,9 @@
-import { AdapterManifest } from "../../type_defs/AdapterManifest"
+import { IAdapterManifest } from "../type_defs/IAdapterManifest"
 import { existsSync } from "fs"
 import { readFileAsync } from "../../utils/fileUtils"
 import path from 'path'
 
-const ensureManifestAttrs = async (manifestJson: AdapterManifest): Promise<AdapterManifest> => {
+const ensureManifestAttrs = async (manifestJson: IAdapterManifest): Promise<IAdapterManifest> => {
     // ensure manifest json attributes
     let absentAttrs: string[] = []
     if (manifestJson.app_id == undefined) {
@@ -28,7 +28,7 @@ const ensureManifestAttrs = async (manifestJson: AdapterManifest): Promise<Adapt
     return manifestJson;
 }
 
-export const getManifestFromExternPlugin = async (pluginExternFoldPath: string): Promise<AdapterManifest> => {
+export const getManifestFromExternPlugin = async (pluginExternFoldPath: string): Promise<IAdapterManifest> => {
     // check if manifest file exists
     const manifestPath = path.join(pluginExternFoldPath, 'manifest.json')
     if (!existsSync(manifestPath)) {
@@ -36,7 +36,7 @@ export const getManifestFromExternPlugin = async (pluginExternFoldPath: string):
         return null
     }
     // read the manifest JSON from file
-    let manifestJson = JSON.parse(await readFileAsync(manifestPath) as string) as any as AdapterManifest
+    let manifestJson = JSON.parse(await readFileAsync(manifestPath) as string) as any as IAdapterManifest
     // console.log(manifestJson)
     return await ensureManifestAttrs(manifestJson)
 }

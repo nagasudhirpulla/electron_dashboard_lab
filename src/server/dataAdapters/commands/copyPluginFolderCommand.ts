@@ -1,9 +1,9 @@
-import { AdapterManifest } from "../../type_defs/AdapterManifest"
+import { IAdapterManifest } from "../type_defs/IAdapterManifest"
 import { getExesFolder } from "../queries/getExesFolderQuery"
 import { ensureFolderAsync, copyFolderAsync } from "../../utils/fileUtils"
 import path from 'path'
 
-export const copyPluginFolder = async (pluginExternFoldPath: string, manifestJson: AdapterManifest): Promise<string> => {
+export const copyPluginFolder = async (pluginExternFoldPath: string, manifestJson: IAdapterManifest): Promise<string> => {
     // copy plugin folder to app plugins directory
     const pluginFolderPath = path.join(getExesFolder(), manifestJson.app_id)
     console.log(`plugin folder path = ${pluginFolderPath}`)

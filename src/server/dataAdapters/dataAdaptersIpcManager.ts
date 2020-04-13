@@ -1,13 +1,14 @@
 import { IpcMainEvent } from "electron"
-import { AdapterManifest } from "../type_defs/AdapterManifest"
+import { IAdapterManifest } from "./type_defs/IAdapterManifest"
 import { ChannelNames } from "../../ipc/ChannelNames"
 import { getAdaptersRegistry } from "./dataAdaptersRegistry"
 import { registerPlugin } from "./commands/registerPluginCommand"
 import { unRegisterPlugin } from "./commands/unRegisterPluginCommand"
 import { updatePlugin } from "./commands/updatePluginCommand"
-import { fetchFromAdapter } from "./queries/fetchFromAdapterQuery"
+import { fetchFromAdapter, fetchMeasDataFromAdapter } from "./queries/fetchFromAdapterQuery"
 import { getAdapterManifest } from "./queries/getAdapterManifestQuery"
 import { openDataAdaptersEditor } from "./commands/openDataAdaptersEditor"
+import { IAdapterMeasurement } from "../../measurements/type_defs/IAdapterMeasurement"
 
 export const openDataAdaptersEditorIPCListener = () => {
     return (event: IpcMainEvent, arg: any[]) => {
@@ -15,15 +16,15 @@ export const openDataAdaptersEditorIPCListener = () => {
     }
 }
 
-export interface IGetAdaptersListResp { adapters: AdapterManifest[] }
+export interface IGetAdaptersListResp { adapters: IAdapterManifest[] }
 export const getAdaptersListIPCListener = () => {
     return (event: IpcMainEvent, inpObj: any[]) => {
-        const adapters: AdapterManifest[] = Object.values(getAdaptersRegistry())
+        const adapters: IAdapterManifest[] = Object.values(getAdaptersRegistry())
         event.reply('' + ChannelNames.getAdaptersListResp, { adapters: adapters } as IGetAdaptersListResp)
     }
 }
 
-export interface IAddDataAdapterResp { newAdapter: AdapterManifest }
+export interface IAddDataAdapterResp { newAdapter: IAdapterManifest }
 export const addDataAdapterIPCListener = () => {
     return (event: IpcMainEvent, inpObj: any[]) => {
         (async function () {
@@ -43,21 +44,22 @@ export const deleteDataAdapterIPCListener = () => {
     }
 }
 
-export interface IUpdateDataAdapterResp { adapter: AdapterManifest }
+export interface IUpdateDataAdapterResp { adapter: IAdapterManifest }
 export const updateDataAdapterIPCListener = () => {
     return (event: IpcMainEvent, adapterId: string) => {
         (async function () {
-            const updatedAdapter: AdapterManifest = await updatePlugin(adapterId)
+            const updatedAdapter: IAdapterManifest = await updatePlugin(adapterId)
             event.reply('' + ChannelNames.updateDataAdapterResp, { adapter: updatedAdapter } as IUpdateDataAdapterResp)
         })()
     }
 }
 
-export type IGetAdapterDataResp = string
+export type IGetAdapterDataResp = number[]
+export type IGetAdapterDataReq = { meas: IAdapterMeasurement, fromTime: Date, toTime: Date }
 export const getAdapterDataIPCListener = () => {
-    return (event: IpcMainEvent, args: { adapterId: string, cmdParams: string[] }) => {
+    return (event: IpcMainEvent, { meas, fromTime, toTime }: IGetAdapterDataReq) => {
         (async function () {
-            const resp = await fetchFromAdapter(args.adapterId, args.cmdParams)
+            const resp = await fetchMeasDataFromAdapter(meas, fromTime, toTime)
             event.reply('' + ChannelNames.getAdapterDataResp, resp as IGetAdapterDataResp)
         })()
     }
@@ -67,7 +69,7 @@ export interface ISelectedMeas { err?: string, measInfo: any, measName: string }
 export const openAdapterMeasPickerIPCListener = () => {
     return (event: IpcMainEvent, args: { adapterId: string, measName: string }) => {
         (async function () {
-            const adapter: AdapterManifest = getAdapterManifest(args.adapterId)
+            const adapter: IAdapterManifest = getAdapterManifest(args.adapterId)
             if (adapter == undefined || adapter == null) {
                 event.reply('' + ChannelNames.selectedMeas, { err: "This data adapter is not present. Please reload or check adapters list...", measName: args.measName } as ISelectedMeas)
                 return
@@ -87,7 +89,7 @@ export interface IOpenAdapterConfigWindowResp { err?: string }
 export const openAdapterConfigWindowIPCListener = () => {
     return (event: IpcMainEvent, adapterId: string) => {
         (async function () {
-            const adapter: AdapterManifest = getAdapterManifest(adapterId)
+            const adapter: IAdapterManifest = getAdapterManifest(adapterId)
             if (adapter == undefined || adapter == null) {
                 event.reply('' + ChannelNames.openAdapterConfigWindowResp, { err: "This data adapter is not present. Please reload or check adapters list..." } as IOpenAdapterConfigWindowResp)
                 return
