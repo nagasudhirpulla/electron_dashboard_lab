@@ -6,6 +6,7 @@ import { IMeasurement } from "../../../../../measurements/type_defs/IMeasurement
 import { ISeriesConfig } from "../../../type_defs/dashboard/ISeriesConfig";
 import { VarTime } from "../../../../../Time/VarTime";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
+import { fetchMeasData } from "../../../fetchers/queries/fetchMeasData";
 
 export interface IFetchSeriesDataPayload {
     widgetIndex: number
@@ -30,17 +31,19 @@ export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pa
     const sInd = action.payload.seriesIndex
     // get series config
     const sConfig: ISeriesConfig = pageState.widgetProps[wInd].config.seriesConfigs[sInd]
-    
+
     // get fetch windows
     const window: ITimePeriod = sConfig.fetchWindow
     const fetchStartTime = VarTime.getDateObj(sConfig.startTime)
     const fetchEndTime = VarTime.getDateObj(sConfig.endTime)
     const fetchWindows = TimePeriod.splitWindow(fetchStartTime, fetchEndTime, window)
-    
+
     // fetch data for each window
     const measList: IMeasurement[] = sConfig.measurements
     for (const fWin of fetchWindows) {
-        // TODO comple this
-
+        for (const meas of measList) {
+            const winData = fetchMeasData(fWin[0], fWin[1], meas, {})
+            // TODO comple this
+        }
     }
 }

@@ -4,11 +4,9 @@ import { IDummyMeasurement } from "../../../../measurements/type_defs/IDummyMeas
 import { TimePeriod } from "../../../../Time/TimePeriod";
 import { DataQuality } from "../../../../server/dataAdapters/type_defs/DataQuality";
 
-export const fetchDummyMeasData = async (fromVarTime: VarTime, toVarTime: VarTime, meas: IDummyMeasurement, options?: IFetcherOptions): Promise<number[]> {
+export const fetchDummyMeasData = async (fromTime: Date, toTime: Date, meas: IDummyMeasurement, options?: IFetcherOptions): Promise<number[]> {
     // Initialize results
     let resultData: number[] = []
-    let fromTime: Date = VarTime.getDateObj(fromVarTime)
-    let toTime: Date = VarTime.getDateObj(toVarTime)
     let periodicityMillis: number = TimePeriod.getSeconds(meas.periodicity) * 1000
     const includeQuality = options ? options.includeQuality : false
 

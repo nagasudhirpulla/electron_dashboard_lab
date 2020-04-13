@@ -8,13 +8,13 @@ import { AdapterMeasurement } from "../../../../measurements/AdapterMeasurement"
 import { fetchAdapterMeasData } from "./fetchAdapterMeasData";
 import { IAdapterMeasurement } from "../../../../measurements/type_defs/IAdapterMeasurement";
 
-export const fetchMeasData = async (fromVarTime: VarTime, toVarTime: VarTime, meas: IMeasurement, options?: IFetcherOptions): Promise<number[]> => {
+export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasurement, options?: IFetcherOptions): Promise<number[]> => {
     let resultData: number[] = []
     if (meas.discriminator == DummyMeasurement.typename) {
-        resultData = await fetchDummyMeasData(fromVarTime, toVarTime, meas as IDummyMeasurement, options)
+        resultData = await fetchDummyMeasData(fromTime, toTime, meas as IDummyMeasurement, options)
     }
     if (meas.discriminator == AdapterMeasurement.typename) {
-        resultData = await fetchAdapterMeasData(fromVarTime, toVarTime, meas as IAdapterMeasurement, options)
+        resultData = await fetchAdapterMeasData(fromTime, toTime, meas as IAdapterMeasurement, options)
     }
     return resultData
 }
