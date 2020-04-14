@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { IDashboardProps } from './type_defs/IDashboardProps';
 import { getDashboardStyle } from './queries/getDashboardStyle';
 import { useDashboardReducer } from './reducers/dashboardReducer';
@@ -14,7 +14,7 @@ import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
 import { vizPluginsRepoContext } from '../../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import './dashboard.css';
 import './rgl_styles.css';
 import { layoutChangeAction } from './actions/LayoutChangeAction';
@@ -29,6 +29,9 @@ import { IDashboardSettings } from '../DashboardSettingsEditor/type_defs/IDashbo
 import { setDashboardSettingsAction } from './actions/SetDashboardSettingsAction';
 import { fetchWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
+import { WidgetAddModal } from '../WidgetAddModal/WidgetAddModal';
+import { addWidgetAction } from './actions/AddWidgetAction';
+import { toggleAutofetchAction } from './actions/ToggleAutoFetch';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -37,6 +40,10 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     const [showEditWidgetModal, setShowEditWidgetModal] = useState(false)
     const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
     const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
+    const [showWidgetAddModal, setShowWidgetAddModal] = useState(false)
+    const vizPluginNames: string[] = useContext(vizPluginsRepoContext).getInstalledPluginNames()
+
+    // TODO implement start and stop timer command dispatches
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
@@ -71,7 +78,15 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const onAddWidgetClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO complete this
+        setShowWidgetAddModal(true)
+    }
+
+    const onToggleTimerClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
+        dashStateDispatch(toggleAutofetchAction())
+    }
+
+    const onAddWidgetSubmit = (vizType: string) => {
+        dashStateDispatch(addWidgetAction(vizType))
     }
 
     const onRefreshAllWidgetsClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -183,6 +198,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                 </button>
                 <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
                 <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
+                <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn ? <><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</> : <><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>}</button>
                 <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
                 <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
             </div>
@@ -218,6 +234,12 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
             setShow={setShowDashSettingsModal}
             value={{ backgroundColor: dashState.gridConfig.backgroundColor, timerSettings: dashState.timerSettings }}
             onSubmit={onDashSettingsSubmit}
+        />
+        <WidgetAddModal
+            show={showWidgetAddModal}
+            setShow={setShowWidgetAddModal}
+            value={vizPluginNames}
+            onSubmit={onAddWidgetSubmit}
         />
     </>
 }

@@ -14,6 +14,8 @@ import { fetchWidgetDataDispatch, IFetchWidgetDataAction } from "../actions/Fetc
 import { fetchSeriesDataDispatch, IFetchSeriesDataAction } from "../actions/FetchSeriesDataAction"
 import { fetchAllWidgetsDataDispatch, IFetchAllWidgetsDataAction } from "../actions/FetchAllWidgetsDataAction"
 import { setSeriesDataReducer, ISetSeriesDataAction } from "../actions/SetSeriesDataAction"
+import { addWidgetReducer, IAddWidgetAction } from "../actions/AddWidgetAction"
+import { toggleAutofetchReducer, IToggleAutofetchAction } from "../actions/ToggleAutoFetch"
 
 export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -27,12 +29,16 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
                 return layoutChangeReducer(state, action as ILayoutChangeAction)
             case ActionType.DUPLICATE_WIDGET:
                 return duplicateWidgetReducer(state, action as IDuplicateWidgetAction)
+            case ActionType.ADD_WIDGET:
+                return addWidgetReducer(state, action as IAddWidgetAction)
             case ActionType.DELETE_WIDGET:
                 return deleteWidgetReducer(state, action as IDeleteWidgetAction)
             case ActionType.SET_DASHBOARD_SETIINGS:
                 return setDashboardSettingsReducer(state, action as ISetDashboardSettingsAction)
             case ActionType.SET_SERIES_DATA:
                 return setSeriesDataReducer(state, action as ISetSeriesDataAction)
+            case ActionType.TOGGLE_AUTOFETCH:
+                return toggleAutofetchReducer(state, action as IToggleAutofetchAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));

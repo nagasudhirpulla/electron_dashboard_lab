@@ -22,7 +22,7 @@ export const MeasurementSelector: React.FC<IMeasurementSelectorProps> = ({ onMea
                 if (onMeasChanged != null) { onMeasChanged(ev.target.value) }
             }}
         >
-            <option value={DummyMeasurement.typename}>Dummy</option>
+            <option value={DummyMeasurement.typename}>Random</option>
             {measOptionEls}
         </select>
     </>

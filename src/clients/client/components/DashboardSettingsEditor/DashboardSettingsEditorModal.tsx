@@ -26,8 +26,8 @@ export const DashboardSettingsEditorModal: React.FC<IDashboardSettingsEditorModa
             <DashboardSettingsEditor value={dashSettings} onChange={onChange} />
         </Modal.Body>
         <Modal.Footer>
-            <button onClick={handleClose}>Close</button>
-            <button onClick={handleSaveChanges}>Save Changes</button>
+            <button className="btn btn-danger" onClick={handleClose}>Cancel</button>
+            <button className="btn btn-success" onClick={handleSaveChanges}>Save Changes</button>
         </Modal.Footer>
     </Modal>;
 }

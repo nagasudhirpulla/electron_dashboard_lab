@@ -27,8 +27,8 @@ export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, on
             <WidgetEditor value={widgetConfig} onChange={onChange} />
         </Modal.Body>
         <Modal.Footer>
-            <button onClick={handleClose}>Close</button>
-            <button onClick={handleSaveChanges}>Save Changes</button>
+            <button className="btn btn-danger" onClick={handleClose}>Cancel</button>
+            <button className="btn btn-success" onClick={handleSaveChanges}>Save Changes</button>
         </Modal.Footer>
     </Modal>;
 }
