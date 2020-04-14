@@ -25,10 +25,14 @@ export function setSeriesDataAction(widgetIndex: number, seriesIndex: number, da
 export const setSeriesDataReducer = (state: IDashboardState, action: ISetSeriesDataAction): IDashboardState => {
     const wInd = action.payload.widgetIndex
     const sInd = action.payload.seriesIndex
-    let newData: ISeriesData
+    let newData: ISeriesData = []
+
     if (!action.payload.append) {
         newData = action.payload.data
     } else {
+        for (const measIter in action.payload.data) {
+            newData[measIter] = []
+        }
         for (const measIter in action.payload.data) {
             if (state.widgetProps[wInd].data[sInd].hasOwnProperty(measIter)) {
                 // append only if measurement index is present in series data dictionary

@@ -84,7 +84,7 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
             default:
                 pageStateDispatch(action);
         }
-    }, [])
+    }, [pageState])
 
     return [pageState, asyncDispatch];
 }

@@ -51,6 +51,11 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             return seriesData
         }
 
+        if (!(0 in props.data[seriesIter])) {
+            //check if we have atleast one measurement data
+            return seriesData
+        }
+
         // determine series data display time shift
         let shiftMillis: number = 0
         if (seriesStyle != TslpSeriesStyle.duration) {
@@ -58,7 +63,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         }
 
         // get points from measurement
-        for (let pntIter = 0; pntIter < props.data[seriesIter].length - 1; pntIter += 2) {
+        for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
             let xVal: Datum = props.data[seriesIter][0][pntIter]
             if (seriesStyle == TslpSeriesStyle.line) {
                 xVal = new Date(xVal + shiftMillis)

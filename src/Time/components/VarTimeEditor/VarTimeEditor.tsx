@@ -14,7 +14,7 @@ export const VarTimeEditor = ({ value, onChange }: { value?: VarTime, onChange?:
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : +ev.target.value
             onChange({ ...propTimeVal, [`${ev.target.name}`]: newVal })
         }
     }

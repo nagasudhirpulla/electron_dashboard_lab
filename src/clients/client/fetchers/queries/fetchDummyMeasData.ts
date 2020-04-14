@@ -26,6 +26,12 @@ export const fetchDummyMeasData = async (fromTime: Date, toTime: Date, meas: IDu
             resultData.push(DataQuality.GOOD)
         }
     }
+
+    // induce delay for testing
+    await (function () {
+        return new Promise(resolve => setTimeout(resolve, 0.1 * 1000));
+    })()
+
     return resultData
 }
 

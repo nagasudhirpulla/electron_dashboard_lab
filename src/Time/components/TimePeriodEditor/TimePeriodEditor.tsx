@@ -12,7 +12,7 @@ export const TimePeriodEditor = ({ value, onChange }: { value?: TimePeriod, onCh
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
-            const newVal = ev.target.type == "checkbox" ? ev.target.checked : ev.target.value
+            const newVal = ev.target.type == "checkbox" ? ev.target.checked : +ev.target.value
             onChange({ ...propVal, [`${ev.target.name}`]: newVal })
         }
     }
