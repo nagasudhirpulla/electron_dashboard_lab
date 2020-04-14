@@ -31,7 +31,8 @@ import { fetchWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WidgetAddModal } from '../WidgetAddModal/WidgetAddModal';
 import { addWidgetAction } from './actions/AddWidgetAction';
-import { toggleAutofetchAction } from './actions/ToggleAutoFetch';
+import { toggleAutofetchAction } from './actions/ToggleAutoFetchAction';
+import { TimePeriod } from '../../../../Time/TimePeriod';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -41,9 +42,8 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
     const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
     const [showWidgetAddModal, setShowWidgetAddModal] = useState(false)
+    const [timerId, setTimerId] = useState(null)
     const vizPluginNames: string[] = useContext(vizPluginsRepoContext).getInstalledPluginNames()
-
-    // TODO implement start and stop timer command dispatches
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
@@ -144,6 +144,47 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         }
     }
 
+    // check if we have to stop the timer
+    if (dashState.timer.isOn == true && dashState.timerSettings.timerOn == false) {
+        dashStateDispatch(setDashboardStateAction({
+            ...dashState,
+            timer: {
+                ...dashState.timer,
+                isOn: false,
+                busy: false
+            }
+        }))
+        window.clearInterval(timerId);
+    }
+
+    // check if we have to start the timer
+    if (dashState.timer.isOn == false && dashState.timerSettings.timerOn == true) {
+        const timerPeriod = 1000 * TimePeriod.getSeconds(dashState.timerSettings.timerPeriodicity);
+        if (timerPeriod > 0) {
+            // set timer as ON
+            dashStateDispatch(setDashboardStateAction({
+                ...dashState,
+                timer: {
+                    ...dashState.timer,
+                    isOn: true
+                }
+            }))
+
+            const newTimerId = window.setInterval(async () => {
+                if (dashState.timer.busy == true) {
+                    return
+                }
+                else {
+                    await dashStateDispatch(fetchAllWidgetsDataAction())
+                }
+            }, timerPeriod)
+
+            setTimerId(newTimerId)
+
+            dashStateDispatch(fetchAllWidgetsDataAction())
+        }
+    }
+
     const divStyle = {
         backgroundColor: dashState.gridConfig.backgroundColor
     }
@@ -198,7 +239,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                 </button>
                 <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
                 <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
-                <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn ? <><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</> : <><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>}</button>
+                <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn == true ? (<><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</>) : (<><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>)}</button>
                 <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
                 <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
             </div>

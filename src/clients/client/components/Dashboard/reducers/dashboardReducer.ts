@@ -15,7 +15,7 @@ import { fetchSeriesDataDispatch, IFetchSeriesDataAction } from "../actions/Fetc
 import { fetchAllWidgetsDataDispatch, IFetchAllWidgetsDataAction } from "../actions/FetchAllWidgetsDataAction"
 import { setSeriesDataReducer, ISetSeriesDataAction } from "../actions/SetSeriesDataAction"
 import { addWidgetReducer, IAddWidgetAction } from "../actions/AddWidgetAction"
-import { toggleAutofetchReducer, IToggleAutofetchAction } from "../actions/ToggleAutoFetch"
+import { toggleAutofetchReducer, IToggleAutofetchAction } from "../actions/ToggleAutoFetchAction"
 
 export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function

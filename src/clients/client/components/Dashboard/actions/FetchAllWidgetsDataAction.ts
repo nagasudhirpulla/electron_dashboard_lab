@@ -28,6 +28,7 @@ export function fetchAllWidgetsDataAction(): IFetchAllWidgetsDataAction {
 
 
 export const fetchAllWidgetsDataDispatch = async (action: IFetchAllWidgetsDataAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+    // TODO set timer busy
     const numWidgets = pageState.widgetProps.length
     for (let wInd = 0; wInd < numWidgets; wInd++) {
         const widgetFetchAction: IFetchWidgetDataAction = {
@@ -36,4 +37,5 @@ export const fetchAllWidgetsDataDispatch = async (action: IFetchAllWidgetsDataAc
         }
         await fetchWidgetDataDispatch(widgetFetchAction, pageState, pageStateDispatch)
     }
+    // TODO release timer busy
 }
