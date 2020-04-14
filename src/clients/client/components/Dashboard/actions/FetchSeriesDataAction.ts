@@ -53,7 +53,10 @@ export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pa
             }
             seriesData[measInd] = winData
         }
-        // TODO comple this
-        pageStateDispatch(setSeriesDataAction(wInd, sInd, seriesData, true))
+        let append = true
+        if (+fWinInd == 0) {
+            append = false
+        }
+        pageStateDispatch(setSeriesDataAction(wInd, sInd, seriesData, append))
     }
 }

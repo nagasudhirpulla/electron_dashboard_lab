@@ -10,6 +10,10 @@ import { ILayoutChangeAction, layoutChangeReducer } from "../actions/LayoutChang
 import { duplicateWidgetReducer, IDuplicateWidgetAction } from "../actions/DuplicateWidgetAction"
 import { deleteWidgetReducer, IDeleteWidgetAction } from "../actions/DeleteWidgetAction"
 import { ISetDashboardSettingsAction, setDashboardSettingsReducer } from "../actions/SetDashboardSettingsAction"
+import { fetchWidgetDataDispatch, IFetchWidgetDataAction } from "../actions/FetchWidgetDataAction"
+import { fetchSeriesDataDispatch, IFetchSeriesDataAction } from "../actions/FetchSeriesDataAction"
+import { fetchAllWidgetsDataDispatch, IFetchAllWidgetsDataAction } from "../actions/FetchAllWidgetsDataAction"
+import { setSeriesDataReducer, ISetSeriesDataAction } from "../actions/SetSeriesDataAction"
 
 export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -27,6 +31,8 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
                 return deleteWidgetReducer(state, action as IDeleteWidgetAction)
             case ActionType.SET_DASHBOARD_SETIINGS:
                 return setDashboardSettingsReducer(state, action as ISetDashboardSettingsAction)
+            case ActionType.SET_SERIES_DATA:
+                return setSeriesDataReducer(state, action as ISetSeriesDataAction)
             default:
                 console.log("unwanted action detected");
                 console.log(JSON.stringify(action));
@@ -61,7 +67,19 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
                 } else {
                     alert('Failed to save Dashboard...')
                 }
-                break;
+                break
+            }
+            case ActionType.FETCH_ALL_WIDGETS_DATA: {
+                await fetchAllWidgetsDataDispatch(action as IFetchAllWidgetsDataAction, pageState, pageStateDispatch)
+                break
+            }
+            case ActionType.FETCH_WIDGET_DATA: {
+                await fetchWidgetDataDispatch(action as IFetchWidgetDataAction, pageState, pageStateDispatch)
+                break
+            }
+            case ActionType.FETCH_SERIES_DATA: {
+                await fetchSeriesDataDispatch(action as IFetchSeriesDataAction, pageState, pageStateDispatch)
+                break
             }
             default:
                 pageStateDispatch(action);

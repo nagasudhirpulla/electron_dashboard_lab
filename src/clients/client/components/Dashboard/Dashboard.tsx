@@ -27,6 +27,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { DashboardSettingsEditorModal } from '../DashboardSettingsEditor/DashboardSettingsEditorModal';
 import { IDashboardSettings } from '../DashboardSettingsEditor/type_defs/IDashboardSettings';
 import { setDashboardSettingsAction } from './actions/SetDashboardSettingsAction';
+import { fetchWidgetDataAction } from './actions/FetchWidgetDataAction';
+import { fetchAllWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -73,7 +75,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
     }
 
     const onRefreshAllWidgetsClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO complete this
+        dashStateDispatch(fetchAllWidgetsDataAction())
     }
 
     const onBreakpointChange = (newBreakpoint: string, newCols: number) => {
@@ -115,7 +117,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
 
     const onRefreshWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
         return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            // TODO complete this
+            dashStateDispatch(fetchWidgetDataAction(wInd))
         }
     }
 
