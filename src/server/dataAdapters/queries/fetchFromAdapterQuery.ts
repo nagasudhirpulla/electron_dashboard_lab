@@ -56,8 +56,8 @@ export const convertTimeToAdapterCmdStr = (time: Date): string => {
 };
 
 export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTime: Date, toTime: Date): Promise<IMeasData> => {
-    const fromTimeStr = convertTimeToAdapterCmdStr(fromTime)
-    const toTimeStr = convertTimeToAdapterCmdStr(toTime)
+    const fromTimeStr = convertTimeToAdapterCmdStr(new Date(fromTime))
+    const toTimeStr = convertTimeToAdapterCmdStr(new Date(toTime))
     const cmdParams: string[] = [
         "--meas_id", meas.meas_id, "--from_time", fromTimeStr, "--to_time", toTimeStr
     ]
