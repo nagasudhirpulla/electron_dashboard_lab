@@ -33,6 +33,7 @@ import { WidgetAddModal } from '../WidgetAddModal/WidgetAddModal';
 import { addWidgetAction } from './actions/AddWidgetAction';
 import { toggleAutofetchAction } from './actions/ToggleAutoFetchAction';
 import { TimePeriod } from '../../../../Time/TimePeriod';
+import { exportExcelAction } from './actions/ExportExcelAction';
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
@@ -126,7 +127,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
 
     const onExportWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
         return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            // TODO complete this
+            dashStateDispatch(exportExcelAction(wInd))
         }
     }
 
@@ -175,7 +176,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
                     return
                 }
                 else {
-                    await dashStateDispatch(fetchAllWidgetsDataAction())
+                    dashStateDispatch(fetchAllWidgetsDataAction())
                 }
             }, timerPeriod)
 

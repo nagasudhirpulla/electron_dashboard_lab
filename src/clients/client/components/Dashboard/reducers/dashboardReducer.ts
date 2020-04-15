@@ -16,6 +16,7 @@ import { fetchAllWidgetsDataDispatch, IFetchAllWidgetsDataAction } from "../acti
 import { setSeriesDataReducer, ISetSeriesDataAction } from "../actions/SetSeriesDataAction"
 import { addWidgetReducer, IAddWidgetAction } from "../actions/AddWidgetAction"
 import { toggleAutofetchReducer, IToggleAutofetchAction } from "../actions/ToggleAutoFetchAction"
+import { ExportExcelDispatch, IExportExcelAction } from "../actions/ExportExcelAction"
 
 export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -85,6 +86,10 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
             }
             case ActionType.FETCH_SERIES_DATA: {
                 await fetchSeriesDataDispatch(action as IFetchSeriesDataAction, pageState, pageStateDispatch)
+                break
+            }
+            case ActionType.EXPORT_EXCEL: {
+                await ExportExcelDispatch(action as IExportExcelAction, pageState, pageStateDispatch)
                 break
             }
             default:
