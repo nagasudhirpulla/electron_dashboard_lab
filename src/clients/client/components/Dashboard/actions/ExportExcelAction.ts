@@ -31,7 +31,7 @@ export const ExportExcelDispatch = async (action: IExportExcelAction, pageState:
     let currCol = 1
     for (const sInd in data) {
         for (const measInd in data[sInd]) {
-            const title = `${pageState.widgetProps[wInd].config.seriesConfigs[sInd].title}_measInd`
+            const title = `${pageState.widgetProps[wInd].config.seriesConfigs[sInd].title}_${measInd}`
             // ws.getRow(1).getCell(currCol).value
             ws.getRow(1).getCell(currCol).value = `Time_${title}`
             ws.getRow(1).getCell(currCol + 1).value = title
