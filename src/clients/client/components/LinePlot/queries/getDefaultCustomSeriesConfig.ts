@@ -12,7 +12,7 @@ export const getDefaultCustomSeriesConfig = (): ILinePlotSeriesConfig["customCon
         color: null,
         renderStrategy: PlotlyRenderStrategy.scatter,
         seriesStyle: TslpSeriesStyle.line,
-        size: 1,
+        size: 2,
         displayTimeShift: new TimePeriod()
     }
 }
