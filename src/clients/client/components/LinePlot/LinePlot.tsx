@@ -1,6 +1,6 @@
 import { IWidgetProps } from "../../type_defs/dashboard/IWidgetProps"
 import React from 'react'
-import { Data, Layout, Config, Frame, Color, Datum, Shape } from "plotly.js"
+import { Data, Layout, Config, Frame, Color, Datum, Shape, PlotData } from "plotly.js"
 import Plot from 'react-plotly.js'
 import { YAxisSide } from "./type_defs/YAxisSide"
 import { ILinePlotWidgetProps } from "./type_defs/ILinePlotWidgetProps"
@@ -9,6 +9,7 @@ import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle"
 import { TimePeriod } from "../../../../Time/TimePeriod"
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig"
 import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
+import { SeriesStackMode } from "./type_defs/SeriesStackMode"
 
 // TODO implement stick, stackedPlot, stackedBox, 
 // candlestick (https://plotly.com/javascript/candlestick-charts/), 
@@ -33,8 +34,13 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             line: { color: 'red' as Color, width: 2, dash: sConfig.customConfig.lineDash, shape: sConfig.customConfig.lineShape },
             marker: { color: 'red' as Color, size: 5 }
         }
-        const seriesStyle = sConfig.customConfig.seriesStyle
         let seriesData: Data = { ...series_data_template }
+
+        let seriesStyle = sConfig.customConfig.seriesStyle
+        // override seriesStyle as normal timeseries for overlap modes
+        if (props.config.customConfig.seriesStackMode != SeriesStackMode.none) {
+            seriesStyle = TslpSeriesStyle.line
+        }
 
         // use different series template for boxplot
         if (seriesStyle == TslpSeriesStyle.boxplot) {
@@ -59,7 +65,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         }
 
         if (seriesStyle == TslpSeriesStyle.lollipop) {
-            // override mode as markers for lollipop plot
+            // override series mode as markers for lollipop plot
             seriesData.mode = 'markers'
         }
 
@@ -101,6 +107,11 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         let plot_data: Data[] = []
         for (let seriesIter = 0; seriesIter < config.seriesConfigs.length; seriesIter++) {
             plot_data.push(generateSeriesData(seriesIter))
+        }
+        if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedArea) {
+            plot_data = stackedArea(plot_data, true)
+        } else if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedLine) {
+            plot_data = stackedArea(plot_data, false)
         }
         return plot_data
     }
@@ -230,4 +241,34 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             useResizeHandler={true}
         />
     )
+}
+
+const stackedArea = (inpTraces: Partial<PlotData>[], enableArea: boolean): Partial<PlotData>[] => {
+    let traces = [...inpTraces]
+    for (let i = 0; i < traces.length; i++) {
+        let traceText: string[] = []
+        traces[i].hoverinfo = 'text'
+        for (let j = 0; j < (traces[i]['y'].length); j++) {
+            traceText.push(traces[i]['name'] + " (" + traces[i]['y'][j] + ")")
+        }
+        traces[i].text = traceText
+        if (enableArea) {
+            traces[i].fill = 'tonexty'
+        }
+    }
+
+    for (let i = 1; i < traces.length; i++) {
+        for (let j = 0; j < (Math.min(traces[i]['y'].length, traces[i - 1]['y'].length)); j++) {
+            const samplVal = +traces[i]['y'][j]
+            const prevTracesamplVal = +traces[i - 1]['y'][j]
+            traces[i]['y'][j] = samplVal + prevTracesamplVal
+        }
+    }
+
+    if (traces.length > 0) {
+        if (enableArea) {
+            traces[0].fill = 'tonexty'
+        }
+    }
+    return traces;
 }
