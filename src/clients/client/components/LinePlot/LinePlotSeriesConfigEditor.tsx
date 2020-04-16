@@ -43,14 +43,7 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
             value={propVal.displayTimeShift}
             onChange={(t) => { onValChanged('displayTimeShift', t) }} />
 
-        <SeriesDivider />
-        <span><b>Line Width{" "}</b></span>
-        <input
-            type="number"
-            name={`size`}
-            onChange={onInpValChanged}
-            value={propVal.size}
-        />
+
 
         <SeriesDivider />
         <span><b>Visualization{" "}</b></span>
@@ -60,9 +53,92 @@ export const LinePlotSeriesConfigEditor: React.FC<ILinePlotSeriesConfEditorProps
             value={propVal.seriesStyle}
         >
             <option value={TslpSeriesStyle.line}>Normal Timeseries</option>
+            <option value={TslpSeriesStyle.lollipop}>Lollipop Chart</option>
             <option value={TslpSeriesStyle.duration}>Duration Curve</option>
             <option value={TslpSeriesStyle.boxplot}>Box Plot</option>
         </select>
+
+        {((propVal.seriesStyle == TslpSeriesStyle.line) || (propVal.seriesStyle == TslpSeriesStyle.lollipop)) &&
+            <>
+                {(propVal.seriesStyle == TslpSeriesStyle.line) &&
+                    <>
+                        <SeriesDivider />
+                        <span><b>Line Mode{" "}</b></span>
+                        <select
+                            name={`lineMode`}
+                            onChange={onSelValChanged}
+                            value={propVal.lineMode}
+                        >
+                            <option value={'lines'}>Line</option>
+                            <option value={'markers'}>Dots</option>
+                            <option value={'lines+markers'}>Line and Dots</option>
+                        </select>
+
+                        <SeriesDivider />
+                        <span><b>Line Dash{" "}</b></span>
+                        <select
+                            name={`lineDash`}
+                            onChange={onSelValChanged}
+                            value={propVal.lineDash}
+                        >
+                            <option value={'solid'}>Solid</option>
+                            <option value={'dot'}>Dots</option>
+                            <option value={'dash'}>Dash</option>
+                            <option value={'dashdot'}>DashDot</option>
+                            <option value={'longdash'}>LongDash</option>
+                            <option value={'longdashdot'}>LongDashDot</option>
+                        </select>
+
+                        <SeriesDivider />
+                        <span><b>Line Shape{" "}</b></span>
+                        <select
+                            name={`lineShape`}
+                            onChange={onSelValChanged}
+                            value={propVal.lineShape}
+                        >
+                            <option value={'linear'}>Linear</option>
+                            <option value={'spline'}>Spline</option>
+                            <option value={'hv'}>hv</option>
+                            <option value={'vh'}>vh</option>
+                            <option value={'hvh'}>hvh</option>
+                            <option value={'vhv'}>vhv</option>
+                        </select>
+                    </>
+                }
+
+                {(propVal.lineMode.includes('lines') || (propVal.seriesStyle == TslpSeriesStyle.lollipop)) &&
+                    <>
+                        <SeriesDivider />
+                        <span><b>Line Width{" "}</b></span>
+                        <input
+                            type="number"
+                            name={`size`}
+                            onChange={onInpValChanged}
+                            value={propVal.size}
+                        />
+                    </>
+                }
+
+                {(propVal.lineMode.includes('markers') || (propVal.seriesStyle == TslpSeriesStyle.lollipop)) &&
+                    <>
+                        <SeriesDivider />
+                        <span><b>Marker Color{" "}</b></span>
+                        <ColorPicker colorStr={propVal.markerColor + ""}
+                            onColorChange={(c) => { onValChanged('markerColor', c) }} />
+
+                        <SeriesDivider />
+                        <span><b>Marker Size{" "}</b></span>
+                        <input
+                            type="number"
+                            name={`markerSize`}
+                            onChange={onInpValChanged}
+                            value={propVal.markerSize}
+                        />
+                    </>
+                }
+
+            </>
+        }
 
         <SeriesDivider />
         <span><b>Y Axis Number{" "}</b></span>

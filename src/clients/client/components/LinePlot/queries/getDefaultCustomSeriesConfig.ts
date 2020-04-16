@@ -5,6 +5,7 @@ import { TslpSeriesStyle } from "../type_defs/TslpSeriesStyle";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 
 export const getDefaultCustomSeriesConfig = (): ILinePlotSeriesConfig["customConfig"] => {
+    //TODO accommodate markers, x and y axis ranges
     return {
         yAxisIndex: 1,
         yAxisSide: YAxisSide.left,
@@ -12,7 +13,12 @@ export const getDefaultCustomSeriesConfig = (): ILinePlotSeriesConfig["customCon
         color: null,
         renderStrategy: PlotlyRenderStrategy.scatter,
         seriesStyle: TslpSeriesStyle.line,
+        lineMode: 'lines',
+        lineDash: 'solid',
+        lineShape: 'linear',
         size: 2,
+        markerColor: null,
+        markerSize: 2,
         displayTimeShift: new TimePeriod()
     }
 }

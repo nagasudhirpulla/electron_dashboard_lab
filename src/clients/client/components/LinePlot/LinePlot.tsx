@@ -1,6 +1,6 @@
 import { IWidgetProps } from "../../type_defs/dashboard/IWidgetProps"
 import React from 'react'
-import { Data, Layout, Config, Frame, Color, Datum } from "plotly.js"
+import { Data, Layout, Config, Frame, Color, Datum, Shape } from "plotly.js"
 import Plot from 'react-plotly.js'
 import { YAxisSide } from "./type_defs/YAxisSide"
 import { ILinePlotWidgetProps } from "./type_defs/ILinePlotWidgetProps"
@@ -9,6 +9,10 @@ import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle"
 import { TimePeriod } from "../../../../Time/TimePeriod"
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig"
 import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
+
+// TODO implement stick, stackedPlot, stackedBox, 
+// candlestick (https://plotly.com/javascript/candlestick-charts/), 
+// lollipop (https://medium.com/@caiotaniguchi/plotting-lollipop-charts-with-plotly-8925d10a3795, https://plotly.com/~caiotaniguchi/4/#code) plots
 
 export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
     // set default values to widget custom config
@@ -22,29 +26,46 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
     }
 
     const generateSeriesData = (seriesIter: number): Data => {
-        let series_data_template: Data = { name: config.seriesConfigs[seriesIter].title, x: [], y: [], type: config.seriesConfigs[seriesIter].customConfig.renderStrategy, mode: 'lines', line: { color: 'red' as Color, width: 2 } }
-        const seriesStyle = config.seriesConfigs[seriesIter].customConfig.seriesStyle
+        const sConfig = config.seriesConfigs[seriesIter]
+        let series_data_template: Data = {
+            name: sConfig.title, x: [], y: [],
+            type: sConfig.customConfig.renderStrategy,
+            line: { color: 'red' as Color, width: 2, dash: sConfig.customConfig.lineDash, shape: sConfig.customConfig.lineShape },
+            marker: { color: 'red' as Color, size: 5 }
+        }
+        const seriesStyle = sConfig.customConfig.seriesStyle
         let seriesData: Data = { ...series_data_template }
 
         // use different series template for boxplot
         if (seriesStyle == TslpSeriesStyle.boxplot) {
             seriesData = {
-                name: config.seriesConfigs[seriesIter].title,
+                name: sConfig.title,
                 y: [],
                 type: 'box',
                 marker: {
-                    color: config.seriesConfigs[seriesIter].customConfig.color
+                    color: sConfig.customConfig.color
                 }
             }
         } else {
+            // set the line mode
+            seriesData.mode = sConfig.customConfig.lineMode
             // set line color and width
-            seriesData.line.color = config.seriesConfigs[seriesIter].customConfig.color
-            seriesData.line.width = config.seriesConfigs[seriesIter].customConfig.size
+            seriesData.line.color = sConfig.customConfig.color
+            seriesData.line.width = sConfig.customConfig.size
+
+            // set marker color and width
+            seriesData.marker.color = sConfig.customConfig.markerColor
+            seriesData.marker.size = sConfig.customConfig.markerSize
+        }
+
+        if (seriesStyle == TslpSeriesStyle.lollipop) {
+            // override mode as markers for lollipop plot
+            seriesData.mode = 'markers'
         }
 
         // implement y axis settings
-        let yAxisInd = config.seriesConfigs[seriesIter].customConfig.yAxisIndex
-        if (yAxisInd > 0) { seriesData['yaxis'] = `y${yAxisInd}` }
+        let yAxisInd = sConfig.customConfig.yAxisIndex
+        if (yAxisInd > 1) { seriesData['yaxis'] = `y${yAxisInd}` }
 
         if (!(seriesIter in props.data)) {
             // check if seriesIter is present as key in data
@@ -59,13 +80,13 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         // determine series data display time shift
         let shiftMillis: number = 0
         if (seriesStyle != TslpSeriesStyle.duration) {
-            shiftMillis = 1000 * TimePeriod.getSeconds(config.seriesConfigs[seriesIter].customConfig.displayTimeShift)
+            shiftMillis = 1000 * TimePeriod.getSeconds(sConfig.customConfig.displayTimeShift)
         }
 
         // get points from measurement
         for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
             let xVal: Datum = props.data[seriesIter][0][pntIter]
-            if (seriesStyle == TslpSeriesStyle.line) {
+            if ([TslpSeriesStyle.line, TslpSeriesStyle.lollipop].includes(seriesStyle)) {
                 xVal = new Date(xVal + shiftMillis)
             }
             if (seriesStyle != TslpSeriesStyle.boxplot) {
@@ -82,6 +103,45 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             plot_data.push(generateSeriesData(seriesIter))
         }
         return plot_data
+    }
+
+    const generateSeriesShapes = (seriesIter: number): Layout["shapes"] => {
+        const sConfig = config.seriesConfigs[seriesIter]
+        const seriesStyle = sConfig.customConfig.seriesStyle
+        if (seriesStyle != TslpSeriesStyle.lollipop) { return [] }
+        let seriesShapes: Layout["shapes"] = []
+        if (!(seriesIter in props.data)) {
+            // check if seriesIter is present as key in data
+            return seriesShapes
+        }
+
+        if (!(0 in props.data[seriesIter])) {
+            //check if we have atleast one measurement data
+            return seriesShapes
+        }
+        // determine series data display time shift
+        const shiftMillis = 1000 * TimePeriod.getSeconds(sConfig.customConfig.displayTimeShift)
+        // get points from measurement
+        for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
+            const xVal: Datum = new Date(props.data[seriesIter][0][pntIter] + shiftMillis)
+            const yVal: Datum = props.data[seriesIter][0][pntIter + 1]
+            let shape: Partial<Shape> = {
+                x0: xVal, y0: 0, x1: xVal, y1: yVal, xref: 'x', yref: 'y', line: { color: sConfig.customConfig.color as string }
+            }
+            // implement y axis settings
+            let yAxisInd = sConfig.customConfig.yAxisIndex
+            if (yAxisInd > 1) { shape['yref'] = `y${yAxisInd}` as any }
+            seriesShapes.push(shape)
+        }
+        return seriesShapes
+    }
+
+    const generatePlotShapes = (): Layout["shapes"] => {
+        let plot_shapes: Layout["shapes"] = []
+        for (let seriesIter = 0; seriesIter < config.seriesConfigs.length; seriesIter++) {
+            plot_shapes = [...plot_shapes, ...generateSeriesShapes(seriesIter)]
+        }
+        return plot_shapes
     }
 
     let plot_data: Data[] = generatePlotData()
@@ -152,8 +212,13 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         plot_layout[`yaxis${yAxisInd}`] = yAxObj
     })
 
+    // get shapes for lollipop chart
+    let shape_data: Layout["shapes"] = generatePlotShapes()
+    plot_layout.shapes = shape_data
+
     let plot_frames: Frame[] = []
     let plot_config: Partial<Config> = {}
+
 
     return (
         <Plot
