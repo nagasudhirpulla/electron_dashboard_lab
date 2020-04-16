@@ -13,7 +13,6 @@ import { SeriesStackMode } from "./type_defs/SeriesStackMode"
 
 // TODO implement x and y axis ranges, stackedBox, 
 // candlestick (https://plotly.com/javascript/candlestick-charts/), 
-// lollipop (https://medium.com/@caiotaniguchi/plotting-lollipop-charts-with-plotly-8925d10a3795, https://plotly.com/~caiotaniguchi/4/#code) plots
 
 export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
     // set default values to widget custom config
@@ -28,6 +27,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
 
     const generateSeriesData = (seriesIter: number): Data => {
         const sConfig = config.seriesConfigs[seriesIter]
+
         let series_data_template: Data = {
             name: sConfig.title, x: [], y: [],
             type: sConfig.customConfig.renderStrategy,
@@ -37,8 +37,9 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         let seriesData: Data = { ...series_data_template }
 
         let seriesStyle = sConfig.customConfig.seriesStyle
+        const seriesStackMode = props.config.customConfig.seriesStackMode
         // override seriesStyle as normal timeseries for overlap modes
-        if (props.config.customConfig.seriesStackMode != SeriesStackMode.none) {
+        if (seriesStackMode != SeriesStackMode.none) {
             seriesStyle = TslpSeriesStyle.line
         }
 
@@ -67,6 +68,12 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         if (seriesStyle == TslpSeriesStyle.lollipop) {
             // override series mode as markers for lollipop plot
             seriesData.mode = 'markers'
+        }
+
+        if (seriesStackMode == SeriesStackMode.stackedBar) {
+            // override series mode as markers for lollipop plot
+            seriesData.type = 'bar'
+            seriesData.marker.color = sConfig.customConfig.color
         }
 
         // implement y axis settings
@@ -119,7 +126,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
     const generateSeriesShapes = (seriesIter: number): Layout["shapes"] => {
         const sConfig = config.seriesConfigs[seriesIter]
         const seriesStyle = sConfig.customConfig.seriesStyle
-        if (seriesStyle != TslpSeriesStyle.lollipop) { return [] }
+        if (![TslpSeriesStyle.lollipop].includes(seriesStyle)) { return [] }
         let seriesShapes: Layout["shapes"] = []
         if (!(seriesIter in props.data)) {
             // check if seriesIter is present as key in data
@@ -226,6 +233,11 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
     // get shapes for lollipop chart
     let shape_data: Layout["shapes"] = generatePlotShapes()
     plot_layout.shapes = shape_data
+
+    if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedBar) {
+        // set bar mode as relative for stacked bar chart
+        plot_layout.barmode = 'relative'
+    }
 
     let plot_frames: Frame[] = []
     let plot_config: Partial<Config> = {}
