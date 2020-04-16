@@ -5,7 +5,6 @@ import { TslpSeriesStyle } from "../type_defs/TslpSeriesStyle";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 
 export const getDefaultCustomSeriesConfig = (): ILinePlotSeriesConfig["customConfig"] => {
-    //TODO accommodate markers, x and y axis ranges
     return {
         yAxisIndex: 1,
         yAxisSide: YAxisSide.left,

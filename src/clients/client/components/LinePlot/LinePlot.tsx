@@ -11,7 +11,7 @@ import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetCo
 import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
 import { SeriesStackMode } from "./type_defs/SeriesStackMode"
 
-// TODO implement stick, stackedPlot, stackedBox, 
+// TODO implement x and y axis ranges, stackedBox, 
 // candlestick (https://plotly.com/javascript/candlestick-charts/), 
 // lollipop (https://medium.com/@caiotaniguchi/plotting-lollipop-charts-with-plotly-8925d10a3795, https://plotly.com/~caiotaniguchi/4/#code) plots
 
