@@ -3,6 +3,7 @@ import { IAdapterMeasurement } from '../type_defs/IAdapterMeasurement';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../../ipc/ChannelNames';
 import { ISelectedMeas } from '../../server/dataAdapters/dataAdaptersIpcManager';
+import { TimePeriodEditor } from '../../Time/components/TimePeriodEditor/TimePeriodEditor';
 
 export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange: (m: IAdapterMeasurement) => void }> = ({ value, onChange }) => {
     const propVal = { ...value }
@@ -10,6 +11,12 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
         if (onChange) {
             const newVal = ev.target.type == 'checkbox' ? ev.target.checked : ev.target.value
             onChange({ ...propVal, [`${ev.target.name}`]: newVal })
+        }
+    }
+
+    const onValChanged = (name: string, val: {}) => {
+        if (onChange) {
+            onChange({ ...propVal, [`${name}`]: val })
         }
     }
 
@@ -40,5 +47,10 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
         />
         <button type='button' onClick={onMeasPickerClick}>...</button>
         <br />
+
+        <span><b>Sample Frequency</b></span>
+        <TimePeriodEditor
+            value={propVal.periodicity}
+            onChange={(t) => { onValChanged('periodicity', t) }} />
     </>
 }

@@ -16,7 +16,7 @@ export const DummyMeasEditor: React.FC<{ value: IDummyMeasurement, onChange: (m:
             onChange({ ...propVal, [`${name}`]: val })
         }
     }
-    
+
     return <>
         <span>{'Value 1 '}</span>
         <input
@@ -35,7 +35,7 @@ export const DummyMeasEditor: React.FC<{ value: IDummyMeasurement, onChange: (m:
         />
         <br /><br />
 
-        <span>Periodicity</span>
+        <span><b>Sample Frequency</b></span>
         <TimePeriodEditor
             value={propVal.periodicity}
             onChange={(t) => { onValChanged('periodicity', t) }} />
