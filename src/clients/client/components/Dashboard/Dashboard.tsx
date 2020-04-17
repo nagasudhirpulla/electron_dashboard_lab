@@ -1,9 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { IDashboardProps } from './type_defs/IDashboardProps';
 import { getDashboardStyle } from './queries/getDashboardStyle';
 import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
 import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
-import { vizPluginsRepoContext } from '../../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 import { deriveLayouts } from './queries/deriveLayouts';
@@ -57,7 +56,7 @@ export const Dashboard: React.FC<IDashboardProps> = (props: IDashboardProps) => 
         return props.widgetProps.map((wp: IWidgetProps, wInd) => {
             let l: Layout = wp.layouts[props.currentBreakpoint]
             const contentStyle: React.CSSProperties = { borderStyle: wp.config.border.style, borderColor: wp.config.border.color, borderWidth: wp.config.border.size }
-            let VizComp: React.FC<IWidgetProps> = useContext(vizPluginsRepoContext).getComp(wp.config.vizType)
+            let VizComp: React.FC<IWidgetProps> = props.getComp(wp.config.vizType)
             return (
                 <div key={l.i} className={l.static ? "static" : ""}>
                     <div className="dragHandle">

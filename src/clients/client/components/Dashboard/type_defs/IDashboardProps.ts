@@ -25,5 +25,6 @@ export interface IDashboardProps {
     onRemoveWidget: (wInd: number) => void
     onLayoutChange: (currentLayout: Layout[], allLayouts: Layouts) => void
     onBreakpointChange: (newBreakpoint: string, newCols: number) => void
+    getComp: (vizType: string) => React.FC<IWidgetProps>
     currentBreakpoint: string
 }

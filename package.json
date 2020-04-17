@@ -91,6 +91,8 @@
         "build-dashboard": "webpack --mode production --config webpack-dash-client.config.js",
         "watch-server": "webpack --mode development --config webpack-server.config.js -w",
         "watch-client": "webpack --mode development --config webpack-client.config.js -w",
-        "watch-dashboard": "webpack --mode development --config webpack-dash-client.config.js -w"
+        "watch-dashboard": "webpack --mode development --config webpack-dash-client.config.js -w",
+        "build-web": "webpack --mode production --config webpack-dash-web.config.js",
+        "watch-web": "webpack --mode development --config webpack-dash-web.config.js -w"
     }
 }

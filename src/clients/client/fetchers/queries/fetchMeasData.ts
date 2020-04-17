@@ -8,6 +8,9 @@ import { AdapterMeasurement } from "../../../../measurements/AdapterMeasurement"
 import { fetchAdapterMeasData } from "./fetchAdapterMeasData";
 import { IAdapterMeasurement } from "../../../../measurements/type_defs/IAdapterMeasurement";
 import { IMeasData } from "../../type_defs/dashboard/IMeasData";
+import { ApiMeasurement } from "../../../../measurements/ApiMeasurement";
+import { fetchApiData } from "../../../../apiAdapters/queries/fetchApiData";
+import { IApiMeasurement } from "../../../../measurements/type_defs/IApiMeasurement";
 
 export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasurement, options?: IFetcherOptions): Promise<IMeasData> => {
     let resultData: number[] = []
@@ -16,6 +19,9 @@ export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasure
     }
     if (meas.discriminator == AdapterMeasurement.typename) {
         resultData = await fetchAdapterMeasData(fromTime, toTime, meas as IAdapterMeasurement, options)
+    }
+    if (meas.discriminator == ApiMeasurement.typename) {
+        resultData = await fetchApiData(fromTime, toTime, meas as IApiMeasurement, options)
     }
     return resultData
 }

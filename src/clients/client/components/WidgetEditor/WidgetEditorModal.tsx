@@ -5,7 +5,7 @@ import { WidgetEditor } from "./WidgetEditor";
 import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 
-export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, measTypes, show, setShow }: IWidgetEditorModalProps) => {
+export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, measTypes, show, setShow, MeasurementEditor }: IWidgetEditorModalProps) => {
     const [widgetConfig, setWidgetConfig] = useState(JSON.parse(JSON.stringify(value)) as IWidgetConfig)
 
     const handleClose = () => setShow(false)
@@ -24,7 +24,7 @@ export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, on
             <Modal.Title>Edit Widget Configuration</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <WidgetEditor value={widgetConfig} onChange={onChange} measTypes={measTypes} />
+            <WidgetEditor value={widgetConfig} onChange={onChange} measTypes={measTypes} MeasurementEditor={MeasurementEditor}/>
         </Modal.Body>
         <Modal.Footer>
             <button className="btn btn-danger" onClick={handleClose}>Cancel</button>

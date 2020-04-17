@@ -1,43 +1,37 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { IElectronDashboardProps } from './type_defs/IDashboardProps';
-import { useDashboardReducer } from './reducers/dashboardReducer';
-import { getDefaultDashboardState } from './queries/getDefaultDashboardState';
-import { IElectronDashboardState } from './type_defs/IDashboardState';
-import { openDashboardAction } from './actions/OpenDashboardAction';
-import { saveDashboardAction } from './actions/SaveDashboardAction';
-import { setDashboardStateAction } from './actions/SetDashboardStateAction';
-import { toggleCompactionAction } from './actions/ToggleCompactionAction';
-import { ipcRenderer } from 'electron';
-import { ChannelNames } from '../../../ipc/ChannelNames';
 import { Layout, Layouts } from "react-grid-layout";
-import { vizPluginsRepoContext } from '../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSyncAlt, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
-import { layoutChangeAction } from './actions/LayoutChangeAction';
-import { duplicateWidgetAction } from './actions/DuplicateWidgetAction';
-import { deleteWidgetAction } from './actions/DeleteWidgetAction';
+import { faSyncAlt, faFolderOpen, faSave, faCog, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { WidgetEditorModal } from '../components/WidgetEditor/WidgetEditorModal';
 import { IWidgetConfig } from '../type_defs/dashboard/IWidgetConfig';
 import "bootstrap/dist/css/bootstrap.min.css";
 import { DashboardSettingsEditorModal } from '../components/DashboardSettingsEditor/DashboardSettingsEditorModal';
 import { IDashboardSettings } from '../components/DashboardSettingsEditor/type_defs/IDashboardSettings';
-import { setDashboardSettingsAction } from './actions/SetDashboardSettingsAction';
-import { fetchWidgetDataAction } from './actions/FetchWidgetDataAction';
-import { fetchAllWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WidgetAddModal } from '../components/WidgetAddModal/WidgetAddModal';
-import { addWidgetAction } from './actions/AddWidgetAction';
-import { toggleAutofetchAction } from './actions/ToggleAutoFetchAction';
-import { TimePeriod } from '../../../Time/TimePeriod';
-import { exportExcelAction } from './actions/ExportExcelAction';
 import { Dashboard } from '../components/Dashboard/Dashboard';
-import { loadDataAdapters } from '../../adapters/queries/loadDataAdapters';
 import { getApiAdaptersRegistry } from '../../../apiAdapters/ApiManifestRegistry';
 import { DummyMeasurement } from '../../../measurements/DummyMeasurement';
-import { MeasurementEditor } from '../../../measurements/components/MeasurementEditor';
+import { IElectronDashboardProps } from '../ElectronDashboard/type_defs/IDashboardProps';
+import { IElectronDashboardState } from '../ElectronDashboard/type_defs/IDashboardState';
+import { getDefaultDashboardState } from '../ElectronDashboard/queries/getDefaultDashboardState';
+import { layoutChangeAction } from '../ElectronDashboard/actions/LayoutChangeAction';
+import { setDashboardStateAction } from '../ElectronDashboard/actions/SetDashboardStateAction';
+import { toggleCompactionAction } from '../ElectronDashboard/actions/ToggleCompactionAction';
+import { toggleAutofetchAction } from '../ElectronDashboard/actions/ToggleAutoFetchAction';
+import { addWidgetAction } from '../ElectronDashboard/actions/AddWidgetAction';
+import { setDashboardSettingsAction } from '../ElectronDashboard/actions/SetDashboardSettingsAction';
+import { duplicateWidgetAction } from '../ElectronDashboard/actions/DuplicateWidgetAction';
+import { deleteWidgetAction } from '../ElectronDashboard/actions/DeleteWidgetAction';
+import { TimePeriod } from '../../../Time/TimePeriod';
+import { useWebDashboardReducer } from './reducers/webDashboardReducer';
+import { vizPluginsRepoContext } from '../webDashboardApp';
+import { fetchWebWidgetDataAction } from './actions/FetchWidgetDataAction';
+import { fetchAllWebWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
+import { WebMeasurementEditor } from '../../../measurements/components/WebMeasurementEditor';
 
-export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
+export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
-    const [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
+    const [dashState, dashStateDispatch] = useWebDashboardReducer(dashInitState)
     const [showEditWidgetModal, setShowEditWidgetModal] = useState(false)
     const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
     const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
@@ -47,9 +41,8 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
     const [measTypes, setMeasTypes] = useState([] as { val: string, name: string }[])
     useEffect(() => {
         (async function () {
-            const dataAdapters = (await loadDataAdapters()).map(n => ({ val: `adapter|${n.adapter_id}`, name: n.name }))
             const apiAdapters = Object.values(getApiAdaptersRegistry()).map(n => ({ val: `api|${n.api_id}`, name: n.name }))
-            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...dataAdapters, ...apiAdapters])
+            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...apiAdapters])
         })()
     }, [])
 
@@ -62,11 +55,11 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
     }
 
     const onOpenDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        dashStateDispatch(openDashboardAction())
+        // TODO complete this
     }
 
     const onSaveDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        dashStateDispatch(saveDashboardAction())
+        // TODO complete this
     }
 
     const onResetLayout = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -75,14 +68,6 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
 
     const onCompactTypeChange = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(toggleCompactionAction())
-    }
-
-    const onDataAdaptersEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        ipcRenderer.send('' + ChannelNames.openDataAdaptersEditor, 'ping')
-    }
-
-    const onVizPluginsEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        ipcRenderer.send('' + ChannelNames.openVizPluginsEditor, 'ping')
     }
 
     const onOpenSettingsEditor = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -102,7 +87,7 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
     }
 
     const onRefreshAllWidgetsClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        dashStateDispatch(fetchAllWidgetsDataAction())
+        dashStateDispatch(fetchAllWebWidgetsDataAction())
     }
 
     const onEditWidget = (wInd: number): void => {
@@ -129,11 +114,11 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
     }
 
     const onExportWidget = (wInd: number): void => {
-        dashStateDispatch(exportExcelAction(wInd))
+        // TODO
     }
 
     const onRefreshWidget = (wInd: number): void => {
-        dashStateDispatch(fetchWidgetDataAction(wInd))
+        dashStateDispatch(fetchWebWidgetDataAction(wInd))
     }
 
     const onRemoveWidget = (wInd: number): void => {
@@ -173,13 +158,13 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
                     return
                 }
                 else {
-                    dashStateDispatch(fetchAllWidgetsDataAction())
+                    dashStateDispatch(fetchAllWebWidgetsDataAction())
                 }
             }, timerPeriod)
 
             setTimerId(newTimerId)
 
-            dashStateDispatch(fetchAllWidgetsDataAction())
+            dashStateDispatch(fetchAllWebWidgetsDataAction())
         }
     }
 
@@ -192,8 +177,6 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
             <button onClick={onCompactTypeChange} className={"btn btn-outline-primary"}>
                 {dashState.gridConfig.compactType || "No"}{` Compaction`}
             </button>
-            <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
-            <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
             <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn == true ? (<><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</>) : (<><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>)}</button>
             <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
             <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
@@ -217,9 +200,9 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
             show={showEditWidgetModal}
             setShow={setShowEditWidgetModal}
             measTypes={measTypes}
-            MeasurementEditor={MeasurementEditor}
             value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
+            MeasurementEditor={WebMeasurementEditor}
         />
         <DashboardSettingsEditorModal
             show={showDashSettingsModal}

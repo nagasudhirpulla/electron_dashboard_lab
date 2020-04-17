@@ -2,13 +2,12 @@ import React from 'react'
 import { ISeriesConfigEditorProps } from "./type_defs/ISeriesConfigEditorProps";
 import { VarTimeEditor } from "../../../../Time/components/VarTimeEditor/VarTimeEditor";
 import { SeriesCustomConfigEditor } from "../SeriesCustomConfigEditor/SeriesCustomConfigEditor";
-import { MeasurementEditor } from "../../../../measurements/components/MeasurementEditor";
 import { getDefaultSeriesConfig } from './queries/getDefautSeriesConfig';
 import { TimePeriodEditor } from '../../../../Time/components/TimePeriodEditor/TimePeriodEditor';
 
 const SeriesDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
-export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChange }: ISeriesConfigEditorProps) => {
+export const SeriesEditor: React.FC<ISeriesConfigEditorProps> = ({ value, onChange, MeasurementEditor }: ISeriesConfigEditorProps) => {
     const propVal = { ...getDefaultSeriesConfig(), ...value }
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {

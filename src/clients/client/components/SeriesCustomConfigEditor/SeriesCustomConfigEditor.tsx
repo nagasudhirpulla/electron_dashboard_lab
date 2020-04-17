@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { IVizConfEditorProps } from '../../type_defs/vizComp/IVizConfEditorProps'
-import { vizPluginsRepoContext } from '../../client'
+import { vizPluginsRepoContext } from '../../webDashboardApp'
 
 export const SeriesCustomConfigEditor: React.FC<IVizConfEditorProps> = ({ vizType, value, onChange }: IVizConfEditorProps) => {
     const vizPluginsRepo = useContext(vizPluginsRepoContext)

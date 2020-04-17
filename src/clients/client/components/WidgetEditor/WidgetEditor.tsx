@@ -4,15 +4,15 @@ import { SeriesEditor } from '../SeriesEditor/SeriesEditor';
 import { WidgetCustomConfigEditor } from '../WidgetCustomConfigEditor/WidgetCustomConfigEditor';
 import { MeasurementSelector } from '../../../../measurements/components/MeasurementSelector';
 import { DummyMeasurement } from '../../../../measurements/DummyMeasurement';
-import { vizPluginsRepoContext } from '../../client';
 import { getNewSeriesForVizType } from '../SeriesEditor/queries/getNewSeriesForVizType';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faClone, faClock } from '@fortawesome/free-solid-svg-icons';
 import { BorderEditor } from '../BorderEditor/BorderEditor';
+import { vizPluginsRepoContext } from '../../webDashboardApp';
 
 const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
-export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange, measTypes }: IWidgetConfigEditorProps) => {
+export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange, measTypes, MeasurementEditor }: IWidgetConfigEditorProps) => {
     const propVal = { ...value }
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
     const vizPluginsRepo = useContext(vizPluginsRepoContext);
@@ -106,7 +106,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
                         <button type="button" onClick={onAllSeriesTimeOverwriteClick(sInd)} className={"btn btn-sm btn-info"}><FontAwesomeIcon icon={faClock} /> Time Overwrite of all Series</button>
                     </div>
                     <hr />
-                    <SeriesEditor value={sConfig} onChange={(seriesConf) => {
+                    <SeriesEditor MeasurementEditor={MeasurementEditor} value={sConfig} onChange={(seriesConf) => {
                         onValChanged('seriesConfigs',
                             [
                                 ...propVal.seriesConfigs.slice(0, sInd),
