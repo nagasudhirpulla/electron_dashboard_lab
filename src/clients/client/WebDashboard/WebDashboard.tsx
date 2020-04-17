@@ -24,10 +24,10 @@ import { duplicateWidgetAction } from '../ElectronDashboard/actions/DuplicateWid
 import { deleteWidgetAction } from '../ElectronDashboard/actions/DeleteWidgetAction';
 import { TimePeriod } from '../../../Time/TimePeriod';
 import { useWebDashboardReducer } from './reducers/webDashboardReducer';
-import { vizPluginsRepoContext } from '../webDashboardApp';
 import { fetchWebWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWebWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WebMeasurementEditor } from '../../../measurements/components/WebMeasurementEditor';
+import { vizPluginsRepoContext } from '../webDashboardApp';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }

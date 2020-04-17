@@ -34,7 +34,7 @@ export const fetchApiData = async (fromTime: Date, toTime: Date, meas: IApiMeasu
 
     // time strings to accommodate in fetch
     const startTimeString = moment(fromTime).format(startTimeFormat)
-    const endTimeString = moment(fromTime).format(endTimeFormat)
+    const endTimeString = moment(toTime).format(endTimeFormat)
     // setup request path
     const fetchPath = replacePlaceholders(adapter.path, startTimeString, endTimeString, meas.meas_id)
 

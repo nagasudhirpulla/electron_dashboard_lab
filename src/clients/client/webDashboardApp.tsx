@@ -29,8 +29,23 @@ const WbesApi: IApiManifest = {
     quality_option: false,
     is_resampling_present: false,
 }
+
+//http://portal.wrldc.in/dashboard/api/pmudata/getdata/13206/2020-04-17-22-48-01/2020-04-17-22-58-01
+const PmuApi: IApiManifest = {
+    name: 'PMU',
+    api_id: 'PmuApi',
+    baseUrl: '../api/pmudata/getdata',
+    path: '${meas_id}/${start_time}/${end_time}',
+    request_type: 'get',
+    start_time_format: 'YYYY-MM-DD-HH-mm-ss',
+    end_time_format: 'YYYY-MM-DD-HH-mm-ss',
+    quality_option: false,
+    is_resampling_present: false,
+}
+
 setApiAdaptersRegistry({})
 registerApiAdapter(WbesApi)
+registerApiAdapter(PmuApi)
 
 const App: React.FC<{}> = () => {
     return <>
