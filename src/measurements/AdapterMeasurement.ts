@@ -1,5 +1,6 @@
 import { IAdapterMeasurement } from "./type_defs/IAdapterMeasurement"
 import { TimePeriod } from "../Time/TimePeriod"
+import { ResamplingStrategy } from "./ResamplingStrategy"
 
 export class AdapterMeasurement implements IAdapterMeasurement {
     static typename: string = "AdapterMeasurement"
@@ -7,4 +8,5 @@ export class AdapterMeasurement implements IAdapterMeasurement {
     meas_id: string = "MeasId"
     adapter_id: string = ""
     periodicity = new TimePeriod()
+    resampling_strategy = ResamplingStrategy.Raw
 }

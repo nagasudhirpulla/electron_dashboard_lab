@@ -1,6 +1,7 @@
 import { IMeasurement } from "../type_defs/IMeasurement";
 import { DummyMeasurement } from "../DummyMeasurement";
 import { AdapterMeasurement } from "../AdapterMeasurement";
+import { ApiMeasurement } from "../ApiMeasurement";
 
 export const generateMeasFromType = (typename: string): IMeasurement => {
     if (typename == DummyMeasurement.typename) {
@@ -12,6 +13,13 @@ export const generateMeasFromType = (typename: string): IMeasurement => {
         const adapterMeas = new AdapterMeasurement()
         adapterMeas.adapter_id = adapterId
         return adapterMeas
+    }
+    else if (typename.startsWith('api|')) {
+        // it is an adapter measurement
+        const apiId = typename.substring(typename.indexOf('|') + 1)
+        const apiMeas = new ApiMeasurement()
+        apiMeas.api_id = apiId
+        return apiMeas
     }
     return null
 }

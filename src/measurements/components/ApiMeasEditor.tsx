@@ -1,12 +1,9 @@
 import React from 'react'
-import { IAdapterMeasurement } from '../type_defs/IAdapterMeasurement';
-import { ipcRenderer } from 'electron';
-import { ChannelNames } from '../../ipc/ChannelNames';
-import { ISelectedMeas } from '../../server/dataAdapters/dataAdaptersIpcManager';
 import { TimePeriodEditor } from '../../Time/components/TimePeriodEditor/TimePeriodEditor';
 import { ResamplingStrategy } from '../ResamplingStrategy';
+import { IApiMeasurement } from '../type_defs/IApiMeasurement';
 
-export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange: (m: IAdapterMeasurement) => void }> = ({ value, onChange }) => {
+export const ApiMeasEditor: React.FC<{ value: IApiMeasurement, onChange: (m: IApiMeasurement) => void }> = ({ value, onChange }) => {
     const propVal = { ...value }
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
@@ -28,23 +25,6 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
         }
     }
 
-    const onMeasPickerClick = () => {
-        ipcRenderer.send('' + ChannelNames.openAdapterMeasPicker, { measName: name, adapterId: propVal.adapter_id })
-    }
-
-    ipcRenderer.once('' + ChannelNames.selectedMeas, (event, resp: ISelectedMeas) => {
-        if (resp.measName != name) {
-            return;
-        }
-        if (resp.err != undefined) {
-            console.log(resp.err);
-            return;
-        }
-        console.log(`Obtained adapter meas from picker is ${resp.measInfo}`)
-        // set the measurement Id and measurement name
-        onChange({ ...propVal, 'meas_id': resp.measInfo[0] })
-    });
-
     return <>
         <span>Measurement Id{' '}</span>
         <input
@@ -53,7 +33,6 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
             value={propVal.meas_id}
             onChange={onInpValChanged}
         />
-        <button type='button' onClick={onMeasPickerClick}>...</button>
         <br />
 
         <span><b>Sample Frequency</b></span>

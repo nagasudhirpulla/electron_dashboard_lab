@@ -5,6 +5,7 @@ import { getExesFolder } from "./getExesFolderQuery"
 import { ChildProcess, spawn } from 'child_process'
 import { IAdapterMeasurement } from "../../../measurements/type_defs/IAdapterMeasurement"
 import { IMeasData } from "../../../clients/client/type_defs/dashboard/IMeasData"
+import { TimePeriod } from "../../../Time/TimePeriod"
 
 const fetchExeData = async (exePath: string, cmdParams: string[]): Promise<string> => {
     const getIpcRespAsync = (ipc: ChildProcess): Promise<string> => {
@@ -62,6 +63,18 @@ export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTi
         "--meas_id", meas.meas_id, "--from_time", fromTimeStr, "--to_time", toTimeStr
     ]
     const adapter: IAdapterManifest = getAdapterManifest(meas.adapter_id)
+    let resamplingSupported = false
+    if (adapter.is_resampling_present != undefined && adapter.is_resampling_present) {
+        resamplingSupported = true
+    }
+    if (resamplingSupported) {
+        const resampleRate = meas.periodicity
+        const resampleStr = `${resampleRate.years}_${resampleRate.months}_${resampleRate.days}_${resampleRate.hrs}_${resampleRate.mins}_${resampleRate.secs}_${resampleRate.millis}`
+        cmdParams.push('--resample_period')
+        cmdParams.push(resampleStr)
+        cmdParams.push('--resampling_strategy')
+        cmdParams.push(meas.resampling_strategy)
+    }
     // get the exe path of adapter
     const exePath = path.join(getExesFolder(), adapter.app_id, adapter.entry)
     try {
@@ -71,6 +84,11 @@ export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTi
             return []
         }
         const resp = exeData.split(',').map((num) => { return +num; });
+
+        if (resamplingSupported == false && TimePeriod.getSeconds(meas.periodicity) != 0) {
+            //TODO perform resampling if required 
+        }
+
         return resp
     }
     catch (ex) {
