@@ -50,10 +50,12 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
     }
 
+    // WEBTODO move to parent
     const onOpenDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(openDashboardAction())
     }
 
+    // WEBTODO move to parent
     const onSaveDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(saveDashboardAction())
     }
@@ -66,10 +68,12 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         dashStateDispatch(toggleCompactionAction())
     }
 
+    // WEBTODO move to parent
     const onDataAdaptersEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
         ipcRenderer.send('' + ChannelNames.openDataAdaptersEditor, 'ping')
     }
 
+    // WEBTODO move to parent
     const onVizPluginsEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
         ipcRenderer.send('' + ChannelNames.openVizPluginsEditor, 'ping')
     }
@@ -90,6 +94,7 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         dashStateDispatch(addWidgetAction(vizType))
     }
 
+    // WEBTODO move to parent
     const onRefreshAllWidgetsClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(fetchAllWidgetsDataAction())
     }
@@ -125,12 +130,14 @@ export const Dashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboard
         }
     }
 
+    // WEBTODO move to parent
     const onExportWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
         return (ev: React.MouseEvent<HTMLButtonElement>): void => {
             dashStateDispatch(exportExcelAction(wInd))
         }
     }
 
+    // WEBTODO move to parent
     const onRefreshWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
         return (ev: React.MouseEvent<HTMLButtonElement>): void => {
             dashStateDispatch(fetchWidgetDataAction(wInd))

@@ -71,6 +71,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
 
     return <>
         <div>
+            {/* WEBTODO supply meas selector option values and texts from parent */}
             <MeasurementSelector onMeasChanged={(measType: string) => { setNewMeasType(measType) }} />
             <button type="button" onClick={(ev: any) => { onAddNewSeriesClick() }} className={"btn btn-sm btn-success ml-1"}>Add Series</button>
         </div>

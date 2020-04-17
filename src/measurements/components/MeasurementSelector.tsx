@@ -8,6 +8,7 @@ export interface IMeasurementSelectorProps {
 }
 
 export const MeasurementSelector: React.FC<IMeasurementSelectorProps> = ({ onMeasChanged }: IMeasurementSelectorProps) => {
+    // WEBTODO supply meas selector option values and texts from parent
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
     const [measOptionEls, setmeasOptionEls] = useState([])
     useEffect(() => {
