@@ -1,6 +1,6 @@
 import { dialog } from 'electron'
 import { writeFileAsync } from '../../utils/fileUtils'
-import { IDashboardState } from '../../../clients/client/components/Dashboard/type_defs/IDashboardState'
+import { IDashboardState } from '../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState'
 
 export const saveDashboardFromDialog = async (state: IDashboardState): Promise<boolean> => {
     const dialogRes = await dialog.showSaveDialog({

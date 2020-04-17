@@ -6,7 +6,7 @@ import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidget
 import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
 import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { VizPluginsManager } from './vizPluginsManager'
-import { Dashboard } from './components/Dashboard/Dashboard'
+import { ElectronDashboard } from './components/ElectronDashboard/ElectronDashboard'
 
 // console.log("Hello World from client!!!")
 // create a global variable for viz plugins repository as well make it a context for other components to access it
@@ -20,7 +20,7 @@ const vizPluginsManager = VizPluginsManager()
 const App: React.FC<{}> = () => {
     // WEBTODO move app logic from dashboard to here
     return <>
-        <Dashboard />
+        <ElectronDashboard />
     </>
 }
 
