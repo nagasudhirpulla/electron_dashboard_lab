@@ -1,6 +1,6 @@
-import { IWidgetProps } from "../../../type_defs/dashboard/IWidgetProps"
-import { getDefaultWidgetConfig } from "../../WidgetEditor/queries/getDefaultWidgetConfig"
 import { v4 as uuid } from 'uuid';
+import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
+import { getDefaultWidgetConfig } from '../../components/WidgetEditor/queries/getDefaultWidgetConfig';
 
 export const getDefaultWidgetProps = (): IWidgetProps => {
     let widgetProps: IWidgetProps = {

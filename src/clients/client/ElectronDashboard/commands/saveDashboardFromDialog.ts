@@ -1,8 +1,8 @@
 
 import { IElectronDashboardState } from "../type_defs/IDashboardState"
 import { ipcRenderer } from "electron"
-import { ChannelNames } from "../../../../../ipc/ChannelNames"
-import { ISaveDashboardFromDialogResp } from "../../../../../server/dashboard/dashboardIpcManager"
+import { ChannelNames } from "../../../../ipc/ChannelNames"
+import { ISaveDashboardFromDialogResp } from "../../../../server/dashboard/dashboardIpcManager"
 
 export const saveDashboardFromDialog = async (state: IElectronDashboardState): Promise<boolean> => {
     return new Promise(function (resolve, reject) {

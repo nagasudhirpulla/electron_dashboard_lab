@@ -1,6 +1,6 @@
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
-import { IDashboardSettings } from "../../DashboardSettingsEditor/type_defs/IDashboardSettings";
+import { IDashboardSettings } from "../../components/DashboardSettingsEditor/type_defs/IDashboardSettings";
 import { IElectronDashboardState } from "../type_defs/IDashboardState";
 
 export interface ISetDashboardSettingsPayload {

@@ -1,5 +1,5 @@
 import { readFileAsync } from "../../utils/fileUtils";
-import { IElectronDashboardState } from "../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState";
+import { IElectronDashboardState } from "../../../clients/client/ElectronDashboard/type_defs/IDashboardState";
 
 export const openDashboard = async (openFilename: string) => {
     if (openFilename == null) {

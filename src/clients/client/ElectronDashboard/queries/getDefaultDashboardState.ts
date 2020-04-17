@@ -1,6 +1,6 @@
 import { IElectronDashboardState } from "../type_defs/IDashboardState";
-import { TimePeriod } from "../../../../../Time/TimePeriod";
 import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
+import { TimePeriod } from "../../../../Time/TimePeriod";
 
 export const getDefaultDashboardState = (): IElectronDashboardState => {
     return {

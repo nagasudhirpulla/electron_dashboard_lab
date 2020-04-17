@@ -1,6 +1,6 @@
-import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
-import { IWidgetProps } from "../../../type_defs/dashboard/IWidgetProps";
 import {CoreProps} from 'react-grid-layout';
+import { ITimePeriod } from '../../../../Time/type_defs/ITimePeriod';
+import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
 export interface IElectronDashboardProps {
     gridConfig: {
         rowHeight: number

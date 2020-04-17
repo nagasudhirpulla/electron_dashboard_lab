@@ -6,7 +6,7 @@ import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidget
 import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
 import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { VizPluginsManager } from './vizPluginsManager'
-import { ElectronDashboard } from './components/ElectronDashboard/ElectronDashboard'
+import { ElectronDashboard } from './ElectronDashboard/ElectronDashboard'
 
 // console.log("Hello World from client!!!")
 // create a global variable for viz plugins repository as well make it a context for other components to access it

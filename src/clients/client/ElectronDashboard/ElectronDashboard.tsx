@@ -8,31 +8,31 @@ import { saveDashboardAction } from './actions/SaveDashboardAction';
 import { setDashboardStateAction } from './actions/SetDashboardStateAction';
 import { toggleCompactionAction } from './actions/ToggleCompactionAction';
 import { ipcRenderer } from 'electron';
-import { ChannelNames } from '../../../../ipc/ChannelNames';
+import { ChannelNames } from '../../../ipc/ChannelNames';
 import { Layout, Layouts } from "react-grid-layout";
-import { vizPluginsRepoContext } from '../../client';
+import { vizPluginsRepoContext } from '../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { layoutChangeAction } from './actions/LayoutChangeAction';
 import { duplicateWidgetAction } from './actions/DuplicateWidgetAction';
 import { deleteWidgetAction } from './actions/DeleteWidgetAction';
-import { WidgetEditorModal } from '../WidgetEditor/WidgetEditorModal';
-import { IWidgetConfig } from '../../type_defs/dashboard/IWidgetConfig';
+import { WidgetEditorModal } from '../components/WidgetEditor/WidgetEditorModal';
+import { IWidgetConfig } from '../type_defs/dashboard/IWidgetConfig';
 import "bootstrap/dist/css/bootstrap.min.css";
-import { DashboardSettingsEditorModal } from '../DashboardSettingsEditor/DashboardSettingsEditorModal';
-import { IDashboardSettings } from '../DashboardSettingsEditor/type_defs/IDashboardSettings';
+import { DashboardSettingsEditorModal } from '../components/DashboardSettingsEditor/DashboardSettingsEditorModal';
+import { IDashboardSettings } from '../components/DashboardSettingsEditor/type_defs/IDashboardSettings';
 import { setDashboardSettingsAction } from './actions/SetDashboardSettingsAction';
 import { fetchWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
-import { WidgetAddModal } from '../WidgetAddModal/WidgetAddModal';
+import { WidgetAddModal } from '../components/WidgetAddModal/WidgetAddModal';
 import { addWidgetAction } from './actions/AddWidgetAction';
 import { toggleAutofetchAction } from './actions/ToggleAutoFetchAction';
-import { TimePeriod } from '../../../../Time/TimePeriod';
+import { TimePeriod } from '../../../Time/TimePeriod';
 import { exportExcelAction } from './actions/ExportExcelAction';
-import { Dashboard } from '../Dashboard/Dashboard';
-import { loadDataAdapters } from '../../../adapters/queries/loadDataAdapters';
-import { getApiAdaptersRegistry } from '../../../../apiAdapters/ApiManifestRegistry';
-import { DummyMeasurement } from '../../../../measurements/DummyMeasurement';
+import { Dashboard } from '../components/Dashboard/Dashboard';
+import { loadDataAdapters } from '../../adapters/queries/loadDataAdapters';
+import { getApiAdaptersRegistry } from '../../../apiAdapters/ApiManifestRegistry';
+import { DummyMeasurement } from '../../../measurements/DummyMeasurement';
 
 export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }

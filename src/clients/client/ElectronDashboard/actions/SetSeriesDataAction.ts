@@ -1,7 +1,7 @@
 import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
-import { ISeriesData } from "../../../type_defs/dashboard/ISeriesData";
+import { ISeriesData } from "../../type_defs/dashboard/ISeriesData";
 
 export interface ISetSeriesDataPayload {
     widgetIndex: number

@@ -1,13 +1,13 @@
 import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
-import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
-import { IMeasurement } from "../../../../../measurements/type_defs/IMeasurement";
-import { ISeriesConfig } from "../../../type_defs/dashboard/ISeriesConfig";
-import { VarTime } from "../../../../../Time/VarTime";
-import { TimePeriod } from "../../../../../Time/TimePeriod";
-import { fetchMeasData } from "../../../fetchers/queries/fetchMeasData";
-import { ISeriesData } from "../../../type_defs/dashboard/ISeriesData";
+import { ITimePeriod } from "../../../../Time/type_defs/ITimePeriod";
+import { IMeasurement } from "../../../../measurements/type_defs/IMeasurement";
+import { ISeriesConfig } from "../../type_defs/dashboard/ISeriesConfig";
+import { VarTime } from "../../../../Time/VarTime";
+import { TimePeriod } from "../../../../Time/TimePeriod";
+import { fetchMeasData } from "../../fetchers/queries/fetchMeasData";
+import { ISeriesData } from "../../type_defs/dashboard/ISeriesData";
 import { setSeriesDataAction } from "./SetSeriesDataAction";
 import { fetchWidgetDataDispatch, IFetchWidgetDataAction } from "./FetchWidgetDataAction";
 

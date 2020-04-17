@@ -3,7 +3,7 @@ import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 // import * as XLSX from 'xlsx';
 import { Workbook } from 'exceljs';
-import { saveExcelAsync } from "../../../../../server/utils/fileUtils";
+import { saveExcelAsync } from "../../../../server/utils/fileUtils";
 
 export interface IExportExcelPayload {
     widgetIndex: number

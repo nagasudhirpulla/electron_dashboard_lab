@@ -1,5 +1,5 @@
 import { IpcMainEvent } from "electron"
-import { IElectronDashboardState } from "../../clients/client/components/ElectronDashboard/type_defs/IDashboardState"
+import { IElectronDashboardState } from "../../clients/client/ElectronDashboard/type_defs/IDashboardState"
 import { ChannelNames } from "../../ipc/ChannelNames"
 import { openDashboardFromDialog } from "./commands/openDashboardFromDialog"
 import { saveDashboardFromDialog } from "./commands/saveDashboardFromDialog"

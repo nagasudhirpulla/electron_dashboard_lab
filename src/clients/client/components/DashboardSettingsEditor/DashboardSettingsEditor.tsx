@@ -2,7 +2,7 @@ import React from 'react'
 import { IDashboardSettingsEditorProps } from './type_defs/IDashboardSettingsEditorProps'
 import { ColorPicker } from '../ColorPicker/ColorPicker'
 import { TimePeriodEditor } from '../../../../Time/components/TimePeriodEditor/TimePeriodEditor'
-import { getDefaultDashboardState } from '../ElectronDashboard/queries/getDefaultDashboardState'
+import { getDefaultDashboardState } from '../../ElectronDashboard/queries/getDefaultDashboardState'
 import { IDashboardSettings } from './type_defs/IDashboardSettings'
 export const DashboardSettingsEditor: React.FC<IDashboardSettingsEditorProps> = ({ value, onChange }) => {
     const defDashState = getDefaultDashboardState()
