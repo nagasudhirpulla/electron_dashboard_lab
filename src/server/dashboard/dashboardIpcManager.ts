@@ -1,10 +1,10 @@
 import { IpcMainEvent } from "electron"
-import { IDashboardState } from "../../clients/client/components/ElectronDashboard/type_defs/IDashboardState"
+import { IElectronDashboardState } from "../../clients/client/components/ElectronDashboard/type_defs/IDashboardState"
 import { ChannelNames } from "../../ipc/ChannelNames"
 import { openDashboardFromDialog } from "./commands/openDashboardFromDialog"
 import { saveDashboardFromDialog } from "./commands/saveDashboardFromDialog"
 
-export interface IOpenDashboardFromDialogResp { dashboard: IDashboardState }
+export interface IOpenDashboardFromDialogResp { dashboard: IElectronDashboardState }
 export const openDashboardFromDialogIPCListener = () => {
     return (event: IpcMainEvent, inpObj: any[]) => {
         (async function () {
@@ -17,7 +17,7 @@ export const openDashboardFromDialogIPCListener = () => {
 
 export interface ISaveDashboardFromDialogResp { isSuccess: boolean }
 export const saveDashboardFromDialogIPCListener = () => {
-    return (event: IpcMainEvent, state: IDashboardState) => {
+    return (event: IpcMainEvent, state: IElectronDashboardState) => {
         (async function () {
             const isSuccess = await saveDashboardFromDialog(state)
             // console.log(names)

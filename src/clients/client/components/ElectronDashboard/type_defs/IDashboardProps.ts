@@ -1,7 +1,7 @@
 import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
 import { IWidgetProps } from "../../../type_defs/dashboard/IWidgetProps";
 import {CoreProps} from 'react-grid-layout';
-export interface IDashboardProps {
+export interface IElectronDashboardProps {
     gridConfig: {
         rowHeight: number
         cols: {

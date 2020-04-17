@@ -1,8 +1,8 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 import { getDefaultWidgetProps } from "./getDefaultWidgetProps";
 
-export const getDefaultDashboardState = (): IDashboardState => {
+export const getDefaultDashboardState = (): IElectronDashboardState => {
     return {
         gridConfig: {
             rowHeight: 20,
@@ -17,12 +17,11 @@ export const getDefaultDashboardState = (): IDashboardState => {
             timerPeriodicity: new TimePeriod()
         },
         widgetProps: [getDefaultWidgetProps()],
-        currentBreakpoint: 'lg',
         timer: {
             isOn: false,
             start: 0,
             busy: false
         },
-        mounted: false
+        currentBreakpoint: 'lg'
     }
 }

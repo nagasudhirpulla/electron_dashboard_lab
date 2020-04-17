@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
@@ -28,7 +28,7 @@ export function fetchWidgetDataAction(widgetIndex: number): IFetchWidgetDataActi
 }
 
 
-export const fetchWidgetDataDispatch = async (action: IFetchWidgetDataAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+export const fetchWidgetDataDispatch = async (action: IFetchWidgetDataAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
     const wInd = action.payload.widgetIndex
     const wConfig = pageState.widgetProps[wInd].config
     for (const sInd in wConfig.seriesConfigs) {

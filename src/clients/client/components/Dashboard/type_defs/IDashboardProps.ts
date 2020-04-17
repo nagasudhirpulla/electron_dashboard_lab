@@ -1,6 +1,5 @@
-import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
 import { IWidgetProps } from "../../../type_defs/dashboard/IWidgetProps";
-import { CoreProps } from 'react-grid-layout';
+import { CoreProps, Layouts, Layout } from 'react-grid-layout';
 export interface IDashboardProps {
     gridConfig: {
         rowHeight: number
@@ -18,17 +17,13 @@ export interface IDashboardProps {
         compactType: CoreProps["compactType"]
     }
     className: string
-    timerSettings: {
-        timerOn: boolean
-        timerPeriodicity: ITimePeriod
-    }
     widgetProps: IWidgetProps[]
-    showDashSettingsModal: boolean
-    showWidgetAddModal: boolean
-    measTypes: { name: string, val: string }[]
-    setShowDashSettingsModal: (v: boolean) => void
-    setShowWidgetAddModal: (v: boolean) => void
+    onEditWidget: (wInd: number) => void
+    onDuplicateWidget: (wInd: number) => void
     onExportWidget: (wInd: number) => void
     onRefreshWidget: (wInd: number) => void
-    onRefreshAllWidgets: () => void
+    onRemoveWidget: (wInd: number) => void
+    onLayoutChange: (currentLayout: Layout[], allLayouts: Layouts) => void
+    onBreakpointChange: (newBreakpoint: string, newCols: number) => void
+    currentBreakpoint: string
 }

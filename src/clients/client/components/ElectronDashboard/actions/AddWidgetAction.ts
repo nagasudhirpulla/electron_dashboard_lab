@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { v4 as uuid } from 'uuid';
@@ -20,7 +20,7 @@ export function addWidgetAction(vizType: string): IAddWidgetAction {
     };
 }
 
-export const addWidgetReducer = (state: IDashboardState, action: IAddWidgetAction): IDashboardState => {
+export const addWidgetReducer = (state: IElectronDashboardState, action: IAddWidgetAction): IElectronDashboardState => {
     let newWidgetProps = getDefaultWidgetProps();
     const vizType = action.payload.vizType
     newWidgetProps.layouts[state.currentBreakpoint] = {
@@ -35,5 +35,5 @@ export const addWidgetReducer = (state: IDashboardState, action: IAddWidgetActio
     return {
         ...state,
         widgetProps: [...state.widgetProps, newWidgetProps]
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }

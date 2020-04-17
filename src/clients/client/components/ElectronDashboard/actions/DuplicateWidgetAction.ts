@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { v4 as uuid } from 'uuid';
@@ -20,7 +20,7 @@ export function duplicateWidgetAction(widgetIndex: number): IDuplicateWidgetActi
     };
 }
 
-export const duplicateWidgetReducer = (state: IDashboardState, action: IDuplicateWidgetAction): IDashboardState => {
+export const duplicateWidgetReducer = (state: IElectronDashboardState, action: IDuplicateWidgetAction): IElectronDashboardState => {
     let newWidgetProps = getDefaultWidgetProps();
     const wInd = action.payload.widgetIndex
     newWidgetProps.layouts[state.currentBreakpoint] = {
@@ -35,5 +35,5 @@ export const duplicateWidgetReducer = (state: IDashboardState, action: IDuplicat
     return {
         ...state,
         widgetProps: [...state.widgetProps, newWidgetProps]
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }

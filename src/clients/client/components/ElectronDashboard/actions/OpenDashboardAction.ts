@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { setDashboardStateAction } from "./SetDashboardStateAction";
@@ -19,7 +19,7 @@ export function openDashboardAction(): IOpenDashboardAction {
     };
 }
 
-export const openDashboardDispatch = async (action: IOpenDashboardAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
-    const newState: IDashboardState = await openDashboardFromDialog()
+export const openDashboardDispatch = async (action: IOpenDashboardAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+    const newState: IElectronDashboardState = await openDashboardFromDialog()
     pageStateDispatch(setDashboardStateAction({ ...pageState, ...newState }))
 }

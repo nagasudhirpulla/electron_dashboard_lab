@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState"
+import { IElectronDashboardState } from "../type_defs/IDashboardState"
 import { IAction } from "../type_defs/IAction"
 import { ActionType } from "../actions/ActionType"
 import { setDashboardStateReducer, ISetDashboardStateAction, setDashboardStateAction } from "../actions/SetDashboardStateAction"
@@ -18,9 +18,9 @@ import { addWidgetReducer, IAddWidgetAction } from "../actions/AddWidgetAction"
 import { toggleAutofetchReducer, IToggleAutofetchAction } from "../actions/ToggleAutoFetchAction"
 import { ExportExcelDispatch, IExportExcelAction } from "../actions/ExportExcelAction"
 
-export const useDashboardReducer = (initState: IDashboardState): [IDashboardState, React.Dispatch<IAction>] => {
+export const useDashboardReducer = (initState: IElectronDashboardState): [IElectronDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
-    const reducer = (state: IDashboardState, action: IAction): IDashboardState => {
+    const reducer = (state: IElectronDashboardState, action: IAction): IElectronDashboardState => {
         switch (action.type) {
             case ActionType.SET_DASHBOARD_STATE:
                 return setDashboardStateReducer(state, action as ISetDashboardStateAction)
@@ -49,12 +49,12 @@ export const useDashboardReducer = (initState: IDashboardState): [IDashboardStat
     }
 
     // create the reducer hook
-    let [pageState, pageStateDispatch]: [IDashboardState, React.Dispatch<IAction>] = useReducer(reducer, initState)
+    let [pageState, pageStateDispatch]: [IElectronDashboardState, React.Dispatch<IAction>] = useReducer(reducer, initState)
 
     useEffect(() => {
         (async function () {
             // perform initialization stuff
-            pageStateDispatch(setDashboardStateAction({ ...pageState, mounted: true }))
+            pageStateDispatch(setDashboardStateAction({ ...pageState}))
         })()
     }, []) // Empty array causes this callback to only be created once per component instance
 

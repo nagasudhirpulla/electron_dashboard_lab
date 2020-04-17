@@ -1,8 +1,8 @@
-import { IDashboardState } from "../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState";
+import { IElectronDashboardState } from "../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState";
 import { getFilePathFromDialog } from "../../utils/fileUtils";
 import { openDashboard } from "./openDashboard";
 
-export const openDashboardFromDialog = async (): Promise<IDashboardState> => {
+export const openDashboardFromDialog = async (): Promise<IElectronDashboardState> => {
     // get the user selected folder path
     const filePath = await getFilePathFromDialog('Select Dashboard', [
         { name: 'E-Dash', extensions: ['edash'] },

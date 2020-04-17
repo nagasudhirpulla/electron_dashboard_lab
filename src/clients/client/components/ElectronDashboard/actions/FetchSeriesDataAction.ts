@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
@@ -28,7 +28,7 @@ export function fetchSeriesDataAction(widgetIndex: number, seriesIndex: number):
 }
 
 
-export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+export const fetchSeriesDataDispatch = async (action: IFetchSeriesDataAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
     const wInd = action.payload.widgetIndex
     const sInd = action.payload.seriesIndex
     // get series config

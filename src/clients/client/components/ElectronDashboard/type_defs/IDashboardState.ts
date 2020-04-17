@@ -1,11 +1,10 @@
-import { IDashboardProps } from "./IDashboardProps";
+import { IElectronDashboardProps } from "./IDashboardProps";
 
-export interface IDashboardState extends IDashboardProps {
+export interface IElectronDashboardState extends IElectronDashboardProps {
     currentBreakpoint: 'lg' | 'md' | 'sm' | 'xs' | 'xxs'
     timer: {
         isOn: boolean,
         start: number,
         busy: boolean
-    },
-    mounted: boolean
+    }
 }

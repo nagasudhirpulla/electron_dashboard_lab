@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { saveDashboardFromDialog } from "../commands/saveDashboardFromDialog";
@@ -19,7 +19,7 @@ export function saveDashboardAction(): ISaveDashboardAction {
     };
 }
 
-const stripDataFromAppState = (state: IDashboardState): IDashboardState => {
+const stripDataFromAppState = (state: IElectronDashboardState): IElectronDashboardState => {
     const dataStrippedWidgetProps = state.widgetProps.map(wp => {
         return { ...wp, data: {} }
     })
@@ -27,7 +27,7 @@ const stripDataFromAppState = (state: IDashboardState): IDashboardState => {
     return newState
 }
 
-export const saveDashboardDispatch = async (action: ISaveDashboardAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+export const saveDashboardDispatch = async (action: ISaveDashboardAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
     const isSuccess = await saveDashboardFromDialog(stripDataFromAppState(pageState))
     console.log(`Save Dashboard = ${isSuccess}`)
 }

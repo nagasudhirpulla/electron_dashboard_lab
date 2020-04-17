@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 
@@ -18,12 +18,12 @@ export function deleteWidgetAction(widgetIndex: number): IDeleteWidgetAction {
     };
 }
 
-export const deleteWidgetReducer = (state: IDashboardState, action: IDeleteWidgetAction): IDashboardState => {
+export const deleteWidgetReducer = (state: IElectronDashboardState, action: IDeleteWidgetAction): IElectronDashboardState => {
     const wInd = action.payload.widgetIndex
     return {
         ...state,
         widgetProps: [
             ...state.widgetProps.slice(0, wInd),
             ...state.widgetProps.slice(wInd + 1)]
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }

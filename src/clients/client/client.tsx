@@ -18,7 +18,6 @@ $comps.registerComp(LinePlotMetadata.discriminator, LinePlot, LinePlotWidgetConf
 const vizPluginsManager = VizPluginsManager()
 
 const App: React.FC<{}> = () => {
-    // WEBTODO move app logic from dashboard to here
     return <>
         <ElectronDashboard />
     </>

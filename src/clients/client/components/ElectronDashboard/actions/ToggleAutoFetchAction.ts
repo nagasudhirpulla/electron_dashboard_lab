@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 
@@ -17,12 +17,12 @@ export function toggleAutofetchAction(): IToggleAutofetchAction {
     };
 }
 
-export const toggleAutofetchReducer = (state: IDashboardState, action: IToggleAutofetchAction): IDashboardState => {
+export const toggleAutofetchReducer = (state: IElectronDashboardState, action: IToggleAutofetchAction): IElectronDashboardState => {
     return {
         ...state,
         timerSettings: {
             ...state.timerSettings,
             timerOn: !state.timerSettings.timerOn
         }
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }

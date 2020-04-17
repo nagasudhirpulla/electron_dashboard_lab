@@ -1,5 +1,5 @@
 import { readFileAsync } from "../../utils/fileUtils";
-import { IDashboardState } from "../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState";
+import { IElectronDashboardState } from "../../../clients/client/components/ElectronDashboard/type_defs/IDashboardState";
 
 export const openDashboard = async (openFilename: string) => {
     if (openFilename == null) {
@@ -12,7 +12,7 @@ export const openDashboard = async (openFilename: string) => {
     console.log(`Opening file ${openFilename}`);
     const fileContents: string = await readFileAsync(openFilename);
     // console.log(`${fileContents}`);
-    const stateObj = JSON.parse(fileContents) as IDashboardState;
+    const stateObj = JSON.parse(fileContents) as IElectronDashboardState;
     // console.log(stateObj);
     return stateObj
 }

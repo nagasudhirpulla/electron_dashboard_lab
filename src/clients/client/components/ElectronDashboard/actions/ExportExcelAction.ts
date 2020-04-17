@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 // import * as XLSX from 'xlsx';
@@ -21,7 +21,7 @@ export function exportExcelAction(widgetIndex: number): IExportExcelAction {
     };
 }
 
-export const ExportExcelDispatch = async (action: IExportExcelAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+export const ExportExcelDispatch = async (action: IExportExcelAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
     const wInd = action.payload.widgetIndex
     const data = pageState.widgetProps[wInd].data
     // use this for excel js implementation

@@ -1,24 +1,19 @@
 import React, { useContext, useState, useEffect } from 'react'
-import { IDashboardProps } from './type_defs/IDashboardProps';
-import { getDashboardStyle } from './queries/getDashboardStyle';
+import { IElectronDashboardProps } from './type_defs/IDashboardProps';
 import { useDashboardReducer } from './reducers/dashboardReducer';
 import { getDefaultDashboardState } from './queries/getDefaultDashboardState';
-import { IDashboardState } from './type_defs/IDashboardState';
+import { IElectronDashboardState } from './type_defs/IDashboardState';
 import { openDashboardAction } from './actions/OpenDashboardAction';
 import { saveDashboardAction } from './actions/SaveDashboardAction';
 import { setDashboardStateAction } from './actions/SetDashboardStateAction';
 import { toggleCompactionAction } from './actions/ToggleCompactionAction';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../../../../ipc/ChannelNames';
-import { Responsive, WidthProvider, Layout, Layouts } from "react-grid-layout";
-import { IWidgetProps } from '../../type_defs/dashboard/IWidgetProps';
+import { Layout, Layouts } from "react-grid-layout";
 import { vizPluginsRepoContext } from '../../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPen, faCopy, faDownload, faSyncAlt, faTimesCircle, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
-import './dashboard.css';
-import './rgl_styles.css';
+import { faSyncAlt, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { layoutChangeAction } from './actions/LayoutChangeAction';
-import { deriveLayouts } from './queries/deriveLayouts';
 import { duplicateWidgetAction } from './actions/DuplicateWidgetAction';
 import { deleteWidgetAction } from './actions/DeleteWidgetAction';
 import { WidgetEditorModal } from '../WidgetEditor/WidgetEditorModal';
@@ -34,10 +29,13 @@ import { addWidgetAction } from './actions/AddWidgetAction';
 import { toggleAutofetchAction } from './actions/ToggleAutoFetchAction';
 import { TimePeriod } from '../../../../Time/TimePeriod';
 import { exportExcelAction } from './actions/ExportExcelAction';
+import { Dashboard } from '../Dashboard/Dashboard';
+import { loadDataAdapters } from '../../../adapters/queries/loadDataAdapters';
+import { getApiAdaptersRegistry } from '../../../../apiAdapters/ApiManifestRegistry';
+import { DummyMeasurement } from '../../../../measurements/DummyMeasurement';
 
-const ResponsiveReactGridLayout = WidthProvider(Responsive);
-export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: IDashboardProps) => {
-    const dashInitState: IDashboardState = { ...getDefaultDashboardState(), ...props, mounted: false }
+export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
+    const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
     const [dashState, dashStateDispatch] = useDashboardReducer(dashInitState)
     const [showEditWidgetModal, setShowEditWidgetModal] = useState(false)
     const [activeWidgetIndex, setActiveWidgetIndex] = useState(0)
@@ -45,17 +43,27 @@ export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: ID
     const [showWidgetAddModal, setShowWidgetAddModal] = useState(false)
     const [timerId, setTimerId] = useState(null)
     const vizPluginNames: string[] = useContext(vizPluginsRepoContext).getInstalledPluginNames()
+    const [measTypes, setMeasTypes] = useState([] as { val: string, name: string }[])
+    useEffect(() => {
+        (async function () {
+            const dataAdapters = (await loadDataAdapters()).map(n => ({ val: `adapter|${n.adapter_id}`, name: n.name }))
+            const apiAdapters = Object.values(getApiAdaptersRegistry()).map(n => ({ val: `api|${n.api_id}`, name: n.name }))
+            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...dataAdapters, ...apiAdapters])
+        })()
+    }, [])
 
     const onLayoutChange = (currLayout: Layout[], allLayouts: Layouts): void => {
         dashStateDispatch(layoutChangeAction(currLayout, allLayouts))
     }
 
-    // WEBTODO move to parent
+    const onBreakpointChange = (newBreakpoint: string, newCols: number) => {
+        dashStateDispatch(setDashboardStateAction({ ...dashState, currentBreakpoint: newBreakpoint as IElectronDashboardState["currentBreakpoint"] }))
+    }
+
     const onOpenDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(openDashboardAction())
     }
 
-    // WEBTODO move to parent
     const onSaveDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
         dashStateDispatch(saveDashboardAction())
     }
@@ -68,12 +76,10 @@ export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: ID
         dashStateDispatch(toggleCompactionAction())
     }
 
-    // WEBTODO move to parent
     const onDataAdaptersEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
         ipcRenderer.send('' + ChannelNames.openDataAdaptersEditor, 'ping')
     }
 
-    // WEBTODO move to parent
     const onVizPluginsEditClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
         ipcRenderer.send('' + ChannelNames.openVizPluginsEditor, 'ping')
     }
@@ -95,19 +101,12 @@ export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: ID
     }
 
     const onRefreshAllWidgetsClick = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // WEBTODO move to parent
         dashStateDispatch(fetchAllWidgetsDataAction())
     }
 
-    const onBreakpointChange = (newBreakpoint: string, newCols: number) => {
-        dashStateDispatch(setDashboardStateAction({ ...dashState, currentBreakpoint: newBreakpoint as IDashboardState["currentBreakpoint"] }))
-    }
-
-    const onEditWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
-        return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            setActiveWidgetIndex(wInd)
-            setShowEditWidgetModal(true)
-        }
+    const onEditWidget = (wInd: number): void => {
+        setActiveWidgetIndex(wInd)
+        setShowEditWidgetModal(true)
     }
 
     const onEditWidgetSubmit = (wc: IWidgetConfig): void => {
@@ -124,31 +123,21 @@ export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: ID
         dashStateDispatch(setDashboardSettingsAction(s))
     }
 
-    const onDuplicateWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
-        return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            dashStateDispatch(duplicateWidgetAction(wInd))
-        }
+    const onDuplicateWidget = (wInd: number): void => {
+        dashStateDispatch(duplicateWidgetAction(wInd))
     }
 
-    const onExportWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
-        return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            // WEBTODO move to parent
-            dashStateDispatch(exportExcelAction(wInd))
-        }
+    const onExportWidget = (wInd: number): void => {
+        dashStateDispatch(exportExcelAction(wInd))
     }
 
-    const onRefreshWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
-        return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            // WEBTODO move to parent
-            dashStateDispatch(fetchWidgetDataAction(wInd))
-        }
+    const onRefreshWidget = (wInd: number): void => {
+        dashStateDispatch(fetchWidgetDataAction(wInd))
     }
 
-    const onRemoveWidget = (wInd: number): ((ev: React.MouseEvent<HTMLButtonElement>) => void) => {
-        return (ev: React.MouseEvent<HTMLButtonElement>): void => {
-            if (confirm('Delete this widget?')) {
-                dashStateDispatch(deleteWidgetAction(wInd))
-            }
+    const onRemoveWidget = (wInd: number): void => {
+        if (confirm('Delete this widget?')) {
+            dashStateDispatch(deleteWidgetAction(wInd))
         }
     }
 
@@ -183,100 +172,49 @@ export const ElectronDashboard: React.FC<Partial<IDashboardProps>> = (props?: ID
                     return
                 }
                 else {
-                    // WEBTODO move to parent
                     dashStateDispatch(fetchAllWidgetsDataAction())
                 }
             }, timerPeriod)
 
             setTimerId(newTimerId)
 
-            // WEBTODO move to parent
             dashStateDispatch(fetchAllWidgetsDataAction())
         }
     }
 
-    const divStyle = {
-        backgroundColor: dashState.gridConfig.backgroundColor
-    }
-
-    const generateDOM = (): JSX.Element[] => {
-        return dashState.widgetProps.map((wp: IWidgetProps, wInd) => {
-            let l: Layout = wp.layouts[dashState.currentBreakpoint];
-            const contentStyle: React.CSSProperties = { borderStyle: wp.config.border.style, borderColor: wp.config.border.color, borderWidth: wp.config.border.size }
-            let VizComp: React.FC<IWidgetProps> = useContext(vizPluginsRepoContext).getComp(wp.config.vizType)
-            return (
-                <div key={l.i} className={l.static ? "static" : ""}>
-                    <div className="dragHandle">
-                        <div style={{ textAlign: 'center' }}>{" "}</div>
-                        <span
-                            className="editItemBtn"
-                            onClick={onEditWidget(wInd)}
-                        ><FontAwesomeIcon icon={faPen} color='coral' size='xs' /></span>
-                        <span
-                            className="copyWidBtn"
-                            onClick={onDuplicateWidget(wInd)}
-                        ><FontAwesomeIcon icon={faCopy} color='white' size='xs' /></span>
-                        <span
-                            className="exportBtn"
-                            onClick={onExportWidget(wInd)}
-                        ><FontAwesomeIcon icon={faDownload} color='#4CAF50' size='xs' /></span>
-                        <span
-                            className="refreshBtn"
-                            onClick={onRefreshWidget(wInd)}
-                        ><FontAwesomeIcon icon={faSyncAlt} color='gold' size='xs' /></span>
-                        <span
-                            className="removeBtn"
-                            onClick={onRemoveWidget(wInd)}
-                        ><FontAwesomeIcon icon={faTimesCircle} color='red' size='xs' /></span>
-                    </div>
-                    <div className="cellContent" key={l.i + '_timeseries'} style={contentStyle}>
-                        <VizComp {...wp}></VizComp>
-                    </div>
-                </div>
-            );
-        });
-    }
-
     return <>
-        <div style={getDashboardStyle(dashState)}>
-            <div className={"btn-group btn-group-sm"}>
-                <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
-                <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
-                <button onClick={onOpenSettingsEditor} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faCog} /> Settings</button>
-                <button onClick={onResetLayout} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSyncAlt} /> Reset Layout</button>
-                <button onClick={onCompactTypeChange} className={"btn btn-outline-primary"}>
-                    {dashState.gridConfig.compactType || "No"}{` Compaction`}
-                </button>
-                <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
-                <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
-                <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn == true ? (<><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</>) : (<><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>)}</button>
-                <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
-                <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
-            </div>
-            <ResponsiveReactGridLayout
-                breakpoints={dashState.gridConfig.breakpoints}
-                cols={dashState.gridConfig.cols}
-                rowHeight={dashState.gridConfig.rowHeight}
-                layouts={deriveLayouts(dashState.widgetProps.map(wp => wp.layouts))}
-                onBreakpointChange={onBreakpointChange}
-                onLayoutChange={onLayoutChange}
-                // WidthProvider option
-                measureBeforeMount={false}
-                // Animate on mount. If you don't, delete `useCSSTransforms` (it's default `true`)
-                // and set `measureBeforeMount={true}`.
-                useCSSTransforms={dashState.mounted}
-                compactType={dashState.gridConfig.compactType}
-                preventCollision={!dashState.gridConfig.compactType}
-                draggableHandle='.dragHandle'
-                style={divStyle}
-            >
-                {generateDOM()}
-            </ResponsiveReactGridLayout>
-
+        <div className={"btn-group btn-group-sm"}>
+            <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
+            <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
+            <button onClick={onOpenSettingsEditor} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faCog} /> Settings</button>
+            <button onClick={onResetLayout} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSyncAlt} /> Reset Layout</button>
+            <button onClick={onCompactTypeChange} className={"btn btn-outline-primary"}>
+                {dashState.gridConfig.compactType || "No"}{` Compaction`}
+            </button>
+            <button onClick={onDataAdaptersEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faDatabase} /> Data Adapters</button>
+            <button onClick={onVizPluginsEditClick} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faChartBar} /> Visualization Plugins</button>
+            <button onClick={onToggleTimerClick} className={"btn btn-outline-primary"}>{dashState.timer.isOn == true ? (<><FontAwesomeIcon icon={faStopCircle} /> Stop AutoFetch</>) : (<><FontAwesomeIcon icon={faPlayCircle} /> Start AutoFetch</>)}</button>
+            <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
+            <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
         </div>
+        <Dashboard
+            className={dashState.className}
+            gridConfig={dashState.gridConfig}
+            widgetProps={dashState.widgetProps}
+            onDuplicateWidget={onDuplicateWidget}
+            onRefreshWidget={onRefreshWidget}
+            onEditWidget={onEditWidget}
+            onRemoveWidget={onRemoveWidget}
+            onExportWidget={onExportWidget}
+            onLayoutChange={onLayoutChange}
+            currentBreakpoint={dashState.currentBreakpoint}
+            onBreakpointChange={onBreakpointChange}
+        />
+
         <WidgetEditorModal
             show={showEditWidgetModal}
             setShow={setShowEditWidgetModal}
+            measTypes={measTypes}
             value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
         />

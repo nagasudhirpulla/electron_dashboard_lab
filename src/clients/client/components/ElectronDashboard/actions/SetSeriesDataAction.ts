@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { ISeriesData } from "../../../type_defs/dashboard/ISeriesData";
@@ -22,7 +22,7 @@ export function setSeriesDataAction(widgetIndex: number, seriesIndex: number, da
     }
 }
 
-export const setSeriesDataReducer = (state: IDashboardState, action: ISetSeriesDataAction): IDashboardState => {
+export const setSeriesDataReducer = (state: IElectronDashboardState, action: ISetSeriesDataAction): IElectronDashboardState => {
     const wInd = action.payload.widgetIndex
     const sInd = action.payload.seriesIndex
     let newData: ISeriesData = []

@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { ITimePeriod } from "../../../../../Time/type_defs/ITimePeriod";
@@ -27,7 +27,7 @@ export function fetchAllWidgetsDataAction(): IFetchAllWidgetsDataAction {
 }
 
 
-export const fetchAllWidgetsDataDispatch = async (action: IFetchAllWidgetsDataAction, pageState: IDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
+export const fetchAllWidgetsDataDispatch = async (action: IFetchAllWidgetsDataAction, pageState: IElectronDashboardState, pageStateDispatch: React.Dispatch<IAction>): Promise<void> => {
     // TODO set timer busy
     const numWidgets = pageState.widgetProps.length
     for (let wInd = 0; wInd < numWidgets; wInd++) {

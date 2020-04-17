@@ -1,7 +1,7 @@
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { IDashboardSettings } from "../../DashboardSettingsEditor/type_defs/IDashboardSettings";
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 
 export interface ISetDashboardSettingsPayload {
     dashboardSettings: IDashboardSettings
@@ -19,7 +19,7 @@ export function setDashboardSettingsAction(dashboardSettings: IDashboardSettings
     };
 }
 
-export const setDashboardSettingsReducer = (state: IDashboardState, action: ISetDashboardSettingsAction): IDashboardState => {
+export const setDashboardSettingsReducer = (state: IElectronDashboardState, action: ISetDashboardSettingsAction): IElectronDashboardState => {
     return {
         ...state,
         gridConfig: {
@@ -29,5 +29,5 @@ export const setDashboardSettingsReducer = (state: IDashboardState, action: ISet
         timerSettings: {
             ...action.payload.dashboardSettings.timerSettings
         }
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }

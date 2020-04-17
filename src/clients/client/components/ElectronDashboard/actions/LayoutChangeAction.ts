@@ -1,4 +1,4 @@
-import { IDashboardState } from "../type_defs/IDashboardState";
+import { IElectronDashboardState } from "../type_defs/IDashboardState";
 import { IAction } from "../type_defs/IAction";
 import { ActionType } from "./ActionType";
 import { setDashboardStateAction } from "./SetDashboardStateAction";
@@ -21,7 +21,7 @@ export function layoutChangeAction(currLayout: Layout[], allLayouts: Layouts): I
     };
 }
 
-export const layoutChangeReducer = (state: IDashboardState, action: ILayoutChangeAction): IDashboardState => {
+export const layoutChangeReducer = (state: IElectronDashboardState, action: ILayoutChangeAction): IElectronDashboardState => {
     // get the layouts breakpoints
     const laytBrPnts = Object.keys(action.payload.allLayouts);
     const widgetProps = state.widgetProps;
@@ -36,5 +36,5 @@ export const layoutChangeReducer = (state: IDashboardState, action: ILayoutChang
     return {
         ...state,
         widgetProps: widgetProps
-    } as IDashboardState;
+    } as IElectronDashboardState;
 }
