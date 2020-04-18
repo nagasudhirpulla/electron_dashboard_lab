@@ -17,6 +17,8 @@ import { IFetchSeriesDataAction } from "../../ElectronDashboard/actions/FetchSer
 import { fetchWebWidgetDataDispatch } from "../actions/FetchWidgetDataAction"
 import { fetchAllWebWidgetsDataDispatch } from "../actions/FetchAllWidgetsDataAction"
 import { fetchWebSeriesDataDispatch } from "../actions/FetchSeriesDataAction"
+import { ExportExcelDispatch, IExportExcelAction } from "../actions/ExportExcelAction"
+import { saveDashboardDispatch, ISaveDashboardAction } from "../actions/SaveDashboardAction"
 
 export const useWebDashboardReducer = (initState: IElectronDashboardState): [IElectronDashboardState, React.Dispatch<IAction>] => {
     // create the reducer function
@@ -66,7 +68,7 @@ export const useWebDashboardReducer = (initState: IElectronDashboardState): [IEl
                 break;
             }
             case ActionType.SAVE_DASHBOARD: {
-                //TODO
+                await saveDashboardDispatch(action as ISaveDashboardAction, pageState, pageStateDispatch)
                 break
             }
             case ActionType.FETCH_ALL_WIDGETS_DATA: {
@@ -82,7 +84,7 @@ export const useWebDashboardReducer = (initState: IElectronDashboardState): [IEl
                 break
             }
             case ActionType.EXPORT_EXCEL: {
-                //TODO
+                await ExportExcelDispatch(action as IExportExcelAction, pageState, pageStateDispatch)
                 break
             }
             default:

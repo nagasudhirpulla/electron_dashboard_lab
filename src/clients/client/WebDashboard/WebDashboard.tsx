@@ -28,6 +28,8 @@ import { fetchWebWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWebWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WebMeasurementEditor } from '../../../measurements/components/WebMeasurementEditor';
 import { vizPluginsRepoContext } from '../webDashboardApp';
+import { exportExcelAction } from './actions/ExportExcelAction';
+import { saveDashboardAction } from './actions/SaveDashboardAction';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -59,7 +61,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
     }
 
     const onSaveDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO complete this
+        dashStateDispatch(saveDashboardAction())
     }
 
     const onResetLayout = (ev: React.MouseEvent<HTMLButtonElement>) => {
@@ -114,7 +116,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
     }
 
     const onExportWidget = (wInd: number): void => {
-        // TODO
+        dashStateDispatch(exportExcelAction(wInd))
     }
 
     const onRefreshWidget = (wInd: number): void => {
