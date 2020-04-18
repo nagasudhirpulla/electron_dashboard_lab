@@ -27,7 +27,7 @@ import { useWebDashboardReducer } from './reducers/webDashboardReducer';
 import { fetchWebWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWebWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WebMeasurementEditor } from '../../../measurements/components/WebMeasurementEditor';
-import { vizPluginsRepoContext } from '../webDashboardApp';
+import { vizPluginsRepoContext, fileUploadBtnId } from '../webDashboardApp';
 import { exportExcelAction } from './actions/ExportExcelAction';
 import { saveDashboardAction } from './actions/SaveDashboardAction';
 
@@ -45,6 +45,21 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
         (async function () {
             const apiAdapters = Object.values(getApiAdaptersRegistry()).map(n => ({ val: `api|${n.api_id}`, name: n.name }))
             setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...apiAdapters])
+            const uploadBtn = document.getElementById(fileUploadBtnId) as HTMLInputElement
+            uploadBtn.onchange = (evt: any) => {
+                var files = evt.target.files
+                if (files.length === 0) {
+                    console.log('No file is selected')
+                    return
+                }
+                var reader = new FileReader()
+                reader.onload = function (event) {
+                    const fContent: string = event.target.result as string
+                    console.log('File content:', fContent)
+                    dashStateDispatch(setDashboardStateAction({ ...dashState, ...JSON.parse(fContent) }))
+                }
+                reader.readAsText(files[0]);
+            }
         })()
     }, [])
 
@@ -57,7 +72,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
     }
 
     const onOpenDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
-        // TODO complete this
+        (document.getElementById(fileUploadBtnId) as HTMLInputElement).click();
     }
 
     const onSaveDashboard = (ev: React.MouseEvent<HTMLButtonElement>) => {
