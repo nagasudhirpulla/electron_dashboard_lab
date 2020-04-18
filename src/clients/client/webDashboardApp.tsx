@@ -7,8 +7,7 @@ import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeries
 import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { WebDashboard } from './WebDashboard/WebDashboard'
 import { setApiAdaptersRegistry } from '../../apiAdapters/ApiManifestRegistry'
-import { IApiManifest } from '../../apiAdapters/type_defs/IApiManifest'
-import { registerApiAdapter } from '../../apiAdapters/commands/registerApiAdapter'
+import { seedApiProviders } from './WebDashboard/commands/seedApiProviders'
 
 // console.log("Hello World from client!!!")
 // create a global variable for viz plugins repository as well make it a context for other components to access it
@@ -17,35 +16,8 @@ export const vizPluginsRepoContext = createContext($comps)
 // register line plot
 $comps.registerComp(LinePlotMetadata.discriminator, LinePlot, LinePlotWidgetConfigEditor, LinePlotSeriesConfigEditor, LinePlotMetadata)
 
-//http://portal.wrldc.in/dashboard/api/wbesArchive/CGPL/Total/2020-04-15/2020-04-16
-const WbesApi: IApiManifest = {
-    name: 'Schedule_Archive',
-    api_id: 'Schedule_Archive',
-    baseUrl: '../api/wbesArchive',
-    path: '${meas_id}/${start_time}/${end_time}',
-    request_type: 'get',
-    start_time_format: 'YYYY-MM-DD',
-    end_time_format: 'YYYY-MM-DD',
-    quality_option: false,
-    is_resampling_present: false,
-}
-
-//http://portal.wrldc.in/dashboard/api/pmudata/getdata/13206/2020-04-17-22-48-01/2020-04-17-22-58-01
-const PmuApi: IApiManifest = {
-    name: 'PMU',
-    api_id: 'PmuApi',
-    baseUrl: '../api/pmudata/getdata',
-    path: '${meas_id}/${start_time}/${end_time}',
-    request_type: 'get',
-    start_time_format: 'YYYY-MM-DD-HH-mm-ss',
-    end_time_format: 'YYYY-MM-DD-HH-mm-ss',
-    quality_option: false,
-    is_resampling_present: false,
-}
-
 setApiAdaptersRegistry({})
-registerApiAdapter(WbesApi)
-registerApiAdapter(PmuApi)
+seedApiProviders()
 
 const App: React.FC<{}> = () => {
     return <>
