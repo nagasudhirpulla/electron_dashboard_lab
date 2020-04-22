@@ -27,7 +27,7 @@ export const fetchApiMeasTable = async (meas: IApiMeasurement): Promise<string[]
     try {
         const resp = await fetch(fetchUrl, fetchParams);
         const respJSON = await resp.json() as string[][];
-        console.log(respJSON);
+        // console.log(respJSON);
         return respJSON;
     } catch (e) {
         console.error(e);
