@@ -46,7 +46,7 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
     });
 
     return <>
-        <span>Measurement Id{' '}</span>
+        <span><b>Measurement Id{' '}</b></span>
         <input
             type='text'
             name='meas_id'

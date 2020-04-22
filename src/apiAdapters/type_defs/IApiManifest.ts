@@ -1,5 +1,3 @@
-import { ResamplingStrategy } from "../../measurements/ResamplingStrategy";
-
 /**
  * In path, query_params, post_body, request_headers objects
  * ${meas_id} will be replaced by measurement id
@@ -14,6 +12,7 @@ export interface IApiManifest {
     api_id: string
     baseUrl: string
     path: string
+    meas_picker_path?: string
     request_type?: 'get' | 'post' | 'put' | 'delete' //default is get
     start_time_format?: string
     end_time_format?: string
