@@ -198,6 +198,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
             <button onClick={onAddWidgetClick} className={"btn btn-outline-success"}><FontAwesomeIcon icon={faPlusSquare} /> Add Widget</button>
             <button onClick={onRefreshAllWidgetsClick} className={"btn btn-outline-warning"}><FontAwesomeIcon icon={faRedoAlt} /> Refresh All</button>
         </div>
+
         <Dashboard
             className={dashState.className}
             gridConfig={dashState.gridConfig}
@@ -217,10 +218,11 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
             show={showEditWidgetModal}
             setShow={setShowEditWidgetModal}
             measTypes={measTypes}
-            value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
+            value={dashState.widgetProps[activeWidgetIndex].config}
             onSubmit={onEditWidgetSubmit}
             MeasurementEditor={WebMeasurementEditor}
         />
+
         <DashboardSettingsEditorModal
             show={showDashSettingsModal}
             setShow={setShowDashSettingsModal}

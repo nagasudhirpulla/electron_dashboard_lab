@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal'
 import { IWidgetEditorModalProps } from "./type_defs/IWidgetEditorModalProps";
 import { WidgetEditor } from "./WidgetEditor";
@@ -6,9 +6,17 @@ import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 
 export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, measTypes, show, setShow, MeasurementEditor }: IWidgetEditorModalProps) => {
-    const [widgetConfig, setWidgetConfig] = useState(JSON.parse(JSON.stringify(value)) as IWidgetConfig)
+    console.log(value)
+    const [widgetConfig, setWidgetConfig] = useState({ ...value })
 
-    const handleClose = () => setShow(false)
+    useEffect(() => {
+        setWidgetConfig({ ...value })
+    }, [value])
+
+    const handleClose = () => {
+        setWidgetConfig({ ...value })
+        setShow(false)
+    }
 
     const handleSaveChanges = () => {
         onSubmit(widgetConfig)
@@ -24,11 +32,11 @@ export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, on
             <Modal.Title>Edit Widget Configuration</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <WidgetEditor value={widgetConfig} onChange={onChange} measTypes={measTypes} MeasurementEditor={MeasurementEditor}/>
+            <WidgetEditor value={widgetConfig} onChange={onChange} measTypes={measTypes} MeasurementEditor={MeasurementEditor} />
         </Modal.Body>
         <Modal.Footer>
             <button className="btn btn-danger" onClick={handleClose}>Cancel</button>
             <button className="btn btn-success" onClick={handleSaveChanges}>Save Changes</button>
         </Modal.Footer>
-    </Modal>;
+    </Modal>
 }
