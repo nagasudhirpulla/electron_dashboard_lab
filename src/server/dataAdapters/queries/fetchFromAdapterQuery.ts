@@ -6,6 +6,7 @@ import { ChildProcess, spawn } from 'child_process'
 import { IAdapterMeasurement } from "../../../measurements/type_defs/IAdapterMeasurement"
 import { IMeasData } from "../../../clients/client/type_defs/dashboard/IMeasData"
 import { TimePeriod } from "../../../Time/TimePeriod"
+import { resampleTimeSeries } from "../../../Time/commands/resampleTimeSeries"
 
 const fetchExeData = async (exePath: string, cmdParams: string[]): Promise<string> => {
     const getIpcRespAsync = (ipc: ChildProcess): Promise<string> => {
@@ -83,10 +84,11 @@ export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTi
         if (exeData == null || exeData == "") {
             return []
         }
-        const resp = exeData.split(',').map((num) => { return +num; });
+        let resp = exeData.split(',').map((num) => { return +num; });
 
         if (resamplingSupported == false && TimePeriod.getSeconds(meas.periodicity) != 0) {
-            //TODO perform resampling if required 
+            // perform resampling if required 
+            resp = resampleTimeSeries(resp, meas.periodicity, meas.resampling_strategy)
         }
 
         return resp

@@ -50,7 +50,7 @@ export const ApiMeasEditor: React.FC<{ value: IApiMeasurement, onChange: (m: IAp
         }
         <br />
 
-        <span><b>Sample Frequency</b></span>
+        <span><b>ReSampling Period</b></span>
         <TimePeriodEditor
             value={propVal.periodicity}
             onChange={(t) => { onValChanged('periodicity', t) }} />
@@ -63,6 +63,7 @@ export const ApiMeasEditor: React.FC<{ value: IApiMeasurement, onChange: (m: IAp
             value={propVal.resampling_strategy}
         >
             <option value={ResamplingStrategy.Raw}>Raw</option>
+            <option value={ResamplingStrategy.Snap}>Snap</option>
             <option value={ResamplingStrategy.Average}>Average</option>
             <option value={ResamplingStrategy.Max}>Maximum</option>
             <option value={ResamplingStrategy.Min}>Minimum</option>

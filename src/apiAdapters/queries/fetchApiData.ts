@@ -4,6 +4,8 @@ import { IMeasData } from "../../clients/client/type_defs/dashboard/IMeasData"
 import moment from 'moment'
 import { IApiManifest } from "../type_defs/IApiManifest"
 import { getApiManifest } from "./getApiManifest"
+import { TimePeriod } from "../../Time/TimePeriod"
+import { resampleTimeSeries } from "../../Time/commands/resampleTimeSeries"
 /**
  * In path, query_params, post_body, request_headers objects
  * ${meas_id} will be replaced by measurement id
@@ -71,10 +73,14 @@ export const fetchApiData = async (fromTime: Date, toTime: Date, meas: IApiMeasu
     // perform web request
     // https://github.com/github/fetch/issues/635#issuecomment-401358597
     try {
-        const resp = await fetch(fetchUrl, fetchParams);
-        const respJSON = await resp.json() as number[];
+        const resp = await fetch(fetchUrl, fetchParams)
+        let respJSON = await resp.json() as number[]
+        if (!(meas.resamplingSupported || false) && TimePeriod.getSeconds(meas.periodicity) != 0) {
+            // perform resampling if required 
+            respJSON = resampleTimeSeries(respJSON, meas.periodicity, meas.resampling_strategy)
+        }
         //console.log(respJSON);
-        return respJSON;
+        return respJSON
     } catch (e) {
         console.error(e);
         return [];

@@ -6,4 +6,5 @@ export interface IApiMeasurement extends IMeasurement {
     api_id: string
     periodicity: Periodicity
     resampling_strategy: ResamplingStrategy
+    resamplingSupported?: false
 }

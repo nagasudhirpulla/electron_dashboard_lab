@@ -6,7 +6,7 @@ import { IWidgetConfig } from "../../type_defs/dashboard/IWidgetConfig";
 import { IWidgetConfigEditorProps } from "./type_defs/IWidgetConfigEditorProps";
 
 export const WidgetEditorModal: React.FC<IWidgetEditorModalProps> = ({ value, onSubmit, measTypes, show, setShow, MeasurementEditor }: IWidgetEditorModalProps) => {
-    console.log(value)
+    // console.log(value)
     const [widgetConfig, setWidgetConfig] = useState({ ...value })
 
     useEffect(() => {
