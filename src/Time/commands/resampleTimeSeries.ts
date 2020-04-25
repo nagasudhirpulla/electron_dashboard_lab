@@ -2,18 +2,9 @@ import { ITimePeriod } from "../type_defs/ITimePeriod";
 import { ResamplingStrategy } from "../../measurements/ResamplingStrategy";
 import { TimePeriod } from "../TimePeriod";
 /**
-assumptions - input timeseries is already sorted
-
-let prevIterationEndTimestampIndex(pieti) = 0
-let prevResult (prevRes) = 1st sample in input timeseries
-let resultSampleTimestamp (rst) = 1st sample timestamp
-
-while rst<= last timestamp of input timeseries
-- next_rst = rst + resample period
-- using pieti, find input samples between [rst, next_rst) and apply resampling logic
-- if n(samples) > 0, update pieti
-- else take result as prev result
-- rst = next_rst
+assumptions
+input timeseries is in the format [timestamp1, value1, timestamp2, value2, ...]
+timestamp is a number that represents duration from UNIX epoch in milliseconds, for example (new Date()).getTime()
  */
 export const resampleTimeSeries = (ts: number[], resamplePeriod: ITimePeriod, strategy: ResamplingStrategy): number[] => {
     if (strategy == ResamplingStrategy.Raw || TimePeriod.getSeconds(resamplePeriod) == 0 || ts.length < 2) {
