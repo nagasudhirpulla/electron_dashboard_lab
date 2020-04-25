@@ -2,10 +2,14 @@ import { IMeasurement } from "../type_defs/IMeasurement";
 import { DummyMeasurement } from "../DummyMeasurement";
 import { AdapterMeasurement } from "../AdapterMeasurement";
 import { ApiMeasurement } from "../ApiMeasurement";
+import { EquationMeasurement } from "../EquationMeasurement";
 
 export const generateMeasFromType = (typename: string): IMeasurement => {
     if (typename == DummyMeasurement.typename) {
         return new DummyMeasurement()
+    }
+    else if (typename == EquationMeasurement.typename) {
+        return new EquationMeasurement()
     }
     else if (typename.startsWith('adapter|')) {
         // it is an adapter measurement

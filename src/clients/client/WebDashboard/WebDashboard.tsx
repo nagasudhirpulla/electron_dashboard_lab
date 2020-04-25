@@ -30,6 +30,7 @@ import { WebMeasurementEditor } from '../../../measurements/components/WebMeasur
 import { vizPluginsRepoContext, fileUploadBtnId } from '../webDashboardApp';
 import { exportExcelAction } from './actions/ExportExcelAction';
 import { saveDashboardAction } from './actions/SaveDashboardAction';
+import { EquationMeasurement } from '../../../measurements/EquationMeasurement';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -44,7 +45,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
     useEffect(() => {
         (async function () {
             const apiAdapters = Object.values(getApiAdaptersRegistry()).map(n => ({ val: `api|${n.api_id}`, name: n.name }))
-            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...apiAdapters])
+            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...apiAdapters, { val: EquationMeasurement.typename, name: 'Equation' }])
             const uploadBtn = document.getElementById(fileUploadBtnId) as HTMLInputElement
             uploadBtn.onchange = (evt: any) => {
                 var files = evt.target.files
