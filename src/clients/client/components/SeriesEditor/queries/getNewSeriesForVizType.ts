@@ -3,9 +3,7 @@ import { ISeriesConfig } from "../../../type_defs/dashboard/ISeriesConfig";
 import { VarTime } from "../../../../../Time/VarTime";
 import { TimePeriod } from "../../../../../Time/TimePeriod";
 
-export const getNewSeriesForVizType = (newMeasType: string, vizType: string, numMeasPerSeries: number): ISeriesConfig => {
-    const newMeas = generateMeasFromType(newMeasType)
-    if (newMeas == null) { return; }
+export const getNewSeriesForVizType = (newMeasTypes: string[], vizType: string): ISeriesConfig => {
     let newSeriesConfig: ISeriesConfig = {
         title: 'series',
         measurements: [],
@@ -15,8 +13,8 @@ export const getNewSeriesForVizType = (newMeasType: string, vizType: string, num
         fetchWindow: new TimePeriod(),
         customConfig: {}
     }
-    for (let measIter = 0; measIter < numMeasPerSeries; measIter++) {
-        newSeriesConfig.measurements.push({ ...newMeas })
+    for (let measIter = 0; measIter < newMeasTypes.length; measIter++) {
+        newSeriesConfig.measurements.push({ ...generateMeasFromType(newMeasTypes[measIter]) })
     }
     return newSeriesConfig
 }

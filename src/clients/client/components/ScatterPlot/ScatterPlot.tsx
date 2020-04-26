@@ -1,22 +1,19 @@
 import { IWidgetProps } from "../../type_defs/dashboard/IWidgetProps"
 import React from 'react'
 import { Data, Layout, Config, Frame, Color, Datum, Shape, PlotData } from "plotly.js"
-import { YAxisSide } from "./type_defs/YAxisSide"
-import { ILinePlotWidgetProps } from "./type_defs/ILinePlotWidgetProps"
 import merge from 'lodash.merge'
-import { TslpSeriesStyle } from "./type_defs/TslpSeriesStyle"
-import { TimePeriod } from "../../../../Time/TimePeriod"
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig"
 import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
-import { SeriesStackMode } from "./type_defs/SeriesStackMode"
+import { IScatterPlotWidgetProps } from "./type_defs/IScatterPlotWidgetProps"
 import createPlotlyComponent from 'react-plotly.js/factory'
-// https://www.npmjs.com/package/react-plotlyjs
 import Plotly from 'plotly.js-cartesian-dist'
+import { TsspSeriesStyle } from "./type_defs/TsspSeriesStyle"
+import { YAxisSide } from "../LinePlot/type_defs/YAxisSide"
 
-// TODO implement x and y axis ranges, stackedBox, 
+// TODO implement x and y axis ranges, 
 // candlestick (https://plotly.com/javascript/candlestick-charts/), 
 
-export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
+export const ScatterPlot: React.FC<IWidgetProps> = (props: IScatterPlotWidgetProps) => {
     const PlotlyComponent = createPlotlyComponent(Plotly)
     // set default values to widget custom config
     let config = { ...props.config }
@@ -40,43 +37,21 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         let seriesData: Data = { ...series_data_template }
 
         let seriesStyle = sConfig.customConfig.seriesStyle
-        const seriesStackMode = props.config.customConfig.seriesStackMode
-        // override seriesStyle as normal timeseries for overlap modes
-        if (seriesStackMode != SeriesStackMode.none) {
-            seriesStyle = TslpSeriesStyle.line
-        }
 
-        // use different series template for boxplot
-        if (seriesStyle == TslpSeriesStyle.boxplot) {
-            seriesData = {
-                name: sConfig.title,
-                y: [],
-                type: 'box',
-                marker: {
-                    color: sConfig.customConfig.color
-                }
-            }
-        } else {
-            // set the line mode
-            seriesData.mode = sConfig.customConfig.lineMode
-            // set line color and width
-            seriesData.line.color = sConfig.customConfig.color
-            seriesData.line.width = sConfig.customConfig.size
+        // set the line mode
+        seriesData.mode = sConfig.customConfig.lineMode
+        // set line color and width
+        seriesData.line.color = sConfig.customConfig.color
+        seriesData.line.width = sConfig.customConfig.size
 
-            // set marker color and width
-            seriesData.marker.color = sConfig.customConfig.markerColor
-            seriesData.marker.size = sConfig.customConfig.markerSize
-        }
+        // set marker color and width
+        seriesData.marker.color = sConfig.customConfig.markerColor
+        seriesData.marker.size = sConfig.customConfig.markerSize
 
-        if (seriesStyle == TslpSeriesStyle.lollipop) {
+
+        if (seriesStyle == TsspSeriesStyle.lollipop) {
             // override series mode as markers for lollipop plot
             seriesData.mode = 'markers'
-        }
-
-        if (seriesStackMode == SeriesStackMode.stackedBar) {
-            // override series mode as markers for lollipop plot
-            seriesData.type = 'bar'
-            seriesData.marker.color = sConfig.customConfig.color
         }
 
         // implement y axis settings
@@ -88,27 +63,21 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             return seriesData
         }
 
-        if (!(0 in props.data[seriesIter])) {
-            //check if we have atleast one measurement data
+        if (!(0 in props.data[seriesIter]) || !(1 in props.data[seriesIter])) {
+            // check if we have atleast 2 measurements data
             return seriesData
         }
 
-        // determine series data display time shift
-        let shiftMillis: number = 0
-        if (seriesStyle != TslpSeriesStyle.duration) {
-            shiftMillis = 1000 * TimePeriod.getSeconds(sConfig.customConfig.displayTimeShift)
+        // check if lengths of both measuerements data are same
+        if (props.data[seriesIter][0].length != props.data[seriesIter][1].length) {
+            return seriesData
         }
 
         // get points from measurement
         for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
-            let xVal: Datum = props.data[seriesIter][0][pntIter]
-            if ([TslpSeriesStyle.line, TslpSeriesStyle.lollipop].includes(seriesStyle)) {
-                xVal = new Date(xVal + shiftMillis)
-            }
-            if (seriesStyle != TslpSeriesStyle.boxplot) {
-                (seriesData.x as Datum[]).push(xVal)
-            }
-            (seriesData.y as Datum[]).push(props.data[seriesIter][0][pntIter + 1])
+            let xVal: Datum = props.data[seriesIter][0][pntIter];
+            (seriesData.x as Datum[]).push(props.data[seriesIter][0][pntIter + 1]);
+            (seriesData.y as Datum[]).push(props.data[seriesIter][1][pntIter + 1]);
         }
         return seriesData
     }
@@ -118,34 +87,27 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
         for (let seriesIter = 0; seriesIter < config.seriesConfigs.length; seriesIter++) {
             plot_data.push(generateSeriesData(seriesIter))
         }
-        if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedArea) {
-            plot_data = stackedArea(plot_data, true)
-        } else if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedLine) {
-            plot_data = stackedArea(plot_data, false)
-        }
         return plot_data
     }
 
     const generateSeriesShapes = (seriesIter: number): Layout["shapes"] => {
         const sConfig = config.seriesConfigs[seriesIter]
         const seriesStyle = sConfig.customConfig.seriesStyle
-        if (![TslpSeriesStyle.lollipop].includes(seriesStyle)) { return [] }
+        if (![TsspSeriesStyle.lollipop].includes(seriesStyle)) { return [] }
         let seriesShapes: Layout["shapes"] = []
         if (!(seriesIter in props.data)) {
             // check if seriesIter is present as key in data
             return seriesShapes
         }
 
-        if (!(0 in props.data[seriesIter])) {
+        if (!(0 in props.data[seriesIter]) || !(1 in props.data[seriesIter])) {
             //check if we have atleast one measurement data
             return seriesShapes
         }
-        // determine series data display time shift
-        const shiftMillis = 1000 * TimePeriod.getSeconds(sConfig.customConfig.displayTimeShift)
         // get points from measurement
         for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
-            const xVal: Datum = new Date(props.data[seriesIter][0][pntIter] + shiftMillis)
-            const yVal: Datum = props.data[seriesIter][0][pntIter + 1]
+            const xVal: Datum = props.data[seriesIter][0][pntIter + 1]
+            const yVal: Datum = props.data[seriesIter][1][pntIter + 1]
             let shape: Partial<Shape> = {
                 x0: xVal, y0: 0, x1: xVal, y1: yVal, xref: 'x', yref: 'y', line: { color: sConfig.customConfig.color as string }
             }
@@ -237,11 +199,6 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
     let shape_data: Layout["shapes"] = generatePlotShapes()
     plot_layout.shapes = shape_data
 
-    if (props.config.customConfig.seriesStackMode == SeriesStackMode.stackedBar) {
-        // set bar mode as relative for stacked bar chart
-        plot_layout.barmode = 'relative'
-    }
-
     let plot_frames: Frame[] = []
     let plot_config: Partial<Config> = {}
 
@@ -256,34 +213,4 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
             useResizeHandler={true}
         />
     )
-}
-
-const stackedArea = (inpTraces: Partial<PlotData>[], enableArea: boolean): Partial<PlotData>[] => {
-    let traces = [...inpTraces]
-    for (let i = 0; i < traces.length; i++) {
-        let traceText: string[] = []
-        traces[i].hoverinfo = 'text'
-        for (let j = 0; j < (traces[i]['y'].length); j++) {
-            traceText.push(traces[i]['name'] + " (" + traces[i]['y'][j] + ")")
-        }
-        traces[i].text = traceText
-        if (enableArea) {
-            traces[i].fill = 'tonexty'
-        }
-    }
-
-    for (let i = 1; i < traces.length; i++) {
-        for (let j = 0; j < (Math.min(traces[i]['y'].length, traces[i - 1]['y'].length)); j++) {
-            const samplVal = +traces[i]['y'][j]
-            const prevTracesamplVal = +traces[i - 1]['y'][j]
-            traces[i]['y'][j] = samplVal + prevTracesamplVal
-        }
-    }
-
-    if (traces.length > 0) {
-        if (enableArea) {
-            traces[0].fill = 'tonexty'
-        }
-    }
-    return traces;
 }

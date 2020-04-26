@@ -62,8 +62,8 @@ export const ApiMeasEditor: React.FC<{ value: IApiMeasurement, onChange: (m: IAp
             onChange={onSelValChanged}
             value={propVal.resampling_strategy}
         >
-            <option value={ResamplingStrategy.Raw}>Raw</option>
             <option value={ResamplingStrategy.Snap}>Snap</option>
+            <option value={ResamplingStrategy.Raw}>Raw</option>
             <option value={ResamplingStrategy.Average}>Average</option>
             <option value={ResamplingStrategy.Max}>Maximum</option>
             <option value={ResamplingStrategy.Min}>Minimum</option>

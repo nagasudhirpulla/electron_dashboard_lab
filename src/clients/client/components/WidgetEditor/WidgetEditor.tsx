@@ -14,8 +14,11 @@ const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></d
 
 export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange, measTypes, MeasurementEditor }: IWidgetConfigEditorProps) => {
     const propVal = { ...value }
-    const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
+    //get the number of meas
     const vizPluginsRepo = useContext(VizPluginsRepoContext);
+    const numMeasPerSeries = vizPluginsRepo.getCompMetadata(propVal.vizType).numMeasPerSeries
+    // newMeasType will be an array of measTypes
+    const [newMeasTypes, setNewMeasTypes] = useState(Array.from(Array(numMeasPerSeries).keys()).map(n => DummyMeasurement.typename))
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
@@ -31,8 +34,7 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
     }
 
     const onAddNewSeriesClick = () => {
-        const numMeasPerSeries = vizPluginsRepo.getCompMetadata(propVal.vizType).numMeasPerSeries
-        const newSeriesConfig = getNewSeriesForVizType(newMeasType, propVal.vizType, numMeasPerSeries)
+        const newSeriesConfig = getNewSeriesForVizType(newMeasTypes, propVal.vizType)
         onChange({ ...propVal, seriesConfigs: [...propVal.seriesConfigs, newSeriesConfig] })
     }
 
@@ -71,7 +73,19 @@ export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChan
 
     return <>
         <div>
-            <MeasurementSelector measTypes={measTypes} onMeasChanged={(measType: string) => { setNewMeasType(measType) }} />
+
+            {Array.from(Array(numMeasPerSeries).keys()).map((mInd) =>
+                <MeasurementSelector measTypes={measTypes} onMeasChanged={(measType: string) => {
+                    setNewMeasTypes(
+                        [
+                            ...newMeasTypes.slice(0, mInd),
+                            measType,
+                            ...newMeasTypes.slice(mInd + 1)
+                        ]
+                    )
+                }} />
+            )
+            }
             <button type="button" onClick={(ev: any) => { onAddNewSeriesClick() }} className={"btn btn-sm btn-success ml-1"}>Add Series</button>
         </div>
 

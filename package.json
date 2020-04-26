@@ -1,9 +1,12 @@
 {
     "name": "electron_dashboard_lab",
-    "version": "1.0.0",
+    "version": "5.0.0",
+    "private": false,
     "description": "experiments for electron dashboard",
     "author": "",
     "license": "ISC",
+    "main": "./dist/bundle.main.js",
+    "homepage": "https://github.com/nagasudhirpulla/electron_react_dashboard",
     "dependencies": {
         "@fortawesome/fontawesome-svg-core": "^1.2.28",
         "@fortawesome/free-solid-svg-icons": "^5.13.0",
@@ -100,8 +103,7 @@
             "oneClick": false
         },
         "dmg": {
-            "contents": [
-                {
+            "contents": [{
                     "x": 110,
                     "y": 150
                 },
@@ -123,8 +125,7 @@
             "target": "NSIS",
             "icon": "assets/img/app_logo.png"
         },
-        "fileAssociations": [
-            {
+        "fileAssociations": [{
                 "name": "JSON File",
                 "description": "Electron Dashboard JSON Config file",
                 "ext": [
@@ -152,6 +153,6 @@
         "build-web": "webpack --mode production --config webpack-dash-web.config.js",
         "watch-web": "webpack --mode development --config webpack-dash-web.config.js -w",
         "pack": "rm -fr ./pack_dist && npm run electron-win-package",
-        "electron-win-package": "electron-builder dist/main.js"
+        "electron-win-package": "electron-builder dist/bundle.main.js"
     }
 }

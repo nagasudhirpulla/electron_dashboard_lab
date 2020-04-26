@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { IAdapterMeasurement } from '../type_defs/IAdapterMeasurement';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../../ipc/ChannelNames';
 import { ISelectedMeas } from '../../server/dataAdapters/dataAdaptersIpcManager';
 import { TimePeriodEditor } from '../../Time/components/TimePeriodEditor/TimePeriodEditor';
 import { ResamplingStrategy } from '../ResamplingStrategy';
+import { v4 as uuid } from 'uuid';
 
 export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange: (m: IAdapterMeasurement) => void }> = ({ value, onChange }) => {
     const propVal = { ...value }
+    const [uid, setUid] = useState(uuid())
+    
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {
             const newVal = ev.target.type == 'checkbox' ? ev.target.checked : ev.target.value
@@ -29,11 +32,11 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
     }
 
     const onMeasPickerClick = () => {
-        ipcRenderer.send('' + ChannelNames.openAdapterMeasPicker, { measName: name, adapterId: propVal.adapter_id })
+        ipcRenderer.send('' + ChannelNames.openAdapterMeasPicker, { measName: uid, adapterId: propVal.adapter_id })
     }
 
     ipcRenderer.once('' + ChannelNames.selectedMeas, (event, resp: ISelectedMeas) => {
-        if (resp.measName != name) {
+        if (resp.measName != uid) {
             return;
         }
         if (resp.err != undefined) {
@@ -68,6 +71,7 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
             onChange={onSelValChanged}
             value={propVal.resampling_strategy}
         >
+            <option value={ResamplingStrategy.Snap}>Snap</option>
             <option value={ResamplingStrategy.Raw}>Raw</option>
             <option value={ResamplingStrategy.Average}>Average</option>
             <option value={ResamplingStrategy.Max}>Maximum</option>
