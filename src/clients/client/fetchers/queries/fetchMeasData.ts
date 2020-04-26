@@ -11,17 +11,23 @@ import { IMeasData } from "../../type_defs/dashboard/IMeasData";
 import { ApiMeasurement } from "../../../../measurements/ApiMeasurement";
 import { fetchApiData } from "../../../../apiAdapters/queries/fetchApiData";
 import { IApiMeasurement } from "../../../../measurements/type_defs/IApiMeasurement";
+import { EquationMeasurement } from "../../../../measurements/EquationMeasurement";
+import { fetchEquationMeasData } from "./fetchEquationMeasData";
+import { IEquationMeasurement } from "../../../../measurements/type_defs/IEquationMeasurement";
 
 export const fetchMeasData = async (fromTime: Date, toTime: Date, meas: IMeasurement, options?: IFetcherOptions): Promise<IMeasData> => {
     let resultData: number[] = []
     if (meas.discriminator == DummyMeasurement.typename) {
         resultData = await fetchDummyMeasData(fromTime, toTime, meas as IDummyMeasurement, options)
     }
-    if (meas.discriminator == AdapterMeasurement.typename) {
+    else if (meas.discriminator == AdapterMeasurement.typename) {
         resultData = await fetchAdapterMeasData(fromTime, toTime, meas as IAdapterMeasurement, options)
     }
-    if (meas.discriminator == ApiMeasurement.typename) {
+    else if (meas.discriminator == ApiMeasurement.typename) {
         resultData = await fetchApiData(fromTime, toTime, meas as IApiMeasurement, options)
+    }
+    else if (meas.discriminator == EquationMeasurement.typename) {
+        resultData = await fetchEquationMeasData(fromTime, toTime, meas as IEquationMeasurement, options)
     }
     return resultData
 }

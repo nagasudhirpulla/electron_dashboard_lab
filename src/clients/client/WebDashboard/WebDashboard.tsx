@@ -27,10 +27,11 @@ import { useWebDashboardReducer } from './reducers/webDashboardReducer';
 import { fetchWebWidgetDataAction } from './actions/FetchWidgetDataAction';
 import { fetchAllWebWidgetsDataAction } from './actions/FetchAllWidgetsDataAction';
 import { WebMeasurementEditor } from '../../../measurements/components/WebMeasurementEditor';
-import { vizPluginsRepoContext, fileUploadBtnId } from '../webDashboardApp';
 import { exportExcelAction } from './actions/ExportExcelAction';
 import { saveDashboardAction } from './actions/SaveDashboardAction';
 import { EquationMeasurement } from '../../../measurements/EquationMeasurement';
+import { VizPluginsRepoContext } from '../contexts/vizPluginsRepoContext';
+import { fileUploadBtnId } from '../webDashboardApp';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -40,7 +41,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
     const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
     const [showWidgetAddModal, setShowWidgetAddModal] = useState(false)
     const [timerId, setTimerId] = useState(null)
-    const vizPluginNames: string[] = useContext(vizPluginsRepoContext).getInstalledPluginNames()
+    const vizPluginNames: string[] = useContext(VizPluginsRepoContext).getInstalledPluginNames()
     const [measTypes, setMeasTypes] = useState([] as { val: string, name: string }[])
     useEffect(() => {
         (async function () {
@@ -212,7 +213,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
             onLayoutChange={onLayoutChange}
             currentBreakpoint={dashState.currentBreakpoint}
             onBreakpointChange={onBreakpointChange}
-            getComp={(vizType: string) => { return useContext(vizPluginsRepoContext).getComp(vizType) }}
+            getComp={(vizType: string) => { return useContext(VizPluginsRepoContext).getComp(vizType) }}
         />
 
         <WidgetEditorModal

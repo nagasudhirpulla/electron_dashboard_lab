@@ -48,7 +48,10 @@ module.exports = {
         // don't bundle the 'react' npm package with our bundle.js, but get it from a global 'React' variable
         // for this, use the script tag so in index.html to get the React variable
         'react': 'React',
-        'react-dom': 'ReactDOM'
+        'react-dom': 'ReactDOM',
+        "toastr": "toastr",
+        "react-plotly.js": "createPlotlyComponent",
+        "plotly.js-cartesian-dist": "Plotly"
     },
 
     plugins: [],

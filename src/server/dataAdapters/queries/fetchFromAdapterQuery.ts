@@ -65,7 +65,7 @@ export const fetchMeasDataFromAdapter = async (meas: IAdapterMeasurement, fromTi
     ]
     const adapter: IAdapterManifest = getAdapterManifest(meas.adapter_id)
     let resamplingSupported = false
-    if (adapter.is_resampling_present != undefined && adapter.is_resampling_present) {
+    if (adapter.is_resampling_present != undefined && adapter.is_resampling_present == true) {
         resamplingSupported = true
     }
     if (resamplingSupported) {

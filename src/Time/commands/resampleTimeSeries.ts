@@ -11,7 +11,6 @@ export const resampleTimeSeries = (ts: number[], resamplePeriod: ITimePeriod, st
         return ts
     }
     const resultTimeSeries = []
-    const lastTimestampOfInp = ts[ts.length - 2]
 
     let currBucketSamplIndex = 0
     let currResTimestamp = ts[0]

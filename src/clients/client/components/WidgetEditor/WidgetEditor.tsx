@@ -8,14 +8,14 @@ import { getNewSeriesForVizType } from '../SeriesEditor/queries/getNewSeriesForV
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt, faClone, faClock } from '@fortawesome/free-solid-svg-icons';
 import { BorderEditor } from '../BorderEditor/BorderEditor';
-import { vizPluginsRepoContext } from '../../webDashboardApp';
+import { VizPluginsRepoContext } from '../../contexts/vizPluginsRepoContext';
 
 const WidgetDivider: React.FC = () => (<div className="series_divider"><hr /></div>);
 
 export const WidgetEditor: React.FC<IWidgetConfigEditorProps> = ({ value, onChange, measTypes, MeasurementEditor }: IWidgetConfigEditorProps) => {
     const propVal = { ...value }
     const [newMeasType, setNewMeasType] = useState(DummyMeasurement.typename)
-    const vizPluginsRepo = useContext(vizPluginsRepoContext);
+    const vizPluginsRepo = useContext(VizPluginsRepoContext);
 
     const onInpValChanged = (ev: React.ChangeEvent<HTMLInputElement>) => {
         if (onChange) {

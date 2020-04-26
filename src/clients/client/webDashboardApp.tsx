@@ -1,10 +1,5 @@
-import React, { createContext } from 'react'
+import React from 'react'
 import { render } from 'react-dom'
-import { VizPluginsRepo } from './VizPluginsRepo'
-import { LinePlot } from './components/LinePlot/LinePlot'
-import { LinePlotWidgetConfigEditor } from './components/LinePlot/LinePlotWidgetConfigEditor'
-import { LinePlotSeriesConfigEditor } from './components/LinePlot/LinePlotSeriesConfigEditor'
-import { LinePlotMetadata } from './components/LinePlot/LinePlotMetadata'
 import { WebDashboard } from './WebDashboard/WebDashboard'
 import { setApiAdaptersRegistry } from '../../apiAdapters/ApiManifestRegistry'
 import { seedApiProviders } from './WebDashboard/commands/seedApiProviders'
@@ -12,11 +7,6 @@ import { setupFileDownloadHref } from './WebDashboard/commands/setupFileDownload
 import { setupFileUploadBtn } from './WebDashboard/commands/setupFileUploadBtn'
 
 // console.log("Hello World from client!!!")
-// create a global variable for viz plugins repository as well make it a context for other components to access it
-const $comps = VizPluginsRepo()
-export const vizPluginsRepoContext = createContext($comps)
-// register line plot
-$comps.registerComp(LinePlotMetadata.discriminator, LinePlot, LinePlotWidgetConfigEditor, LinePlotSeriesConfigEditor, LinePlotMetadata)
 
 setApiAdaptersRegistry({})
 seedApiProviders()

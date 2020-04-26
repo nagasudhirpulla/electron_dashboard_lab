@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 import { IEquationMeasurement } from '../type_defs/IEquationMeasurement';
-import { TimePeriodEditor } from '../../Time/components/TimePeriodEditor/TimePeriodEditor';
 import { WebMeasurementEditor } from './WebMeasurementEditor';
 import { DummyMeasurement } from '../DummyMeasurement';
 import { MeasurementSelector } from './MeasurementSelector';

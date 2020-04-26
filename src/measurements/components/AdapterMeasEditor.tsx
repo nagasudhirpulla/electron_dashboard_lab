@@ -56,7 +56,7 @@ export const AdapterMeasEditor: React.FC<{ value: IAdapterMeasurement, onChange:
         <button type='button' onClick={onMeasPickerClick}>...</button>
         <br />
 
-        <span><b>Sample Frequency</b></span>
+        <span><b>Re-sampling period</b></span>
         <TimePeriodEditor
             value={propVal.periodicity}
             onChange={(t) => { onValChanged('periodicity', t) }} />

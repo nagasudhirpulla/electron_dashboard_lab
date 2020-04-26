@@ -10,11 +10,15 @@ import { TimePeriod } from "../../../../Time/TimePeriod"
 import { getDefaultCustomWidgetConfig } from "./queries/getDefaultCustomWidgetConfig"
 import { getDefaultCustomSeriesConfig } from "./queries/getDefaultCustomSeriesConfig"
 import { SeriesStackMode } from "./type_defs/SeriesStackMode"
+import createPlotlyComponent from 'react-plotly.js/factory'
+// https://www.npmjs.com/package/react-plotlyjs
+import Plotly from 'plotly.js-cartesian-dist'
 
 // TODO implement x and y axis ranges, stackedBox, 
 // candlestick (https://plotly.com/javascript/candlestick-charts/), 
 
 export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) => {
+    const PlotlyComponent = createPlotlyComponent(Plotly)
     // set default values to widget custom config
     let config = { ...props.config }
     config.customConfig = merge({}, getDefaultCustomWidgetConfig(), config.customConfig)
@@ -244,7 +248,7 @@ export const LinePlot: React.FC<IWidgetProps> = (props: ILinePlotWidgetProps) =>
 
 
     return (
-        <Plot
+        <PlotlyComponent
             data={plot_data}
             layout={plot_layout}
             frames={plot_frames}

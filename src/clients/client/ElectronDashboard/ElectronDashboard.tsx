@@ -10,7 +10,6 @@ import { toggleCompactionAction } from './actions/ToggleCompactionAction';
 import { ipcRenderer } from 'electron';
 import { ChannelNames } from '../../../ipc/ChannelNames';
 import { Layout, Layouts } from "react-grid-layout";
-import { vizPluginsRepoContext } from '../client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSyncAlt, faFolderOpen, faSave, faCog, faDatabase, faChartBar, faPlusSquare, faRedoAlt, faStopCircle, faPlayCircle } from '@fortawesome/free-solid-svg-icons'
 import { layoutChangeAction } from './actions/LayoutChangeAction';
@@ -34,6 +33,8 @@ import { loadDataAdapters } from '../../adapters/queries/loadDataAdapters';
 import { getApiAdaptersRegistry } from '../../../apiAdapters/ApiManifestRegistry';
 import { DummyMeasurement } from '../../../measurements/DummyMeasurement';
 import { MeasurementEditor } from '../../../measurements/components/MeasurementEditor';
+import { VizPluginsRepoContext } from '../contexts/vizPluginsRepoContext';
+import { EquationMeasurement } from '../../../measurements/EquationMeasurement';
 
 export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -43,13 +44,15 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
     const [showDashSettingsModal, setShowDashSettingsModal] = useState(false)
     const [showWidgetAddModal, setShowWidgetAddModal] = useState(false)
     const [timerId, setTimerId] = useState(null)
-    const vizPluginNames: string[] = useContext(vizPluginsRepoContext).getInstalledPluginNames()
+    const vizPluginNames: string[] = useContext(VizPluginsRepoContext).getInstalledPluginNames()
     const [measTypes, setMeasTypes] = useState([] as { val: string, name: string }[])
     useEffect(() => {
         (async function () {
             const dataAdapters = (await loadDataAdapters()).map(n => ({ val: `adapter|${n.adapter_id}`, name: n.name }))
             const apiAdapters = Object.values(getApiAdaptersRegistry()).map(n => ({ val: `api|${n.api_id}`, name: n.name }))
-            setMeasTypes([{ val: DummyMeasurement.typename, name: 'Random' }, ...dataAdapters, ...apiAdapters])
+            const dummyMeasOpt = { val: DummyMeasurement.typename, name: 'Random' }
+            const eqMeasOpt = { val: EquationMeasurement.typename, name: 'Equation' }
+            setMeasTypes([dummyMeasOpt, ...dataAdapters, ...apiAdapters, eqMeasOpt])
         })()
     }, [])
 
@@ -210,7 +213,7 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
             onLayoutChange={onLayoutChange}
             currentBreakpoint={dashState.currentBreakpoint}
             onBreakpointChange={onBreakpointChange}
-            getComp={(vizType: string) => { return useContext(vizPluginsRepoContext).getComp(vizType) }}
+            getComp={(vizType: string) => { return useContext(VizPluginsRepoContext).getComp(vizType) }}
         />
 
         <WidgetEditorModal
