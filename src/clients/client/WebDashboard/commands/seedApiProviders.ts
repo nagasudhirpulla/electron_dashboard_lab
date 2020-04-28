@@ -61,8 +61,24 @@ export const seedApiProviders = () => {
         is_resampling_present: false,
     }
 
+    // http://portal.wrldc.in/dashboard/api/reports/getMeasData/WR_DAY_AVERAGE_FREQ/2020-04-01-00-00-00/2020-04-15-00-00-00
+    // http://portal.wrldc.in/dashboard/api/reports/getmeasurementstable
+    const ReportsApi: IApiManifest = {
+        name: 'Reports',
+        api_id: 'ReportsApi',
+        baseUrl: '../api/reports',
+        path: 'getMeasData/${meas_id}/${start_time}/${end_time}',
+        meas_picker_path: '../api/reports/getmeasurementstable',
+        request_type: 'get',
+        start_time_format: 'YYYY-MM-DD-HH-mm-ss',
+        end_time_format: 'YYYY-MM-DD-HH-mm-ss',
+        quality_option: false,
+        is_resampling_present: false,
+    }
+
     registerApiAdapter(WbesApi)
     registerApiAdapter(PmuApi)
     registerApiAdapter(ScadaApi)
     registerApiAdapter(MeterApi)
+    registerApiAdapter(ReportsApi)
 }
