@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from 'react-bootstrap/Modal'
 import { IDashboardSettingsEditorModalProps } from "./type_defs/IDashboardSettingsEditorModalProps";
 import { IDashboardSettingsEditorProps } from "./type_defs/IDashboardSettingsEditorProps";
@@ -13,6 +13,10 @@ export const DashboardSettingsEditorModal: React.FC<IDashboardSettingsEditorModa
         onSubmit(dashSettings)
         setShow(false)
     }
+
+    useEffect(() => {
+        setDashSettings(JSON.parse(JSON.stringify(value)))
+    }, [value])
 
     const onChange: IDashboardSettingsEditorProps["onChange"] = (v: IDashboardSettingsEditorProps['value']) => {
         setDashSettings(v)

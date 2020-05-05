@@ -32,6 +32,7 @@ import { saveDashboardAction } from './actions/SaveDashboardAction';
 import { EquationMeasurement } from '../../../measurements/EquationMeasurement';
 import { VizPluginsRepoContext } from '../contexts/vizPluginsRepoContext';
 import { fileUploadBtnId } from '../webDashboardApp';
+import { renewablesDash } from './preset_dashboards/renewables_dash';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -146,6 +147,22 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
         }
     }
 
+    const onLoadPresetDashboard = (evnt: React.ChangeEvent<HTMLSelectElement>) => {
+        // get the selected option
+        const selOpt: string = evnt.target.value;
+        if (selOpt == "renewables") {
+            if (confirm("Do you want to load this dashbaord?")) {
+                dashStateDispatch(setDashboardStateAction(
+                    {
+                        ...dashInitState,
+                        ...renewablesDash as IElectronDashboardState,
+                        timer: { ...dashState.timer }
+                    }
+                ))
+            }
+        }
+    }
+
     // check if we have to stop the timer
     if (dashState.timer.isOn == true && dashState.timerSettings.timerOn == false) {
         dashStateDispatch(setDashboardStateAction({
@@ -189,6 +206,10 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
 
     return <>
         <div className={"btn-group btn-group-sm"}>
+            <select onChange={onLoadPresetDashboard}>
+                <option value="none">Select Dashboard</option>
+                <option value="renewables">Renewables</option>
+            </select>
             <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
             <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
             <button onClick={onOpenSettingsEditor} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faCog} /> Settings</button>
