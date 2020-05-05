@@ -216,14 +216,16 @@ export const ElectronDashboard: React.FC<Partial<IElectronDashboardProps>> = (pr
             getComp={(vizType: string) => { return useContext(VizPluginsRepoContext).getComp(vizType) }}
         />
 
-        <WidgetEditorModal
-            show={showEditWidgetModal}
-            setShow={setShowEditWidgetModal}
-            measTypes={measTypes}
-            MeasurementEditor={MeasurementEditor}
-            value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
-            onSubmit={onEditWidgetSubmit}
-        />
+        {(dashState.widgetProps[activeWidgetIndex] != undefined) &&
+            <WidgetEditorModal
+                show={showEditWidgetModal}
+                setShow={setShowEditWidgetModal}
+                measTypes={measTypes}
+                MeasurementEditor={MeasurementEditor}
+                value={dashState.widgetProps[activeWidgetIndex] == undefined ? null : dashState.widgetProps[activeWidgetIndex].config}
+                onSubmit={onEditWidgetSubmit}
+            />}
+
         <DashboardSettingsEditorModal
             show={showDashSettingsModal}
             setShow={setShowDashSettingsModal}

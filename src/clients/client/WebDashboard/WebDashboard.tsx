@@ -216,14 +216,15 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
             getComp={(vizType: string) => { return useContext(VizPluginsRepoContext).getComp(vizType) }}
         />
 
-        <WidgetEditorModal
-            show={showEditWidgetModal}
-            setShow={setShowEditWidgetModal}
-            measTypes={measTypes}
-            value={dashState.widgetProps[activeWidgetIndex].config}
-            onSubmit={onEditWidgetSubmit}
-            MeasurementEditor={WebMeasurementEditor}
-        />
+        {(dashState.widgetProps[activeWidgetIndex] != undefined) &&
+            <WidgetEditorModal
+                show={showEditWidgetModal}
+                setShow={setShowEditWidgetModal}
+                measTypes={measTypes}
+                value={dashState.widgetProps[activeWidgetIndex].config}
+                onSubmit={onEditWidgetSubmit}
+                MeasurementEditor={WebMeasurementEditor}
+            />}
 
         <DashboardSettingsEditorModal
             show={showDashSettingsModal}
