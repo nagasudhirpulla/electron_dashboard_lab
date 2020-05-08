@@ -33,6 +33,7 @@ import { EquationMeasurement } from '../../../measurements/EquationMeasurement';
 import { VizPluginsRepoContext } from '../contexts/vizPluginsRepoContext';
 import { fileUploadBtnId } from '../webDashboardApp';
 import { renewablesDash } from './preset_dashboards/renewables_dash';
+import { wrRenewablesDash } from './preset_dashboards/wr_renewables_dash';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -149,13 +150,21 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
 
     const onLoadPresetDashboard = (evnt: React.ChangeEvent<HTMLSelectElement>) => {
         // get the selected option
-        const selOpt: string = evnt.target.value;
+        const selOpt: string = evnt.target.value
+        let dashObj = null
         if (selOpt == "renewables") {
+            dashObj = { ...renewablesDash }
+            
+        } else if (selOpt == "wr_renewables") {
+            dashObj = { ...wrRenewablesDash }
+        }
+
+        if (dashObj!=null) {
             if (confirm("Do you want to load this dashbaord?")) {
                 dashStateDispatch(setDashboardStateAction(
                     {
                         ...dashInitState,
-                        ...renewablesDash as IElectronDashboardState,
+                        ...dashObj as IElectronDashboardState,
                         timer: { ...dashState.timer }
                     }
                 ))
@@ -209,6 +218,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
             <select onChange={onLoadPresetDashboard}>
                 <option value="none">Select Dashboard</option>
                 <option value="renewables">Renewables</option>
+                <option value="wr_renewables">Total Renewables</option>
             </select>
             <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
             <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
