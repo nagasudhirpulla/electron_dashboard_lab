@@ -34,6 +34,7 @@ import { VizPluginsRepoContext } from '../contexts/vizPluginsRepoContext';
 import { fileUploadBtnId } from '../webDashboardApp';
 import { renewablesDash } from './preset_dashboards/renewables_dash';
 import { wrRenewablesDash } from './preset_dashboards/wr_renewables_dash';
+import { mumbaiDash } from './preset_dashboards/mumbai_dash';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -158,6 +159,9 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
         } else if (selOpt == "wr_renewables") {
             dashObj = { ...wrRenewablesDash }
         }
+        else if (selOpt == "mumbai") {
+            dashObj = { ...mumbaiDash }
+        }
 
         if (dashObj!=null) {
             if (confirm("Do you want to load this dashbaord?")) {
@@ -217,6 +221,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
         <div className={"btn-group btn-group-sm"}>
             <select onChange={onLoadPresetDashboard}>
                 <option value="none">Select Dashboard</option>
+                <option value="mumbai">Mumbai Dem and Gen</option>
                 <option value="renewables">Renewables</option>
                 <option value="wr_renewables">Total Renewables</option>
             </select>
