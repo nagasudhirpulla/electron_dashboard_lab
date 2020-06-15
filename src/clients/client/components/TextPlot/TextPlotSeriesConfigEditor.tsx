@@ -67,6 +67,7 @@ export const TextPlotSeriesConfigEditor: React.FC<ITextPlotSeriesConfEditorProps
             <option value={TextComputationStrategy.average}>Average</option>
             <option value={TextComputationStrategy.max}>Max value</option>
             <option value={TextComputationStrategy.min}>Min value</option>
+            <option value={TextComputationStrategy.count}>Number of samples</option>
             <option value={TextComputationStrategy.sum}>Sum of samples</option>
             <option value={TextComputationStrategy.percentile}>Percentile</option>
             <option value={TextComputationStrategy.firstTimestamp}>First Timestamp</option>

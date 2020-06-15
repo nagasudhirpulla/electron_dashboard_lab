@@ -45,6 +45,9 @@ export const TextPlot: React.FC<IWidgetProps> = (props: ITextPlotWidgetProps) =>
             else if (computationStrategy == TextComputationStrategy.lastTimestamp) {
                 val = '' + props.data[seriesIter][0][props.data[seriesIter][0].length - 2]
             }
+            else if (computationStrategy == TextComputationStrategy.count) {
+                val = '' + Math.round(props.data[seriesIter][0].length / 2)
+            }
             else if ([TextComputationStrategy.average, TextComputationStrategy.sum].includes(computationStrategy)) {
                 let sumVal = 0
                 for (let pntIter = 0; pntIter < props.data[seriesIter][0].length - 1; pntIter += 2) {
@@ -103,7 +106,7 @@ export const TextPlot: React.FC<IWidgetProps> = (props: ITextPlotWidgetProps) =>
                 val = "" + (Math.round(+val * decimalDivider) / decimalDivider);
             }
         }
-        
+
         const seriesStyle: CSSProperties = {
             color: sConfig.customConfig.color + '',
             backgroundColor: sConfig.customConfig.backgroundColor + '',

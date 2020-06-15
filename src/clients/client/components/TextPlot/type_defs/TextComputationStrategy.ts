@@ -6,6 +6,7 @@ export enum TextComputationStrategy {
     min = "min",
     percentile = "percentile",
     sum = "sum",
+    count = "count",
     firstTimestamp = "firstTimestamp",
     lastTimestamp = "lastTimestamp",
     maxValTimestamp = "maxValTimestamp",
