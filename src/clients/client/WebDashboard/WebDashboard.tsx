@@ -36,6 +36,7 @@ import { renewablesDash } from './preset_dashboards/renewables_dash';
 import { wrRenewablesDash } from './preset_dashboards/wr_renewables_dash';
 import { mumbaiDash } from './preset_dashboards/mumbai_dash';
 import { demFreqDash } from './preset_dashboards/dem_freq_dash';
+import { scadaInfoDash } from './preset_dashboards/scada_info';
 
 export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?: IElectronDashboardProps) => {
     const dashInitState: IElectronDashboardState = { ...getDefaultDashboardState(), ...props }
@@ -166,6 +167,9 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
         else if (selOpt == "dem_freq") {
             dashObj = { ...demFreqDash }
         }
+        else if (selOpt == "scada_info") {
+            dashObj = { ...scadaInfoDash }
+        }
 
         if (dashObj != null) {
             if (confirm("Do you want to load this dashbaord?")) {
@@ -229,6 +233,7 @@ export const WebDashboard: React.FC<Partial<IElectronDashboardProps>> = (props?:
                 <option value="renewables">Renewables</option>
                 <option value="wr_renewables">Total Renewables</option>
                 <option value="dem_freq">Demand Frequency</option>
+                <option value="scada_info">SCADA Values</option>
             </select>
             <button onClick={onOpenDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faFolderOpen} /> Open</button>
             <button onClick={onSaveDashboard} className={"btn btn-outline-primary"}><FontAwesomeIcon icon={faSave} /> Save</button>
