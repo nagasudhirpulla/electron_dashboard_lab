@@ -91,10 +91,26 @@ export const seedApiProviders = () => {
         is_resampling_present: false,
     }
 
+    // http://portal.wrldc.in/dashboard/api/TempMointor/Server_Room|Temperature/2020-06-18-00-00-00/2020-06-28-00-00-00
+    // http://portal.wrldc.in/dashboard/api/TempMointor/getmeasurementstable
+    const TempMonitorApi: IApiManifest = {
+        name: 'WRLDC_Temp_Monitor',
+        api_id: 'TempMonitor',
+        baseUrl: '../api/TempMointor',
+        path: '${meas_id}/${start_time}/${end_time}',
+        meas_picker_path: '../api/TempMointor/getmeasurementstable',
+        request_type: 'get',
+        start_time_format: 'YYYY-MM-DD-HH-mm-ss',
+        end_time_format: 'YYYY-MM-DD-HH-mm-ss',
+        quality_option: false,
+        is_resampling_present: false,
+    }
+
     registerApiAdapter(WbesApi)
     registerApiAdapter(PmuApi)
     registerApiAdapter(ScadaApi)
     registerApiAdapter(MeterApi)
     registerApiAdapter(ReportsApi)
     registerApiAdapter(PingStatusApi)
+    registerApiAdapter(TempMonitorApi)
 }
